@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package com.itrjp.im.proto.connect;
+option java_outer_classname = "ConnectProto";
+
+service Connect{
+  // 推送消息
+  rpc push (PushRequest) returns (ApiResponse) {}
+}
+
+message PushRequest{
+  string channelId = 1;
+  string content = 2;
+}
+
+message ApiResponse{
+  int32 code = 1;
+  string message = 2;
+}

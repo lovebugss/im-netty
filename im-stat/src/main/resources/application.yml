@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: im-stat
+  instance_id: 240524ef8731eb67cadc6f52db911bfd
+  cloud:
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+server:
+  port: 8280
+grpc:
+  server:
+    port: 29290
+  client:
+    GLOBAL:
+      negotiationType: plaintext

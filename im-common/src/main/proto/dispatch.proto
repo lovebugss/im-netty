@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package com.itrjp.im.proto.dispatcher;
+option java_outer_classname = "DispatchProto";
+
+service Dispatch{
+  // 上线
+  rpc online(DispatchRequest) returns (ApiResponse) {}
+  // 下线
+  rpc offline(DispatchRequest) returns (ApiResponse) {}
+
+  rpc getConnectInfo(DispatchRequest) returns (ApiResponse) {}
+}
+
+message DispatchRequest{
+  string channelId = 1; // 频道ID
+  string userId = 2; // 用户ID
+}
+
+message ApiResponse{
+  int32 code = 1;
+  string message = 2;
+  int64 users = 3;
+
+}
+
