@@ -71,8 +71,8 @@ public class WebsocketHandler extends SimpleChannelInboundHandler<Object> {
         if (msg instanceof CloseWebSocketFrame) {
             logger.info("WebsocketHandler#channelRead CloseWebSocketFrame");
             ctx.channel().writeAndFlush(msg).addListener(ChannelFutureListener.CLOSE);
-        } else if (msg instanceof FullHttpRequest req) {
-            handleHttpRequest(ctx, req);
+        } else if (msg instanceof FullHttpRequest) {
+            handleHttpRequest(ctx, (FullHttpRequest) msg);
         }
     }
 
@@ -146,10 +146,10 @@ public class WebsocketHandler extends SimpleChannelInboundHandler<Object> {
                     // 二进制消息
                     byteBuf.retain();
                     out.add(msg.content());
-                } else if (msg instanceof TextWebSocketFrame text) {
+                } else if (msg instanceof TextWebSocketFrame) {
                     // 二进制消息
                     byteBuf.retain();
-                    out.add(text.content());
+                    out.add(((TextWebSocketFrame) msg).content());
                 } else if (msg instanceof PingWebSocketFrame) {
                     pingListener.onPing(channelsHub.getWebSocketClient(ctx.channel().id().asLongText()));
                 } else if (msg instanceof PongWebSocketFrame) {

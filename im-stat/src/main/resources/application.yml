@@ -1,18 +1,31 @@
 spring:
   application:
     name: im-stat
-  instance_id: 240524ef8731eb67cadc6f52db911bfd
+    instance_id: 240524ef8731eb67cadc6f52db911bfd
   cloud:
     consul:
       host: 127.0.0.1
       port: 8500
       discovery:
         instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+      config:
+        enabled: false
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    timeout: 3000
+    lettuce:
+      pool:
+        max-active: 8
+        min-idle: 0
+        max-idle: 8
+        max-wait: 1ms
 server:
   port: 8280
 grpc:
   server:
-    port: 29290
+    port: 28280
   client:
     GLOBAL:
       negotiationType: plaintext

@@ -61,7 +61,8 @@ public class AuthorizeHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         logger.info("AuthorizeHandler#channelRead, channel: [{}], message class: [{}]", ctx.channel().id(), msg.getClass());
-        if (msg instanceof FullHttpRequest request) {
+        if (msg instanceof FullHttpRequest) {
+            FullHttpRequest request = (FullHttpRequest) msg;
             // 错误请求
             if (!request.decoderResult().isSuccess()) {
                 sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), BAD_REQUEST, ctx.alloc().buffer(0)));

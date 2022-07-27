@@ -31,12 +31,11 @@ public final class HandshakeData {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (HandshakeData) obj;
-        return Objects.equals(this.parameters, that.parameters) &&
-                Objects.equals(this.uri, that.uri);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HandshakeData that = (HandshakeData) o;
+        return Objects.equals(parameters, that.parameters) && Objects.equals(uri, that.uri);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.itrjp.im.proto.dispatcher.DispatchProto;
 import com.itrjp.im.proto.message.MessageGrpc;
 import com.itrjp.im.proto.message.MessageProto;
 import net.devh.boot.grpc.client.inject.GrpcClient;
+import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.concurrent.Executor;
  */
 @Service
 public class ChannelServiceImpl implements ChannelService {
+    private final ConsulDiscoveryProperties consulDiscoveryProperties;
     private final ChannelsHub channelsHub;
     private final Executor executor;
 
@@ -32,7 +34,8 @@ public class ChannelServiceImpl implements ChannelService {
     private MessageGrpc.MessageBlockingStub messageBlockingStub;
 
 
-    public ChannelServiceImpl(ChannelsHub channelsHub, Executor executor) {
+    public ChannelServiceImpl(ConsulDiscoveryProperties consulDiscoveryProperties, ChannelsHub channelsHub, Executor executor) {
+        this.consulDiscoveryProperties = consulDiscoveryProperties;
         this.channelsHub = channelsHub;
         this.executor = executor;
     }
@@ -49,6 +52,8 @@ public class ChannelServiceImpl implements ChannelService {
         DispatchProto.DispatchRequest request = DispatchProto.DispatchRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
+                .setSessionId(client.getSession())
+                .setNodeId(consulDiscoveryProperties.getInstanceId())
                 .build();
         DispatchProto.ApiResponse online = dispatchStub.online(request);
         System.out.println(online);
@@ -74,6 +79,8 @@ public class ChannelServiceImpl implements ChannelService {
         DispatchProto.DispatchRequest request = DispatchProto.DispatchRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
+                .setSessionId(client.getSession())
+                .setNodeId(consulDiscoveryProperties.getInstanceId())
                 .build();
         DispatchProto.ApiResponse offline = dispatchStub.offline(request);
         System.out.println(offline);

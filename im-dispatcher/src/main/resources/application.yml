@@ -7,6 +7,8 @@ spring:
       port: 8500
       discovery:
         instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+      config:
+        enabled: false
   kafka:
     bootstrap-servers: 127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094  #bootstrap-servers：连接kafka的地址，多个地址用逗号分隔
     consumer:
@@ -28,4 +30,4 @@ server:
   port: 8180
 grpc:
   server:
-    port: 19190
+    port: 28180

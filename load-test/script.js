@@ -3,10 +3,14 @@ import {check, crpyto} from 'k6';
 import proto from "./packet_pb.js"
 
 export const options = {
-    stages: [{}],
+    stages: [
+//    {duration: '30s', target: 100},
+//    {duration: '60s', target: 1000},
+//    {duration: '60s', target: 10},
+    ],
     thresholds: {},
-    vus: 100,
-    duration: '300s'
+    vus: 3000,
+    duration: '60s'
 
 }
 
@@ -18,7 +22,7 @@ export default () => {
             console.log('connected');
             var message_proto = new proto.Data()
             message_proto.setContent("你好-" + new Date().getTime())
-            console.log(`send message: ${message_proto.serializeBinary()}`)
+            console.log(`send message: ${message_proto}`)
             socket.sendBinary(message_proto.serializeBinary().buffer);
             socket.setInterval(function timeout() {
                 socket.ping();
@@ -32,8 +36,7 @@ export default () => {
             console.log(`Received message: ${message}`);
         });
         socket.on('binaryMessage', function (message) {
-              // msg is an ArrayBuffer, so we can wrap it in a typed array directly.
-               console.log(`Received binaryMessage: ${new proto.Data(message.buffer)}`);
+               console.log(`Received binaryMessage: ${proto.Data.deserializeBinary(message)}`);
             });
         socket.on('close', () => console.log('disconnected'));
 

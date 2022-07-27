@@ -1,0 +1,15 @@
+{
+  "watches": [
+    {
+      "type": "checks",
+      "handler_type": "http",
+      "http_handler_config": {
+        "path": "http://172.16.26.81:8180/watch",
+        "method": "POST",
+        "header": { "x-foo": ["bar", "baz"] },
+        "timeout": "10s",
+        "tls_skip_verify": false
+      }
+    }
+  ]
+}
