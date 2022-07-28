@@ -8,6 +8,7 @@ services:
       dockerfile: Dockerfile
     image: im-connect:latest
     ulimits:
+      core: -1
       nproc: 65535
       nofile:
         soft: 20000
@@ -36,6 +37,7 @@ services:
       dockerfile: Dockerfile
     image: im-dispatcher:latest
     ulimits:
+      core: -1
       nproc: 65535
       nofile:
         soft: 20000
@@ -62,6 +64,7 @@ services:
       dockerfile: Dockerfile
     image: im-stat:latest
     ulimits:
+      core: -1
       nproc: 65535
       nofile:
         soft: 20000
@@ -88,6 +91,7 @@ services:
       dockerfile: Dockerfile
     image: im-message:latest
     ulimits:
+      core: -1
       nproc: 65535
       nofile:
         soft: 20000
@@ -114,6 +118,7 @@ services:
       dockerfile: Dockerfile
     image: im-storage:latest
     ulimits:
+      core: -1
       nproc: 65535
       nofile:
         soft: 20000

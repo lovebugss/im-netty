@@ -1,6 +1,6 @@
 
 
-FROM openjdk:8-jdk-alpine
+FROM openjdk:17-alpine
 
 COPY target/im-connect.jar im-connect.jar
 RUN ulimit -c unlimited
