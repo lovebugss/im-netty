@@ -13,11 +13,16 @@ services:
       nofile:
         soft: 20000
         hard: 40000
+    volumes:
+      - /tmp/:/tmp/
     environment:
       - JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
     ports:
       - 8080:8080
       - 18080:18080
@@ -25,10 +30,11 @@ services:
     networks:
       - im-network
     depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
-      - consul
+      - im-kafka1
+      - im-kafka2
+      - im-kafka3
+      - im-consul
+      - im-redis
   # 分发服务
   im-dispatcher:
     container_name: im-dispatcher
@@ -47,15 +53,17 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
     ports:
       - 8180:8180
       - 28180:28180
     networks:
       - im-network
     depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
+      - im-kafka1
+      - im-kafka2
+      - im-kafka3
+      - im-consul
   # 统计服务
   im-stat:
     container_name: im-stat
@@ -74,13 +82,19 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
+
     ports:
       - 8280:8280
       - 28280:28280
     depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
+      - im-kafka1
+      - im-kafka2
+      - im-kafka3
+      - im-consul
+      - im-redis
     networks:
       - im-network
   # 消息服务
@@ -101,13 +115,16 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
+
     ports:
       - 8380:8380
       - 28380:28380
     depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
+      - im-kafka1
+      - im-kafka2
+      - im-kafka3
+      - im-consul
     networks:
       - im-network
   # 存储服务
@@ -128,50 +145,61 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_CLOUD_CONSUL_HOST=consul
       - SPRING_CLOUD_CONSUL_PORT=8500
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
+
     ports:
       - 8480:8480
       - 28480:28480
     depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
+      - im-kafka1
+      - im-kafka2
+      - im-kafka3
+      - im-consul
     networks:
       - im-network
-  zookeeper1:
+  im-zoo1:
     image: zookeeper:3.4
     restart: always
-    hostname: zookeeper1
-    container_name: zookeeper1
+    hostname: zoo1
+    container_name: zoo1
     ports:
       - 2181:2181
+    #      - 3888:3888
     environment:
       ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
     networks:
       - im-network
-  zookeeper2:
+  im-zoo2:
     image: zookeeper:3.4
     restart: always
-    hostname: zookeeper2
-    container_name: zookeeper2
+    hostname: zoo2
+    container_name: zoo2
     ports:
       - 2182:2182
+    #      - 3888:3888
     environment:
-      ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+    #    links:
+    #      - zoo3
+    #      - zoo1
     networks:
       - im-network
-  zookeeper3:
+  im-zoo3:
     image: zookeeper:3.4
     restart: always
-    hostname: zookeeper3
-    container_name: zookeeper3
+    hostname: zoo3
+    container_name: zoo3
     ports:
       - 2183:2183
+    #      - 3888:3888
     environment:
-      ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888
-  kafka1:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+    networks:
+      - im-network
+  im-kafka1:
     image: wurstmeister/kafka:2.12-2.4.1
     restart: always
     hostname: kafka1
@@ -184,14 +212,14 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://kafka1:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
       KAFKA_ADVERTISED_PORT: 9092
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2182,zookeeper3:2183
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
     depends_on:
-      - zookeeper1
-      - zookeeper2
-      - zookeeper3
+      - zoo1
+      - zoo2
+      - zoo3
     networks:
       - im-network
-  kafka2:
+  im-kafka2:
     image: wurstmeister/kafka:2.12-2.4.1
     restart: always
     hostname: kafka2
@@ -204,14 +232,14 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://kafka2:9093
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093
       KAFKA_ADVERTISED_PORT: 9093
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2182,zookeeper3:2183
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
     depends_on:
-      - zookeeper1
-      - zookeeper2
-      - zookeeper3
+      - zoo1
+      - zoo2
+      - zoo3
     networks:
       - im-network
-  kafka3:
+  im-kafka3:
     image: wurstmeister/kafka:2.12-2.4.1
     restart: always
     hostname: kafka3
@@ -224,20 +252,25 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://kafka3:9094
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9094
       KAFKA_ADVERTISED_PORT: 9094
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2182,zookeeper3:2183
+      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
     depends_on:
-      - zookeeper1
-      - zookeeper2
-      - zookeeper3
-    external_links:
-      - zookeeper1
-      - zookeeper2
-      - zookeeper3
+      - zoo1
+      - zoo2
+      - zoo3
     networks:
       - im-network
-  consul:
+  im-redis:
+    image: redis
+    hostname: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    networks:
+      - im-network
+  im-consul:
     image: consul:1.11.3
     hostname: consul
+#    container_name: consul
     ports:
       - 8300:8300
       - 8500:8500
@@ -247,4 +280,3 @@ services:
       - im-network
 networks:
   im-network:
-    driver: bridge
