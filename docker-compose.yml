@@ -1,162 +1,162 @@
 version: '3.8'
 services:
-  # 长链接服务
-  im-connect:
-    container_name: im-connect
-    build:
-      context: im-connect
-      dockerfile: Dockerfile
-    image: im-connect:latest
-    ulimits:
-      core: -1
-      nproc: 65535
-      nofile:
-        soft: 20000
-        hard: 40000
-    volumes:
-      - /tmp/:/tmp/
-    environment:
-      - JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CLOUD_CONSUL_HOST=consul
-      - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_REDIS_HOST=redis
-      - SPRING_REDIS_PORT=6379
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
-    ports:
-      - 8080:8080
-      - 18080:18080
-      - 29090:29090
-    networks:
-      - im-network
-    depends_on:
-      - im-kafka1
-      - im-kafka2
-      - im-kafka3
-      - im-consul
-      - im-redis
-  # 分发服务
-  im-dispatcher:
-    container_name: im-dispatcher
-    build:
-      context: im-dispatcher
-      dockerfile: Dockerfile
-    image: im-dispatcher:latest
-    ulimits:
-      core: -1
-      nproc: 65535
-      nofile:
-        soft: 20000
-        hard: 40000
-    environment:
-      - JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CLOUD_CONSUL_HOST=consul
-      - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
-    ports:
-      - 8180:8180
-      - 28180:28180
-    networks:
-      - im-network
-    depends_on:
-      - im-kafka1
-      - im-kafka2
-      - im-kafka3
-      - im-consul
-  # 统计服务
-  im-stat:
-    container_name: im-stat
-    build:
-      context: im-stat
-      dockerfile: Dockerfile
-    image: im-stat:latest
-    ulimits:
-      core: -1
-      nproc: 65535
-      nofile:
-        soft: 20000
-        hard: 40000
-    environment:
-      - JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CLOUD_CONSUL_HOST=consul
-      - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_REDIS_HOST=redis
-      - SPRING_REDIS_PORT=6379
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
-
-    ports:
-      - 8280:8280
-      - 28280:28280
-    depends_on:
-      - im-kafka1
-      - im-kafka2
-      - im-kafka3
-      - im-consul
-      - im-redis
-    networks:
-      - im-network
-  # 消息服务
-  im-message:
-    container_name: im-message
-    build:
-      context: im-message
-      dockerfile: Dockerfile
-    image: im-message:latest
-    ulimits:
-      core: -1
-      nproc: 65535
-      nofile:
-        soft: 20000
-        hard: 40000
-    environment:
-      - JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CLOUD_CONSUL_HOST=consul
-      - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
-
-    ports:
-      - 8380:8380
-      - 28380:28380
-    depends_on:
-      - im-kafka1
-      - im-kafka2
-      - im-kafka3
-      - im-consul
-    networks:
-      - im-network
-  # 存储服务
-  im-storage:
-    container_name: im-storage
-    build:
-      context: im-storage
-      dockerfile: Dockerfile
-    image: im-storage:latest
-    ulimits:
-      core: -1
-      nproc: 65535
-      nofile:
-        soft: 20000
-        hard: 40000
-    environment:
-      - JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_CLOUD_CONSUL_HOST=consul
-      - SPRING_CLOUD_CONSUL_PORT=8500
-      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
-
-    ports:
-      - 8480:8480
-      - 28480:28480
-    depends_on:
-      - im-kafka1
-      - im-kafka2
-      - im-kafka3
-      - im-consul
-    networks:
-      - im-network
+#  # 长链接服务
+#  im-connect:
+#    container_name: im-connect
+#    build:
+#      context: im-connect
+#      dockerfile: Dockerfile
+#    image: im-connect:latest
+#    ulimits:
+#      core: -1
+#      nproc: 65535
+#      nofile:
+#        soft: 20000
+#        hard: 40000
+#    volumes:
+#      - /tmp/:/tmp/
+#    environment:
+#      - JAVA_OPTIONS=-Xmx512m -Xms256m
+#      - SPRING_PROFILES_ACTIVE=prod
+#      - SPRING_CLOUD_CONSUL_HOST=consul
+#      - SPRING_CLOUD_CONSUL_PORT=8500
+#      - SPRING_REDIS_HOST=redis
+#      - SPRING_REDIS_PORT=6379
+#      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
+#    ports:
+#      - 8080:8080
+#      - 18080:18080
+#      - 29090:29090
+#    networks:
+#      - im-network
+#    depends_on:
+#      - im-kafka1
+#      - im-kafka2
+#      - im-kafka3
+#      - im-consul
+#      - im-redis
+#  # 分发服务
+#  im-dispatcher:
+#    container_name: im-dispatcher
+#    build:
+#      context: im-dispatcher
+#      dockerfile: Dockerfile
+#    image: im-dispatcher:latest
+#    ulimits:
+#      core: -1
+#      nproc: 65535
+#      nofile:
+#        soft: 20000
+#        hard: 40000
+#    environment:
+#      - JAVA_OPTIONS=-Xmx512m -Xms256m
+#      - SPRING_PROFILES_ACTIVE=prod
+#      - SPRING_CLOUD_CONSUL_HOST=consul
+#      - SPRING_CLOUD_CONSUL_PORT=8500
+#      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
+#    ports:
+#      - 8180:8180
+#      - 28180:28180
+#    networks:
+#      - im-network
+#    depends_on:
+#      - im-kafka1
+#      - im-kafka2
+#      - im-kafka3
+#      - im-consul
+#  # 统计服务
+#  im-stat:
+#    container_name: im-stat
+#    build:
+#      context: im-stat
+#      dockerfile: Dockerfile
+#    image: im-stat:latest
+#    ulimits:
+#      core: -1
+#      nproc: 65535
+#      nofile:
+#        soft: 20000
+#        hard: 40000
+#    environment:
+#      - JAVA_OPTIONS=-Xmx512m -Xms256m
+#      - SPRING_PROFILES_ACTIVE=prod
+#      - SPRING_CLOUD_CONSUL_HOST=consul
+#      - SPRING_CLOUD_CONSUL_PORT=8500
+#      - SPRING_REDIS_HOST=redis
+#      - SPRING_REDIS_PORT=6379
+#      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
+#
+#    ports:
+#      - 8280:8280
+#      - 28280:28280
+#    depends_on:
+#      - im-kafka1
+#      - im-kafka2
+#      - im-kafka3
+#      - im-consul
+#      - im-redis
+#    networks:
+#      - im-network
+#  # 消息服务
+#  im-message:
+#    container_name: im-message
+#    build:
+#      context: im-message
+#      dockerfile: Dockerfile
+#    image: im-message:latest
+#    ulimits:
+#      core: -1
+#      nproc: 65535
+#      nofile:
+#        soft: 20000
+#        hard: 40000
+#    environment:
+#      - JAVA_OPTIONS=-Xmx512m -Xms256m
+#      - SPRING_PROFILES_ACTIVE=prod
+#      - SPRING_CLOUD_CONSUL_HOST=consul
+#      - SPRING_CLOUD_CONSUL_PORT=8500
+#      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
+#
+#    ports:
+#      - 8380:8380
+#      - 28380:28380
+#    depends_on:
+#      - im-kafka1
+#      - im-kafka2
+#      - im-kafka3
+#      - im-consul
+#    networks:
+#      - im-network
+#  # 存储服务
+#  im-storage:
+#    container_name: im-storage
+#    build:
+#      context: im-storage
+#      dockerfile: Dockerfile
+#    image: im-storage:latest
+#    ulimits:
+#      core: -1
+#      nproc: 65535
+#      nofile:
+#        soft: 20000
+#        hard: 40000
+#    environment:
+#      - JAVA_OPTIONS=-Xmx512m -Xms256m
+#      - SPRING_PROFILES_ACTIVE=prod
+#      - SPRING_CLOUD_CONSUL_HOST=consul
+#      - SPRING_CLOUD_CONSUL_PORT=8500
+#      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
+#
+#    ports:
+#      - 8480:8480
+#      - 28480:28480
+#    depends_on:
+#      - im-kafka1
+#      - im-kafka2
+#      - im-kafka3
+#      - im-consul
+#    networks:
+#      - im-network
   im-zoo1:
     image: zookeeper:3.4
     restart: always
@@ -214,9 +214,9 @@ services:
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
     depends_on:
-      - zoo1
-      - zoo2
-      - zoo3
+      - im-zoo1
+      - im-zoo2
+      - im-zoo3
     networks:
       - im-network
   im-kafka2:
@@ -234,9 +234,9 @@ services:
       KAFKA_ADVERTISED_PORT: 9093
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
     depends_on:
-      - zoo1
-      - zoo2
-      - zoo3
+      - im-zoo1
+      - im-zoo2
+      - im-zoo3
     networks:
       - im-network
   im-kafka3:
@@ -254,9 +254,9 @@ services:
       KAFKA_ADVERTISED_PORT: 9094
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
     depends_on:
-      - zoo1
-      - zoo2
-      - zoo3
+      - im-zoo1
+      - im-zoo2
+      - im-zoo3
     networks:
       - im-network
   im-redis:
