@@ -10,6 +10,7 @@
         <module>im-common</module>
         <module>im-stat</module>
         <module>im-storage</module>
+        <module>im-uid</module>
 
     </modules>
     <packaging>pom</packaging>

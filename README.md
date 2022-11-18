@@ -5,6 +5,16 @@
 
 # 架构描述
 
+# 模块介绍
+```
+im
+|- im-common //通用模块 
+|- im-connect //长链接模块
+|- im-dispatcher //分发模块
+|- im-message //消息模块
+|- im-stat //统计模块
+|- im-storage //存储模块
+```
 # 功能列表
 
  - [x] 上下线广播

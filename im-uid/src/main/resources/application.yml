@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: im-uid
+    instance_id: 2b470f496397432287a6622bd6ec7a69
+  cloud:
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+      config:
+        enabled: false
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/im?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+server:
+  port: 8880
+grpc:
+  server:
+    port: 28880
+  client:
+    GLOBAL:
+      negotiationType: plaintext
+
+mybatis:
+  type-aliases-package: com.itrjp.im.uid.worker.entity
+  mapper-locations: 'classpath:mapper/*.xml'

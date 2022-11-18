@@ -14,14 +14,28 @@ public class ConnectServiceImpl implements ConnectService {
 
     @Override
     public ConnectInfo getConnectInfo(String channelId) {
-        // 检查频道是否存在
-        if (!exits(channelId)) {
-            throw new ChannelNotFoundException(channelId);
-        }
+
+        checkChannelConfig(channelId);
+
         // 获取最佳节点
         String url = getConnectNode(channelId);
         String token = createToken(channelId);
         return new ConnectInfo(url, token);
+    }
+
+    /**
+     * 检查当前房间配置
+     *
+     * @param channelId
+     */
+    private void checkChannelConfig(String channelId) {
+
+        // 检查频道是否存在
+        if (!exits(channelId)) {
+            throw new ChannelNotFoundException(channelId);
+        }
+        // 检查是否超过最大连接数
+
     }
 
     /**
@@ -34,6 +48,12 @@ public class ConnectServiceImpl implements ConnectService {
         return "123";
     }
 
+    /**
+     * TODO 生成token
+     *
+     * @param channelId
+     * @return
+     */
     private String getConnectNode(String channelId) {
 
         return "localhost:18080/ws?cid=" + channelId;

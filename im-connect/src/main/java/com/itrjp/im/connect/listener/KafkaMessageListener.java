@@ -51,7 +51,7 @@ public class KafkaMessageListener {
     public void onJoinLeave(byte[] data) {
         try {
             KafkaProto.JoinLeave d = KafkaProto.JoinLeave.parseFrom(data);
-            logger.info("接受Kafka上下线消息: {}", d);
+            logger.info("接受Kafka上下线消息: {}, type: {}", d, d.getType());
             messageService.broadcastJoinLeaveMessage(d.getChannelId(), d.getUserId(), d.getType());
         } catch (Exception e) {
             logger.error("上下线消息处理失败", e);

@@ -13,8 +13,9 @@ public interface MessageService {
      * @param channelId
      * @param userId
      * @param message
+     * @param msgId
      */
-    void handlerMessage(String channelId, String userId, String message);
+    void handlerMessage(String channelId, String userId, String message, long msgId);
 
     /**
      * 处理上下线

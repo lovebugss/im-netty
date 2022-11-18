@@ -26,7 +26,8 @@ public class MessageGrpcImpl extends MessageGrpc.MessageImplBase {
     @Override
     public void onMessage(MessageProto.MessageRequest request, StreamObserver<MessageProto.ApiResponse> responseObserver) {
         try {
-            messageService.handlerMessage(request.getChannelId(), request.getUserId(), request.getContent());
+            // TODO 使用实体
+            messageService.handlerMessage(request.getChannelId(), request.getUserId(), request.getContent(), request.getMsgId());
             responseObserver.onNext(MessageProto.ApiResponse.newBuilder()
                     .setMessage("success")
                     .setCode(200)

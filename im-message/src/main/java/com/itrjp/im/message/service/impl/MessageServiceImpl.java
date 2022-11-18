@@ -31,20 +31,19 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void handlerMessage(String channelId, String userId, String message) {
+    public void handlerMessage(String channelId, String userId, String message, long msgId) {
         logger.info("handler message, channelId: {}, userId:{}, message: {}", channelId, userId, message);
         // 消息过滤
         boolean filter = filter(message);
         if (!filter) {
             return;
         }
-        // TODO 其他逻辑: 生成消息ID
-
-        // 消息投递
+        // 消息投递给connect 进行广播
         // connect
         kafkaTemplate.send(MESSAGE_TOPIC, channelId, KafkaProto.Message.newBuilder()
                 .setChannelId(channelId)
                 .setContent(message)
+                .setMessageId(msgId)
                 .build().toByteArray());
         // storage
     }
@@ -62,6 +61,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     private boolean filter(String message) {
+
         for (MessageFilter filter : messageFilterList) {
             if (filter.match(MessageFilter.MessageFilterType.black)) {
                 return filter.doFilter(message);
