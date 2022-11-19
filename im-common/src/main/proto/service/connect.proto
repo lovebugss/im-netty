@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package com.itrjp.im.proto.connect;
-option java_outer_classname = "ConnectProto";
+package com.itrjp.im.proto.service;
+option java_outer_classname = "ConnectRpcService";
 
 service Connect{
   // 推送消息
-  rpc push (PushRequest) returns (ApiResponse) {}
+  rpc push (PushRequest) returns (PushResponse) {}
 }
 
 message PushRequest{
@@ -13,7 +13,7 @@ message PushRequest{
   string content = 2;
 }
 
-message ApiResponse{
+message PushResponse{
   int32 code = 1;
   string message = 2;
 }

@@ -1,8 +1,8 @@
 package com.itrjp.im.connect.rpc;
 
 import com.itrjp.common.grpc.GrpcService;
-import com.itrjp.im.proto.connect.ConnectGrpc;
-import com.itrjp.im.proto.connect.ConnectProto;
+import com.itrjp.im.proto.service.ConnectGrpc;
+import com.itrjp.im.proto.service.ConnectRpcService;
 import io.grpc.stub.StreamObserver;
 
 /**
@@ -14,11 +14,11 @@ import io.grpc.stub.StreamObserver;
 @GrpcService
 public class ChannelImpl extends ConnectGrpc.ConnectImplBase {
     @Override
-    public void push(ConnectProto.PushRequest request, StreamObserver<ConnectProto.ApiResponse> responseObserver) {
+    public void push(ConnectRpcService.PushRequest request, StreamObserver<ConnectRpcService.PushResponse> responseObserver) {
         // 消息广播
         String channelId = request.getChannelId();
         String content = request.getContent();
-        ConnectProto.ApiResponse response = ConnectProto.ApiResponse.newBuilder()
+        ConnectRpcService.PushResponse response = ConnectRpcService.PushResponse.newBuilder()
                 .setCode(200)
                 .setMessage("success")
                 .build();

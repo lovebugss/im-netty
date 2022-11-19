@@ -3,10 +3,11 @@ package com.itrjp.im.connect.service.impl;
 import com.itrjp.im.connect.service.ChannelService;
 import com.itrjp.im.connect.websocket.WebSocketClient;
 import com.itrjp.im.connect.websocket.channel.ChannelsHub;
-import com.itrjp.im.proto.dispatcher.DispatchGrpc;
-import com.itrjp.im.proto.dispatcher.DispatchProto;
-import com.itrjp.im.proto.message.MessageGrpc;
-import com.itrjp.im.proto.message.MessageProto;
+import com.itrjp.im.proto.dto.MessageProto;
+import com.itrjp.im.proto.service.DispatchGrpc;
+import com.itrjp.im.proto.service.DispatchRpcService;
+import com.itrjp.im.proto.service.MessageGrpc;
+import com.itrjp.im.proto.service.MessageRpcService;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,6 @@ import java.util.concurrent.Executor;
 @Service
 public class ChannelServiceImpl implements ChannelService {
     private final ConsulDiscoveryProperties consulDiscoveryProperties;
-    private final ChannelsHub channelsHub;
-    private final Executor executor;
 
 
     @GrpcClient("im-stat")
@@ -36,8 +35,6 @@ public class ChannelServiceImpl implements ChannelService {
 
     public ChannelServiceImpl(ConsulDiscoveryProperties consulDiscoveryProperties, ChannelsHub channelsHub, Executor executor) {
         this.consulDiscoveryProperties = consulDiscoveryProperties;
-        this.channelsHub = channelsHub;
-        this.executor = executor;
     }
 
     @Override
@@ -49,25 +46,24 @@ public class ChannelServiceImpl implements ChannelService {
         Map<String, List<String>> parameters = client.getParameters();
         String uid = parameters.get("uid").get(0);
         // 通知状态服务
-        DispatchProto.DispatchRequest request = DispatchProto.DispatchRequest.newBuilder()
+        DispatchRpcService.OnlineRequest request = DispatchRpcService.OnlineRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
                 .setSessionId(client.getSession())
                 .setNodeId(consulDiscoveryProperties.getInstanceId())
                 .build();
-        DispatchProto.ApiResponse online = dispatchStub.online(request);
+        DispatchRpcService.DispatchResponse online = dispatchStub.online(request);
         System.out.println(online);
         // 通知消息服务
-        MessageProto.ApiResponse apiResponse = messageBlockingStub.onJoinLeave(MessageProto.JoinLeaveRequest.newBuilder()
+        MessageRpcService.OnNoticeResponse noticeResponse = messageBlockingStub.onNotice(MessageRpcService.EventRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
-                .setType(MessageProto.OperateType.leave)
+                .setType(MessageProto.EventType.join)
                 .build());
     }
 
     @Override
     public void onClose(WebSocketClient client) {
-        System.out.println("on close");
         // 频道ID
         String channelId = client.getChannelId();
         if (channelId == null) {
@@ -76,20 +72,19 @@ public class ChannelServiceImpl implements ChannelService {
         Map<String, List<String>> parameters = client.getParameters();
         String uid = parameters.get("uid").get(0);
         // 通知状态服务
-        DispatchProto.DispatchRequest request = DispatchProto.DispatchRequest.newBuilder()
+        DispatchRpcService.OfflineRequest request = DispatchRpcService.OfflineRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
                 .setSessionId(client.getSession())
                 .setNodeId(consulDiscoveryProperties.getInstanceId())
                 .build();
-        DispatchProto.ApiResponse offline = dispatchStub.offline(request);
-        System.out.println(offline);
+        DispatchRpcService.DispatchResponse offline = dispatchStub.offline(request);
 
         // 通知消息服务
-        MessageProto.ApiResponse apiResponse = messageBlockingStub.onJoinLeave(MessageProto.JoinLeaveRequest.newBuilder()
+        MessageRpcService.OnNoticeResponse noticeResponse = messageBlockingStub.onNotice(MessageRpcService.EventRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
-                .setType(MessageProto.OperateType.leave)
+                .setType(MessageProto.EventType.leave)
                 .build());
     }
 }

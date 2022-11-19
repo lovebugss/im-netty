@@ -1,5 +1,8 @@
 package com.itrjp.im.message.service;
 
+
+import com.itrjp.im.proto.dto.MessageProto;
+
 /**
  * TODO
  *
@@ -24,5 +27,5 @@ public interface MessageService {
      * @param userId
      * @param type      0: 上线, 1: 下线
      */
-    void handlerJoinLeave(String channelId, String userId, int type);
+    void handlerJoinLeave(String channelId, String userId, MessageProto.EventType type);
 }

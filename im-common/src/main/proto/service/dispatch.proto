@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package com.itrjp.im.proto.service;
+option java_outer_classname = "DispatchRpcService";
+
+service Dispatch{
+  // 上线
+  rpc online(OnlineRequest) returns (DispatchResponse) {}
+  // 下线
+  rpc offline(OfflineRequest) returns (DispatchResponse) {}
+
+  rpc getConnectInfo(GetConnectInfoRequest) returns (DispatchResponse) {}
+}
+
+message OnlineRequest{
+  string channelId = 1; // 频道ID
+  string userId = 2; // 用户ID
+  string sessionId = 3; // sessionId
+  string nodeId = 4;
+}
+message OfflineRequest{
+  string channelId = 1; // 频道ID
+  string userId = 2; // 用户ID
+  string sessionId = 3; // sessionId
+  string nodeId = 4;
+}
+
+message GetConnectInfoRequest{}
+
+message DispatchResponse{
+  int32 code = 1;
+  string message = 2;
+  int64 users = 3;
+}

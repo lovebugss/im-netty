@@ -1,8 +1,8 @@
 package com.itrjp.im.message.grpc;
 
 import com.itrjp.im.message.service.MessageService;
-import com.itrjp.im.proto.message.MessageGrpc;
-import com.itrjp.im.proto.message.MessageProto;
+import com.itrjp.im.proto.service.MessageGrpc;
+import com.itrjp.im.proto.service.MessageRpcService;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
@@ -24,11 +24,11 @@ public class MessageGrpcImpl extends MessageGrpc.MessageImplBase {
     }
 
     @Override
-    public void onMessage(MessageProto.MessageRequest request, StreamObserver<MessageProto.ApiResponse> responseObserver) {
+    public void onMessage(MessageRpcService.MessageRequest request, StreamObserver<MessageRpcService.OnMessageResponse> responseObserver) {
         try {
             // TODO 使用实体
             messageService.handlerMessage(request.getChannelId(), request.getUserId(), request.getContent(), request.getMsgId());
-            responseObserver.onNext(MessageProto.ApiResponse.newBuilder()
+            responseObserver.onNext(MessageRpcService.OnMessageResponse.newBuilder()
                     .setMessage("success")
                     .setCode(200)
                     .build());
@@ -40,10 +40,10 @@ public class MessageGrpcImpl extends MessageGrpc.MessageImplBase {
     }
 
     @Override
-    public void onJoinLeave(MessageProto.JoinLeaveRequest request, StreamObserver<MessageProto.ApiResponse> responseObserver) {
+    public void onNotice(MessageRpcService.EventRequest request, StreamObserver<MessageRpcService.OnNoticeResponse> responseObserver) {
         try {
-            messageService.handlerJoinLeave(request.getChannelId(), request.getUserId(), request.getType().getNumber());
-            responseObserver.onNext(MessageProto.ApiResponse.newBuilder()
+            messageService.handlerJoinLeave(request.getChannelId(), request.getUserId(), request.getType());
+            responseObserver.onNext(MessageRpcService.OnNoticeResponse.newBuilder()
                     .setMessage("success")
                     .setCode(200)
                     .build());

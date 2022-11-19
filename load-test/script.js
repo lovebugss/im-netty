@@ -1,6 +1,6 @@
 import ws from 'k6/ws';
 import {check, crpyto} from 'k6';
-import proto from "./packet_pb.js"
+import proto from "./message_pb.js"
 
 export const options = {
     stages: [
@@ -20,8 +20,12 @@ export default () => {
     const response = ws.connect(url, {}, function (socket) {
         socket.on('open', function open() {
             console.log('connected');
-            var message_proto = new proto.Data()
-            message_proto.setContent("你好-" + new Date().getTime())
+            var message_proto = new proto.Packet()
+            var message = new proto.Message();
+            message.setContent("你好-" + new Date().getTime());
+            message_proto.setDatatype(1);
+            message_proto.setMessage(message);
+            message_proto.setTimestamp(new Date().getTime())
             console.log(`send message: ${message_proto}`)
             socket.sendBinary(message_proto.serializeBinary().buffer);
             socket.setInterval(function timeout() {
@@ -36,7 +40,7 @@ export default () => {
             console.log(`Received message: ${message}`);
         });
         socket.on('binaryMessage', function (message) {
-               console.log(`Received binaryMessage: ${proto.Data.deserializeBinary(message)}`);
+               console.log(`Received binaryMessage: ${proto.Packet.deserializeBinary(message)}`);
             });
         socket.on('close', () => console.log('disconnected'));
 

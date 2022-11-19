@@ -2,7 +2,7 @@ package com.itrjp.im.message.service.impl;
 
 import com.itrjp.im.message.service.MessageService;
 import com.itrjp.im.message.service.filter.MessageFilter;
-import com.itrjp.im.proto.kafka.KafkaProto;
+import com.itrjp.im.proto.dto.MessageProto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -40,20 +40,21 @@ public class MessageServiceImpl implements MessageService {
         }
         // 消息投递给connect 进行广播
         // connect
-        kafkaTemplate.send(MESSAGE_TOPIC, channelId, KafkaProto.Message.newBuilder()
+        kafkaTemplate.send(MESSAGE_TOPIC, channelId, MessageProto.Message.newBuilder()
                 .setChannelId(channelId)
                 .setContent(message)
                 .setMessageId(msgId)
+                .setTimestamp(System.currentTimeMillis())
                 .build().toByteArray());
         // storage
     }
 
     @Override
-    public void handlerJoinLeave(String channelId, String userId, int type) {
+    public void handlerJoinLeave(String channelId, String userId, MessageProto.EventType type) {
 
         // TODO 上下线限流
         //消息投递
-        kafkaTemplate.send(MESSAGE_JOIN_LEAVE_TOPIC, channelId, KafkaProto.JoinLeave.newBuilder()
+        kafkaTemplate.send(MESSAGE_JOIN_LEAVE_TOPIC, channelId, MessageProto.Event.newBuilder()
                 .setType(type)
                 .setUserId(userId)
                 .setChannelId(channelId).build().toByteArray());

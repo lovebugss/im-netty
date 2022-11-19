@@ -1,7 +1,7 @@
 package com.itrjp.im.connect.listener;
 
 import com.itrjp.im.connect.service.impl.MessageServiceImpl;
-import com.itrjp.im.proto.kafka.KafkaProto;
+import com.itrjp.im.proto.dto.MessageProto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -34,9 +34,9 @@ public class KafkaMessageListener {
     @KafkaListener(topics = {MESSAGE_TOPIC})
     public void onMessage(byte[] data) {
         try {
-            KafkaProto.Message d = KafkaProto.Message.parseFrom(data);
+            MessageProto.Message d = MessageProto.Message.parseFrom(data);
             logger.info("接受Kafka消息: {}", d);
-            messageService.broadcastMessage(d.getChannelId(), d.getContent());
+            messageService.broadcastMessage(d.getChannelId(), d);
         } catch (Exception e) {
             logger.error("消息处理失败", e);
         }
@@ -50,9 +50,9 @@ public class KafkaMessageListener {
     @KafkaListener(topics = {MESSAGE_JOIN_LEAVE_TOPIC})
     public void onJoinLeave(byte[] data) {
         try {
-            KafkaProto.JoinLeave d = KafkaProto.JoinLeave.parseFrom(data);
-            logger.info("接受Kafka上下线消息: {}, type: {}", d, d.getType());
-            messageService.broadcastJoinLeaveMessage(d.getChannelId(), d.getUserId(), d.getType());
+            MessageProto.Event event = MessageProto.Event.parseFrom(data);
+            logger.info("接受Kafka上下线消息: {}, type: {}", event, event.getType());
+            messageService.broadcastEvent(event.getChannelId(), event);
         } catch (Exception e) {
             logger.error("上下线消息处理失败", e);
         }

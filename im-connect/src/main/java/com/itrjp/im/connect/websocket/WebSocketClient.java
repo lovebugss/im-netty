@@ -1,7 +1,7 @@
 package com.itrjp.im.connect.websocket;
 
 import com.itrjp.im.connect.websocket.channel.WebsocketChannel;
-import com.itrjp.im.proto.Packet;
+import com.itrjp.im.proto.dto.MessageProto.Packet;
 
 import java.util.List;
 import java.util.Map;
@@ -29,5 +29,5 @@ public interface WebSocketClient {
 
     Map<String, List<String>> getParameters();
 
-    void sendMessage(Packet.Data data);
+    void sendMessage(Packet data);
 }

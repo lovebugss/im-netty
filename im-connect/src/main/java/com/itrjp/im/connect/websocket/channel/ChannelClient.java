@@ -2,7 +2,7 @@ package com.itrjp.im.connect.websocket.channel;
 
 import com.itrjp.im.connect.websocket.HandshakeData;
 import com.itrjp.im.connect.websocket.WebSocketClient;
-import com.itrjp.im.proto.Packet;
+import com.itrjp.im.proto.dto.MessageProto;
 import io.netty.channel.Channel;
 
 import java.util.List;
@@ -67,7 +67,7 @@ public class ChannelClient implements WebSocketClient {
     }
 
     @Override
-    public void sendMessage(Packet.Data data) {
+    public void sendMessage(MessageProto.Packet data) {
         channel.writeAndFlush(data);
     }
 

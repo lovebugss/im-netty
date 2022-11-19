@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package com.itrjp.im.proto.service;
+option java_outer_classname = "UidRpcService";
+
+service Uid{
+  // onMessage
+  rpc genUid(UidRequest) returns (UidResponse){}
+
+}
+message UidRequest{
+  string channel_id = 1;
+}
+message UidResponse{
+  int32 code = 1;
+  string message = 2;
+  int64 uid = 3;
+}

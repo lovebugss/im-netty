@@ -1,6 +1,6 @@
 package com.itrjp.im.storage.listener;
 
-import com.itrjp.im.proto.kafka.KafkaProto;
+import com.itrjp.im.proto.dto.MessageProto;
 import com.itrjp.im.storage.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class KafkaMessageListener {
     @KafkaListener(topics = {MESSAGE_TOPIC})
     public void onMessage(byte[] data) {
         try {
-            KafkaProto.Message d = KafkaProto.Message.parseFrom(data);
+            MessageProto.Message d = MessageProto.Message.parseFrom(data);
             logger.info("接受Kafka消息: {}", d);
             messageService.handlerMessage(d.getChannelId(), d.getContent());
         } catch (Exception e) {
@@ -44,7 +44,7 @@ public class KafkaMessageListener {
     @KafkaListener(topics = {MESSAGE_JOIN_LEAVE_TOPIC})
     public void onJoinLeave(byte[] data) {
         try {
-            KafkaProto.JoinLeave d = KafkaProto.JoinLeave.parseFrom(data);
+            MessageProto.Event d = MessageProto.Event.parseFrom(data);
             logger.info("接受Kafka上下线消息: {}", d);
             messageService.handlerJoinLeaveMessage(d.getChannelId(), d.getUserId(), d.getType());
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.itrjp.im.storage.service.impl;
 
+import com.itrjp.im.proto.dto.MessageProto;
 import com.itrjp.im.storage.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void handlerJoinLeaveMessage(String channelId, String userId, int type) {
+    public void handlerJoinLeaveMessage(String channelId, String userId, MessageProto.EventType type) {
         logger.info("handler join/leave message channelId: {}, userId: {}, type: {}", channelId, userId, type);
         // TODO 消息落盘
     }

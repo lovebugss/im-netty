@@ -1,6 +1,7 @@
 package com.itrjp.im.connect.service;
 
 import com.itrjp.im.connect.websocket.listener.MessageListener;
+import com.itrjp.im.proto.dto.MessageProto;
 
 /**
  * TODO
@@ -11,18 +12,14 @@ import com.itrjp.im.connect.websocket.listener.MessageListener;
 public interface MessageService extends MessageListener {
     /**
      * 广播聊天消息
-     *
-     * @param channelId
-     * @param content
      */
-    void broadcastMessage(String channelId, String content);
+    void broadcastMessage(String channelId, MessageProto.Message message);
 
     /**
      * 广播上下线消息(是不是能用设计模式)
      *
      * @param channelId
-     * @param userId
-     * @param type
+     * @param event
      */
-    void broadcastJoinLeaveMessage(String channelId, String userId, int type);
+    void broadcastEvent(String channelId, MessageProto.Event event);
 }

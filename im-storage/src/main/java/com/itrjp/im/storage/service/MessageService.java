@@ -1,5 +1,8 @@
 package com.itrjp.im.storage.service;
 
+
+import com.itrjp.im.proto.dto.MessageProto;
+
 /**
  * TODO
  *
@@ -9,5 +12,5 @@ package com.itrjp.im.storage.service;
 public interface MessageService {
     void handlerMessage(String channelId, String content);
 
-    void handlerJoinLeaveMessage(String channelId, String userId, int type);
+    void handlerJoinLeaveMessage(String channelId, String userId, MessageProto.EventType type);
 }

@@ -4,11 +4,11 @@ import com.itrjp.im.connect.service.MessageService;
 import com.itrjp.im.connect.websocket.WebSocketClient;
 import com.itrjp.im.connect.websocket.channel.ChannelsHub;
 import com.itrjp.im.connect.websocket.channel.WebsocketChannel;
-import com.itrjp.im.proto.Packet;
-import com.itrjp.im.proto.message.MessageGrpc;
-import com.itrjp.im.proto.message.MessageProto;
-import com.itrjp.im.proto.uid.UidGrpc;
-import com.itrjp.im.proto.uid.UidProto;
+import com.itrjp.im.proto.dto.MessageProto;
+import com.itrjp.im.proto.service.MessageGrpc;
+import com.itrjp.im.proto.service.MessageRpcService;
+import com.itrjp.im.proto.service.UidGrpc;
+import com.itrjp.im.proto.service.UidRpcService;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
@@ -36,47 +36,59 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void onMessage(WebSocketClient channel, Packet.Data data) {
-        String content = data.getContent();
+    public void onMessage(WebSocketClient channel, MessageProto.Packet data) {
+        MessageProto.Message message = data.getMessage();
         // 直接交给im-message 服务进行处理
         Map<String, List<String>> parameters = channel.getParameters();
         // 生成全局唯一ID
-        UidProto.ApiResponse response = uidBlockingStub.genUid(UidProto.MessageRequest.newBuilder().build());
+        UidRpcService.UidResponse response = uidBlockingStub.genUid(UidRpcService.UidRequest.newBuilder().build());
         // TODO 当生成id 失败时, 如何处理
         if (response.getCode() != 200) {
 
         }
-        MessageProto.MessageRequest messageRequest = MessageProto.MessageRequest.newBuilder()
+        MessageRpcService.MessageRequest messageRequest = MessageRpcService.MessageRequest.newBuilder()
                 .setChannelId(channel.getChannelId())
                 .setUserId(parameters.get("uid").get(0))
-                .setContent(content)
+                .setContent(message.getContent())
                 .setFrom(parameters.get("uid").get(0))
                 .setTo(channel.getChannelId())
                 .setMsgId(response.getUid())
                 .setTimestamp(System.currentTimeMillis())
                 .build();
         // 消息投递给im-message服务
-        MessageProto.ApiResponse apiResponse = messageBlockingStub.onMessage(messageRequest);
+        messageBlockingStub.onMessage(messageRequest);
     }
 
     @Override
-    public void broadcastMessage(String channelId, String content) {
+    public void broadcastMessage(String channelId, MessageProto.Message message) {
+        MessageProto.Packet packet = MessageProto.Packet.newBuilder()
+                .setDataType(MessageProto.DataType.msg)
+                .setMessage(message)
+                .setTimestamp(message.getTimestamp())
+                .build();
+        broadcast(channelId, packet);
+    }
+
+    private void broadcast(String channelId, MessageProto.Packet packet) {
         WebsocketChannel websocketChannel = channelsHub.get(channelId);
         if (websocketChannel == null) {
             return;
         }
+        // 循环广播
         for (WebSocketClient webSocketClient : websocketChannel.getAllClient()) {
-            webSocketClient.sendMessage(Packet.Data.newBuilder()
-                    .setContent(content) //消息内容
-                    .build());
+            webSocketClient.sendMessage(packet);
         }
-
     }
 
 
     @Override
-    public void broadcastJoinLeaveMessage(String channelId, String userId, int type) {
+    public void broadcastEvent(String channelId, MessageProto.Event event) {
 
-        broadcastMessage(channelId, type + "#" + userId);
+        MessageProto.Packet build = MessageProto.Packet.newBuilder()
+                .setDataType(MessageProto.DataType.notion)
+                .setEvent(event)
+                .setTimestamp(event.getTimestamp())
+                .build();
+        broadcast(channelId, build);
     }
 }
