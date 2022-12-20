@@ -10,6 +10,6 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public ChannelConfig getChannelConfig(String channelId) {
-        return null;
+        return new ChannelConfig();
     }
 }

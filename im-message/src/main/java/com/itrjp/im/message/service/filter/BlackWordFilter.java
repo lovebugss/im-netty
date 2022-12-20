@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class BlackWordFilter implements MessageFilter {
     @Override
     public boolean match(MessageFilterType type) {
-        return type.equals(MessageFilterType.black);
+        return MessageFilterType.BLACK.equals(type);
     }
 
     @Override

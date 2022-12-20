@@ -8,7 +8,7 @@ package com.itrjp.im.message.service.filter;
  */
 public interface MessageFilter {
     enum MessageFilterType {
-        auto, black
+        AUTO, BLACK
     }
 
     boolean match(MessageFilterType type);

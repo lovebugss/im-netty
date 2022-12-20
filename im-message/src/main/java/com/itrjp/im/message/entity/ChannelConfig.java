@@ -12,7 +12,7 @@ public class ChannelConfig {
     /**
      * 消息过滤器
      */
-    private MessageFilter.MessageFilterType filterType;
+    private MessageFilter.MessageFilterType filterType = MessageFilter.MessageFilterType.AUTO;
 
     public MessageFilter.MessageFilterType getFilterType() {
         return filterType;

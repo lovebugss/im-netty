@@ -1,6 +1,7 @@
 package com.itrjp.im.message.service.impl;
 
 import com.itrjp.im.message.service.MessageStorageService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,10 +11,11 @@ import org.springframework.stereotype.Service;
  * @date 2022/12/19 21:58
  */
 @Service
+@Slf4j
 public class MessageStorageServiceImpl implements MessageStorageService {
     @Override
     public void saveInvalidMessage(String channelId, String userId, String message) {
-
+        log.info("无效的消息内容: {}", message);
     }
 
     /**

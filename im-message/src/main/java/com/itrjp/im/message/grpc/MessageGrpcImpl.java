@@ -4,6 +4,7 @@ import com.itrjp.im.message.service.MessageService;
 import com.itrjp.im.proto.service.MessageGrpc;
 import com.itrjp.im.proto.service.MessageRpcService;
 import io.grpc.stub.StreamObserver;
+import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
  */
 @GrpcService
 @Service
+@Slf4j
 public class MessageGrpcImpl extends MessageGrpc.MessageImplBase {
 
     private final MessageService messageService;
@@ -35,9 +37,9 @@ public class MessageGrpcImpl extends MessageGrpc.MessageImplBase {
                     .build());
             responseObserver.onCompleted();
         } catch (Exception e) {
+            log.error("处理消息异常, message: {}", e.getMessage(), e);
             responseObserver.onError(e);
         }
-
     }
 
     @Override
