@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: im-api
+    instance_id: 3b8323048f9840c294e0cc70cf0ae941
+server:
+  port: 8580
+grpc:
+  server:
+    port: 28580
+  client:
+    GLOBAL:
+      negotiationType: plaintext
