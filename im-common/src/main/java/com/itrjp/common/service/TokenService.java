@@ -14,5 +14,5 @@ public interface TokenService {
      *
      * @return
      */
-    String create();
+    String create(String channelId);
 }

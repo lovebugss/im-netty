@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: im-api
+    instance_id: b8daff12a2064eeba42d443734a45fcf
+  cloud:
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+      config:
+        enabled: false

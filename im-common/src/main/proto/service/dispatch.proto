@@ -9,7 +9,7 @@ service Dispatch{
   // 下线
   rpc offline(OfflineRequest) returns (DispatchResponse) {}
 
-  rpc getConnectInfo(GetConnectInfoRequest) returns (DispatchResponse) {}
+  rpc getConnectInfo(GetConnectInfoRequest) returns (GetConnectInfoResponse) {}
 }
 
 message OnlineRequest{
@@ -25,7 +25,12 @@ message OfflineRequest{
   string nodeId = 4;
 }
 
-message GetConnectInfoRequest{}
+message GetConnectInfoRequest{
+  string channelId = 1; //频道ID
+}
+message GetConnectInfoResponse{
+  string host = 1;
+}
 
 message DispatchResponse{
   int32 code = 1;

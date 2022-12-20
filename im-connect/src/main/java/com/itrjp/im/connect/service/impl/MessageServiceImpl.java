@@ -28,8 +28,7 @@ public class MessageServiceImpl implements MessageService {
 
     @GrpcClient("im-message")
     private MessageGrpc.MessageBlockingStub messageBlockingStub;
-    @GrpcClient("im-uid")
-    private UidGrpc.UidBlockingStub uidBlockingStub;
+
 
     public MessageServiceImpl(ChannelsHub channelsHub) {
         this.channelsHub = channelsHub;
@@ -40,19 +39,13 @@ public class MessageServiceImpl implements MessageService {
         MessageProto.Message message = data.getMessage();
         // 直接交给im-message 服务进行处理
         Map<String, List<String>> parameters = channel.getParameters();
-        // 生成全局唯一ID
-        UidRpcService.UidResponse response = uidBlockingStub.genUid(UidRpcService.UidRequest.newBuilder().build());
-        // TODO 当生成id 失败时, 如何处理
-        if (response.getCode() != 200) {
 
-        }
         MessageRpcService.MessageRequest messageRequest = MessageRpcService.MessageRequest.newBuilder()
                 .setChannelId(channel.getChannelId())
                 .setUserId(parameters.get("uid").get(0))
                 .setContent(message.getContent())
                 .setFrom(parameters.get("uid").get(0))
                 .setTo(channel.getChannelId())
-                .setMsgId(response.getUid())
                 .setTimestamp(System.currentTimeMillis())
                 .build();
         // 消息投递给im-message服务

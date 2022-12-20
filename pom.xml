@@ -11,6 +11,7 @@
         <module>im-stat</module>
         <module>im-storage</module>
         <module>im-uid</module>
+        <module>im-api</module>
 
     </modules>
     <packaging>pom</packaging>
