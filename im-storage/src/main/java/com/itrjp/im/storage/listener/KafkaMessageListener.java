@@ -7,11 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
-import static com.itrjp.common.consts.KafkaConstant.MESSAGE_TOPIC;
+import static com.itrjp.common.consts.KafkaConstant.*;
 
 /**
- * TODO
+ * kafka 消息监听
  *
  * @author <a href="mailto:r979668507@gmail.com">renjp</a>
  * @date 2022/7/26 10:36
@@ -25,7 +24,7 @@ public class KafkaMessageListener {
         this.messageService = messageService;
     }
 
-    @KafkaListener(topics = {MESSAGE_TOPIC})
+    @KafkaListener(topics = {STORAGE_TOPIC})
     public void onMessage(byte[] data) {
         try {
             MessageProto.Message d = MessageProto.Message.parseFrom(data);

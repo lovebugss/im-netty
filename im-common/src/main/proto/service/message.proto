@@ -16,6 +16,7 @@ service Message{
 message OnMessageResponse{
   int32 code = 1;
   string message = 2;
+  string messageId = 3;
 }
 
 message OnNoticeResponse{

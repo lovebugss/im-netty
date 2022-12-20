@@ -1,5 +1,8 @@
 package com.itrjp.im.message.service.impl;
 
+import com.itrjp.im.message.entity.ChannelConfig;
+import com.itrjp.im.message.service.ChannelService;
+import com.itrjp.im.message.service.MessageHistoryService;
 import com.itrjp.im.message.service.MessageService;
 import com.itrjp.im.message.service.MessageStorageService;
 import com.itrjp.im.message.service.filter.MessageFilter;
@@ -15,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
-import static com.itrjp.common.consts.KafkaConstant.MESSAGE_TOPIC;
+import static com.itrjp.common.consts.KafkaConstant.CONNECT_MESSAGE_TOPIC;
 
 /**
  * 消息 service
@@ -31,27 +34,35 @@ public class MessageServiceImpl implements MessageService {
     private UidGrpc.UidBlockingStub uidBlockingStub;
     private final KafkaTemplate<String, byte[]> kafkaTemplate;
     private final MessageStorageService messageStorageService;
+    private final MessageHistoryService messageHistoryService;
 
-    public MessageServiceImpl(List<MessageFilter> messageFilterList, KafkaTemplate<String, byte[]> kafkaTemplate, MessageStorageService messageStorageService) {
+    private final ChannelService channelService;
+
+
+    public MessageServiceImpl(List<MessageFilter> messageFilterList, KafkaTemplate<String, byte[]> kafkaTemplate, MessageStorageService messageStorageService, MessageHistoryService messageHistoryService, ChannelService channelService) {
         this.messageFilterList = messageFilterList;
         this.kafkaTemplate = kafkaTemplate;
         this.messageStorageService = messageStorageService;
+        this.messageHistoryService = messageHistoryService;
+        this.channelService = channelService;
     }
 
     @Override
-    public void handlerMessage(String channelId, String userId, String message) {
+    public String handlerMessage(String channelId, String userId, String message) {
         logger.info("handler message, channelId: {}, userId:{}, message: {}", channelId, userId, message);
         long messageId = createMessageId();
+
+        ChannelConfig channelConfig = channelService.getChannelConfig(channelId);
         // 消息过滤
-        boolean filter = filter(message);
+        boolean filter = filter(message, channelConfig.getFilterType());
         if (!filter) {
             // 存储不合法的消息
             messageStorageService.saveInvalidMessage(channelId, userId, message);
-            return;
+            return messageId + "";
         }
         // 消息投递给connect 进行广播
         // connect
-        kafkaTemplate.send(MESSAGE_TOPIC, channelId, MessageProto.Message.newBuilder()
+        kafkaTemplate.send(CONNECT_MESSAGE_TOPIC, channelId, MessageProto.Message.newBuilder()
                 .setChannelId(channelId)
                 .setContent(message)
                 .setMessageId(messageId)
@@ -59,6 +70,8 @@ public class MessageServiceImpl implements MessageService {
                 .build().toByteArray());
         // storage
         messageStorageService.saveMessage(channelId, userId, message, messageId);
+        messageHistoryService.add(channelId, userId, message, messageId);
+        return messageId + "";
     }
 
     private long createMessageId() {
@@ -83,10 +96,10 @@ public class MessageServiceImpl implements MessageService {
 
     }
 
-    private boolean filter(String message) {
-
+    private boolean filter(String message, MessageFilter.MessageFilterType filterType) {
+        // 查询当前房间配置的过滤器
         for (MessageFilter filter : messageFilterList) {
-            if (filter.match(MessageFilter.MessageFilterType.black)) {
+            if (filter.match(filterType)) {
                 return filter.doFilter(message);
             }
         }

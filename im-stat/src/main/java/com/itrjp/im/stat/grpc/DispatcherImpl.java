@@ -58,7 +58,7 @@ public class DispatcherImpl extends DispatchGrpc.DispatchImplBase {
     }
 
     @Override
-    public void getConnectInfo(DispatchRpcService.GetConnectInfoRequest request, StreamObserver<DispatchRpcService.DispatchResponse> responseObserver) {
+    public void getConnectInfo(DispatchRpcService.GetConnectInfoRequest request, StreamObserver<DispatchRpcService.GetConnectInfoResponse> responseObserver) {
         super.getConnectInfo(request, responseObserver);
     }
 }

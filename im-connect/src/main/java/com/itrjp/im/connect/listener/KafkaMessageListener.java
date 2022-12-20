@@ -8,7 +8,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
-import static com.itrjp.common.consts.KafkaConstant.MESSAGE_TOPIC;
+import static com.itrjp.common.consts.KafkaConstant.CONNECT_MESSAGE_TOPIC;
 
 /**
  * Kafka 监听器
@@ -31,7 +31,7 @@ public class KafkaMessageListener {
      *
      * @param data
      */
-    @KafkaListener(topics = {MESSAGE_TOPIC})
+    @KafkaListener(topics = {CONNECT_MESSAGE_TOPIC})
     public void onMessage(byte[] data) {
         try {
             MessageProto.Message d = MessageProto.Message.parseFrom(data);

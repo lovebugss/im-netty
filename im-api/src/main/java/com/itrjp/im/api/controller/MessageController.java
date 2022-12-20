@@ -5,6 +5,7 @@ import com.itrjp.im.api.entity.MessageParam;
 import com.itrjp.im.api.entity.SendMessageVo;
 import com.itrjp.im.api.service.MessageService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,7 @@ public class MessageController {
     }
 
     @PostMapping("send")
-    public Result<SendMessageVo> send(MessageParam param) {
+    public Result<SendMessageVo> send(@RequestBody MessageParam param) {
         // 发送消息
         String messageId = messageService.sendMessage(param);
         return Result.success(new SendMessageVo(messageId));

@@ -7,3 +7,5 @@ spring:
       port: 8500
       discovery:
         instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  profiles:
+    active: dev

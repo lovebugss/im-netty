@@ -17,7 +17,7 @@ public interface MessageService {
      * @param userId    用户id
      * @param message   消息体
      */
-    void handlerMessage(String channelId, String userId, String message);
+    String handlerMessage(String channelId, String userId, String message);
 
     /**
      * 处理上下线

@@ -17,6 +17,7 @@ public class BlackWordFilter implements MessageFilter {
 
     @Override
     public boolean doFilter(String message) {
+
         return true;
     }
 }

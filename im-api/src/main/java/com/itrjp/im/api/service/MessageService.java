@@ -1,6 +1,9 @@
 package com.itrjp.im.api.service;
 
 import com.itrjp.im.api.entity.MessageParam;
+import com.itrjp.im.proto.service.MessageGrpc;
+import com.itrjp.im.proto.service.MessageRpcService;
+import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,7 +14,19 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MessageService {
+    @GrpcClient("im-message")
+    private MessageGrpc.MessageBlockingStub messageBlockingStub;
+
     public String sendMessage(MessageParam param) {
-        return null;
+        MessageRpcService.MessageRequest messageRequest = MessageRpcService.MessageRequest.newBuilder()
+                .setChannelId(param.getTo())
+                .setContent(param.getMessage().getContent())
+                .setTimestamp(System.currentTimeMillis())
+                .setTo(param.getTo())
+                .setFrom(param.getFrom())
+                .setUserId(param.getFrom())
+                .build();
+        MessageRpcService.OnMessageResponse onMessageResponse = messageBlockingStub.onMessage(messageRequest);
+        return onMessageResponse.getMessageId();
     }
 }
