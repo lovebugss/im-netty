@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author <a href="mailto:r979668507@gmail.com">renjp</a>
  * @date 2022/7/11 15:57
  */
-@ConfigurationProperties("im")
+@ConfigurationProperties("websocket")
 public class WebSocketProperties {
     private int bossNum = 0;
     private int workNum = 0;

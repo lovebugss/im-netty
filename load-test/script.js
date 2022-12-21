@@ -10,12 +10,12 @@ export const options = {
     ],
     thresholds: {},
     vus: 20,
-    duration: '60s'
+    duration: '300s'
 
 }
 
 export default () => {
-    const url = 'ws://127.0.0.1:18080/ws?cid=ch_00001&uid=xxxxxxxxxx';
+    const url = 'ws://127.0.0.1:18081/ws?cid=ch_00001&uid=xxxxxxxxxx';
 
     const response = ws.connect(url, {}, function (socket) {
         socket.on('open', function open() {
