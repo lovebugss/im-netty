@@ -1,5 +1,6 @@
 package com.itrjp.im.message.service.impl;
 
+import com.itrjp.common.enums.MessageFilterType;
 import com.itrjp.im.message.entity.ChannelConfig;
 import com.itrjp.im.message.service.ChannelService;
 import com.itrjp.im.message.service.MessageHistoryService;
@@ -96,7 +97,7 @@ public class MessageServiceImpl implements MessageService {
 
     }
 
-    private boolean filter(String message, MessageFilter.MessageFilterType filterType) {
+    private boolean filter(String message, MessageFilterType filterType) {
         // 查询当前房间配置的过滤器
         for (MessageFilter filter : messageFilterList) {
             if (filter.match(filterType)) {

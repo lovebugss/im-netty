@@ -1,5 +1,7 @@
 package com.itrjp.im.message.service.filter;
 
+import com.itrjp.common.enums.MessageFilterType;
+
 /**
  * 消息过滤
  *
@@ -7,9 +9,6 @@ package com.itrjp.im.message.service.filter;
  * @date 2022/7/25 13:56
  */
 public interface MessageFilter {
-    enum MessageFilterType {
-        AUTO, BLACK
-    }
 
     boolean match(MessageFilterType type);
 

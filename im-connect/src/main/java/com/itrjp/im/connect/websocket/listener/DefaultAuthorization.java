@@ -20,7 +20,6 @@ public class DefaultAuthorization implements AuthorizationListener {
     @Override
     public boolean authorize(HandshakeData handshakeData) {
         logger.info("DefaultAuthorization#authorize, handshakeData: {}", handshakeData);
-        Map<String, List<String>> parameters = handshakeData.parameters();
-        return parameters.containsKey("cid") && parameters.containsKey("uid");
+        return true;
     }
 }

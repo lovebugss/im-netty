@@ -12,9 +12,15 @@ public class DefaultTokenService implements TokenService {
 
     @Value("${im.common.sign:123456}")
     private String sign;
+    /**
+     * 超时时间(s)
+     */
+    @Value("${im.token.expire:300}")
+    private long expire = 5 * 60;
 
     @Override
     public boolean check(String token) {
+
         return false;
     }
 

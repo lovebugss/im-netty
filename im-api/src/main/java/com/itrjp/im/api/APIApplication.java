@@ -9,7 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @author <a href="mailto:r979668507@gmail.com">renjp</a>
  * @date 2022/11/19 20:57
  */
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.itrjp")
 @EnableAutoConfiguration
 @EnableDiscoveryClient
 public class APIApplication {

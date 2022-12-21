@@ -1,8 +1,8 @@
 package com.itrjp.common.result;
 
+import com.itrjp.common.exception.BizException;
+
 /**
- * TODO
- *
  * @author <a href="mailto:r979668507@gmail.com">renjp</a>
  * @date 2022/11/17 23:25
  */
@@ -19,11 +19,18 @@ public class Result<T> {
     }
 
     public static Result<Void> error() {
-        return error(0, "error");
+        return error(ErrorCode.ERROR);
     }
 
+    public static Result<Void> error(ErrorCode errorCode) {
+        return new Result<>(errorCode.getCode(), errorCode.getMessage(), null);
+    }
     public static Result<Void> error(int code, String message) {
         return new Result<>(code, message, null);
+    }
+
+    public static Result<Void> error(BizException exception) {
+        return new Result<>(exception.getCode(), exception.getMessage(), null);
     }
 
     public static <T> Result<T> success(T data) {

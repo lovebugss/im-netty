@@ -1,5 +1,6 @@
 package com.itrjp.im.message.entity;
 
+import com.itrjp.common.enums.MessageFilterType;
 import com.itrjp.im.message.service.filter.MessageFilter;
 
 public class ChannelConfig {
@@ -12,13 +13,13 @@ public class ChannelConfig {
     /**
      * 消息过滤器
      */
-    private MessageFilter.MessageFilterType filterType = MessageFilter.MessageFilterType.AUTO;
+    private MessageFilterType filterType = MessageFilterType.AUTO;
 
-    public MessageFilter.MessageFilterType getFilterType() {
+    public MessageFilterType getFilterType() {
         return filterType;
     }
 
-    public void setFilterType(MessageFilter.MessageFilterType filterType) {
+    public void setFilterType(MessageFilterType filterType) {
         this.filterType = filterType;
     }
 }

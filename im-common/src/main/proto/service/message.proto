@@ -38,6 +38,6 @@ message MessageRequest{
   string from = 4;
   string to = 5;
   int64 msgId = 6;
-  int64 timestamp = 7;
+  int64 timestamp = 7; // 消息时间戳(服务端接收到消息的时间戳)
 }
 

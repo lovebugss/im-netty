@@ -1,5 +1,6 @@
 package com.itrjp.im.message.service.filter;
 
+import com.itrjp.common.enums.MessageFilterType;
 import org.springframework.stereotype.Service;
 
 /**

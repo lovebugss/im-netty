@@ -1,6 +1,8 @@
 package com.itrjp.im.api.controller;
 
 import com.itrjp.common.result.Result;
+import com.itrjp.im.api.service.ChannelService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,8 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("connect")
+@RequiredArgsConstructor
 public class ConnectController {
-
+    private final ChannelService channelService;
 
     /**
      * 获取长链接信息
@@ -22,6 +25,7 @@ public class ConnectController {
      */
     @PostMapping("get")
     public Result<?> init(String channelId) {
+
         return Result.success(null);
     }
 }

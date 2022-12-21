@@ -26,7 +26,8 @@ public class MessageService {
                 .setFrom(param.getFrom())
                 .setUserId(param.getFrom())
                 .build();
-        MessageRpcService.OnMessageResponse onMessageResponse = messageBlockingStub.onMessage(messageRequest);
-        return onMessageResponse.getMessageId();
+        // todo 消息投递失败
+        MessageRpcService.OnMessageResponse response = messageBlockingStub.onMessage(messageRequest);
+        return response.getMessageId();
     }
 }
