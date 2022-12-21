@@ -4,9 +4,12 @@ import com.itrjp.common.exception.BizException;
 import com.itrjp.common.result.ErrorCode;
 import com.itrjp.common.result.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
@@ -28,6 +31,7 @@ public class GlobalHandler {
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public Result<Void> handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.warn("MethodArgumentNotValidException, message: {}", e.getMessage());
         FieldError fieldError = e.getBindingResult().getFieldError();

@@ -1,5 +1,6 @@
 package com.itrjp.common.service;
 
+import com.itrjp.common.util.Md5Utils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,18 +17,23 @@ public class DefaultTokenService implements TokenService {
      * 超时时间(s)
      */
     @Value("${im.token.expire:300}")
-    private long expire = 5 * 60;
+    private long expire = 5 * 60L;
 
     @Override
-    public boolean check(String token) {
+    public boolean check(String token, String channelId, long time, String uid) {
 
-        return false;
+        return token.equals(create(channelId, time, uid)) && checkTime(time);
+    }
+
+    private boolean checkTime(long time) {
+        long currentTime = System.currentTimeMillis() / 1000;
+        return currentTime < time + expire && currentTime > time - 60;
     }
 
     @Override
-    public String create(String channelId) {
+    public String create(String channelId, long currentTime, String uid) {
         // token 格式:
         // channelId:
-        return null;
+        return Md5Utils.create(channelId + uid + channelId + sign);
     }
 }

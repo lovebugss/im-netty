@@ -13,4 +13,5 @@ public class ChannelConnectInfo {
     private String channelId;
     private List<ChannelNodeInfo> nodeInfo;
     private String token;
+    private long time;
 }

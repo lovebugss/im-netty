@@ -13,12 +13,12 @@ public interface TokenService {
      * @param token
      * @return
      */
-    boolean check(String token);
+    boolean check(String token, String channelId, long currentTime, String uid);
 
     /**
      * 创建token
      *
      * @return
      */
-    String create(String channelId);
+    String create(String channelId, long currentTime, String uid);
 }
