@@ -14,5 +14,5 @@ message UidRequest{
 message UidResponse{
   int32 code = 1;
   string message = 2;
-  int64 uid = 3;
+  string uid = 3;
 }

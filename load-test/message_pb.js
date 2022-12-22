@@ -379,7 +379,7 @@ proto.Message.toObject = function(includeInstance, msg) {
   var f, obj = {
     channelid: jspb.Message.getFieldWithDefault(msg, 1, ""),
     content: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    messageid: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    messageid: jspb.Message.getFieldWithDefault(msg, 3, ""),
     timestamp: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
@@ -426,7 +426,7 @@ proto.Message.deserializeBinaryFromReader = function(msg, reader) {
       msg.setContent(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = /** @type {string} */ (reader.readString());
       msg.setMessageid(value);
       break;
     case 4:
@@ -477,8 +477,8 @@ proto.Message.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getMessageid();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (f.length > 0) {
+    writer.writeString(
       3,
       f
     );
@@ -530,20 +530,20 @@ proto.Message.prototype.setContent = function(value) {
 
 
 /**
- * optional int64 messageId = 3;
- * @return {number}
+ * optional string messageId = 3;
+ * @return {string}
  */
 proto.Message.prototype.getMessageid = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
 };
 
 
 /**
- * @param {number} value
+ * @param {string} value
  * @return {!proto.Message} returns this
  */
 proto.Message.prototype.setMessageid = function(value) {
-  return jspb.Message.setProto3IntField(this, 3, value);
+  return jspb.Message.setProto3StringField(this, 3, value);
 };
 
 

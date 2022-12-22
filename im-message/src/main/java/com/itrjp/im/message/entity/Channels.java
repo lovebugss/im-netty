@@ -1,17 +1,19 @@
 package com.itrjp.im.message.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.itrjp.common.enums.MessageFilterType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author renjp
@@ -21,7 +23,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("IM_CHANNELS")
-public class ImChannels implements Serializable {
+public class Channels implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,7 +34,7 @@ public class ImChannels implements Serializable {
     private String channelId;
 
     @TableField("FILTER_TYPE")
-    private Integer filterType;
+    private MessageFilterType filterType;
 
     @TableField("CHANNEL_LIMIT")
     private Integer channelLimit;

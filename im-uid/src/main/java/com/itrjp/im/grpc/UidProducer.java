@@ -27,7 +27,7 @@ public class UidProducer extends UidGrpc.UidImplBase {
         responseObserver.onNext(UidRpcService.UidResponse.newBuilder()
                 .setCode(200)
                 .setMessage("success")
-                .setUid(uid)
+                .setUid(uid + "")
                 .build());
         responseObserver.onCompleted();
     }

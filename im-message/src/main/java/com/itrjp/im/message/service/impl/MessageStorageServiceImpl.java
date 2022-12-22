@@ -27,7 +27,7 @@ public class MessageStorageServiceImpl implements MessageStorageService {
      * @param messageId
      */
     @Override
-    public void saveMessage(String channelId, String userId, String message, long messageId) {
+    public void saveMessage(String channelId, String userId, String message, String messageId) {
 
     }
 }

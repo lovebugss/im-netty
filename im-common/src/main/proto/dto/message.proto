@@ -20,7 +20,7 @@ enum DataType{
 message Message{
   string channelId = 1;
   string content = 2;
-  int64 messageId = 3;
+  string messageId = 3;
   int64  timestamp = 4;// 时间戳
 
 }

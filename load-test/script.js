@@ -15,7 +15,7 @@ export const options = {
 }
 
 export default () => {
-    const url = 'ws://127.0.0.1:18081/ws?cid=ch_00001&uid=xxxxxxxxxx';
+    const url = 'ws://127.0.0.1:18080/ws?cid=ch_0000001&uid=111111&t=95446525d50adfa4dfb9fc8eb65ad739&tm=1671668373';
 
     const response = ws.connect(url, {}, function (socket) {
         socket.on('open', function open() {

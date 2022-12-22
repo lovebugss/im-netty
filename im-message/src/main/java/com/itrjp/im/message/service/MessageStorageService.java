@@ -16,5 +16,5 @@ public interface MessageStorageService {
      */
     void saveInvalidMessage(String channelId, String userId, String message);
 
-    void saveMessage(String channelId, String userId, String message, long messageId);
+    void saveMessage(String channelId, String userId, String message, String messageId);
 }

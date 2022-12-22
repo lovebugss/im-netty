@@ -1,8 +1,8 @@
 package com.itrjp.im.message.service.impl;
 
 import com.itrjp.common.enums.MessageFilterType;
-import com.itrjp.im.message.entity.ChannelConfig;
-import com.itrjp.im.message.service.ChannelService;
+import com.itrjp.im.message.entity.Channels;
+import com.itrjp.im.message.service.IChannelsService;
 import com.itrjp.im.message.service.MessageHistoryService;
 import com.itrjp.im.message.service.MessageService;
 import com.itrjp.im.message.service.MessageStorageService;
@@ -10,6 +10,7 @@ import com.itrjp.im.message.service.filter.MessageFilter;
 import com.itrjp.im.proto.dto.MessageProto;
 import com.itrjp.im.proto.service.UidGrpc;
 import com.itrjp.im.proto.service.UidRpcService;
+import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +19,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
 import static com.itrjp.common.consts.KafkaConstant.CONNECT_MESSAGE_TOPIC;
+import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
 
 /**
  * 消息 service
@@ -28,6 +29,7 @@ import static com.itrjp.common.consts.KafkaConstant.CONNECT_MESSAGE_TOPIC;
  * @date 2022/7/25 13:49
  */
 @Service
+@RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
     private final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
     private final List<MessageFilter> messageFilterList;
@@ -37,23 +39,15 @@ public class MessageServiceImpl implements MessageService {
     private final MessageStorageService messageStorageService;
     private final MessageHistoryService messageHistoryService;
 
-    private final ChannelService channelService;
+    private final IChannelsService channelService;
 
-
-    public MessageServiceImpl(List<MessageFilter> messageFilterList, KafkaTemplate<String, byte[]> kafkaTemplate, MessageStorageService messageStorageService, MessageHistoryService messageHistoryService, ChannelService channelService) {
-        this.messageFilterList = messageFilterList;
-        this.kafkaTemplate = kafkaTemplate;
-        this.messageStorageService = messageStorageService;
-        this.messageHistoryService = messageHistoryService;
-        this.channelService = channelService;
-    }
 
     @Override
     public String handlerMessage(String channelId, String userId, String message) {
         logger.info("handler message, channelId: {}, userId:{}, message: {}", channelId, userId, message);
-        long messageId = createMessageId();
+        String messageId = createMessageId();
 
-        ChannelConfig channelConfig = channelService.getChannelConfig(channelId);
+        Channels channelConfig = channelService.getByChannelId(channelId);
         // 消息过滤
         boolean filter = filter(message, channelConfig.getFilterType());
         if (!filter) {
@@ -75,12 +69,12 @@ public class MessageServiceImpl implements MessageService {
         return messageId + "";
     }
 
-    private long createMessageId() {
+    private String createMessageId() {
         // 生成全局唯一ID
         UidRpcService.UidResponse response = uidBlockingStub.genUid(UidRpcService.UidRequest.newBuilder().build());
         // TODO 当生成id 失败时, 如何处理
         if (response.getCode() != 200) {
-            return System.currentTimeMillis();
+            return String.valueOf(System.currentTimeMillis());
         }
         return response.getUid();
     }

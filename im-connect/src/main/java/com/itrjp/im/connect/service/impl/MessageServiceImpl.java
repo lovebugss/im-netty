@@ -7,8 +7,6 @@ import com.itrjp.im.connect.websocket.channel.WebsocketChannel;
 import com.itrjp.im.proto.dto.MessageProto;
 import com.itrjp.im.proto.service.MessageGrpc;
 import com.itrjp.im.proto.service.MessageRpcService;
-import com.itrjp.im.proto.service.UidGrpc;
-import com.itrjp.im.proto.service.UidRpcService;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +55,7 @@ public class MessageServiceImpl implements MessageService {
         MessageProto.Packet packet = MessageProto.Packet.newBuilder()
                 .setDataType(MessageProto.DataType.msg)
                 .setMessage(message)
-                .setTimestamp(message.getTimestamp())
+                .setTimestamp(System.currentTimeMillis())
                 .build();
         broadcast(channelId, packet);
     }

@@ -13,5 +13,5 @@ public interface MessageHistoryService {
 
     List<MessageHistory> list();
 
-    void add(String channelId, String userId, String message, long messageId);
+    void add(String channelId, String userId, String message, String messageId);
 }

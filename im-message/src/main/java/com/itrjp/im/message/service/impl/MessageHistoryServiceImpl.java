@@ -15,7 +15,7 @@ public class MessageHistoryServiceImpl implements MessageHistoryService {
     }
 
     @Override
-    public void add(String channelId, String userId, String message, long messageId) {
+    public void add(String channelId, String userId, String message, String messageId) {
 
     }
 }
