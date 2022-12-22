@@ -2,6 +2,9 @@ package com.itrjp.im.stat.service;
 
 import com.itrjp.im.stat.pojo.ChannelInfo;
 
+import java.util.Optional;
+import java.util.OptionalInt;
+
 /**
  * 频道统计
  *
@@ -29,4 +32,8 @@ public interface ChannelStatService {
      * @return
      */
     ChannelInfo getChannelInfo(String channelId);
+
+    Optional<Integer> getChannelConnectCount(String channelId);
+
+    Optional<Integer> getChannelUserCount(String channelId);
 }

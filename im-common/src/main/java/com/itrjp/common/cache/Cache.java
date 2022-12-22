@@ -6,39 +6,26 @@ package com.itrjp.common.cache;
  * @author <a href="mailto:r979668507@gmail.com">renjp</a>
  * @date 2022/7/24 18:09
  */
-public interface Cache<T> {
+public abstract class Cache<T> {
+    private final Store<T> store;
 
-    /**
-     * 获取
-     *
-     * @param key
-     * @return
-     */
-    T get(String key);
+    protected Cache(Store<T> store) {
+        this.store = store;
+    }
 
+    public T get(String key) {
+        return store.get(key);
+    }
 
-    /**
-     * 设置
-     *
-     * @param key
-     * @param value
-     * @return
-     */
-    T set(String key, T value);
+    public T set(String key, T value) {
+        return store.set(key, value);
+    }
 
-    /**
-     * 删除
-     *
-     * @param key
-     * @return
-     */
-    boolean remove(String key);
+    public boolean remove(String key) {
+        return store.remove(key);
+    }
 
-    /**
-     * 是否存在
-     *
-     * @param key
-     * @return
-     */
-    boolean has(String key);
+    public boolean has(String key) {
+        return store.has(key);
+    }
 }

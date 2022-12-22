@@ -5,6 +5,8 @@ import com.itrjp.im.stat.service.ChannelStatService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * TODO
  *
@@ -34,5 +36,16 @@ public class ChannelStatServiceImpl implements ChannelStatService {
     @Override
     public ChannelInfo getChannelInfo(String channelId) {
         return new ChannelInfo();
+    }
+
+    @Override
+    public Optional<Integer> getChannelConnectCount(String channelId) {
+        String count = redisTemplate.opsForValue().get("im:stat:channel:pv:" + channelId);
+        return Optional.of(count == null ? 0 : Integer.parseInt(count));
+    }
+
+    @Override
+    public Optional<Integer> getChannelUserCount(String channelId) {
+        return Optional.empty();
     }
 }

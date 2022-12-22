@@ -1,12 +1,17 @@
 package com.itrjp.im.connect.websocket.handler;
 
 
+import com.itrjp.common.cache.ChannelCache;
+import com.itrjp.common.entity.Channel;
+import com.itrjp.common.result.ErrorCode;
 import com.itrjp.im.connect.websocket.HandshakeData;
 import com.itrjp.im.connect.websocket.WebSocketProperties;
 import com.itrjp.im.connect.websocket.listener.AuthorizationListener;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -24,17 +29,12 @@ import static io.netty.handler.codec.http.HttpResponseStatus.*;
  * @date 2022/7/11 17:26
  */
 @Component
+@RequiredArgsConstructor
 @ChannelHandler.Sharable
 public class AuthorizeHandler extends ChannelInboundHandlerAdapter {
     private final Logger logger = LoggerFactory.getLogger(AuthorizeHandler.class);
     private final WebSocketProperties webSocketProperties;
     private final AuthorizationListener authorization;
-    private final String channelIdFiled = "cid";
-
-    public AuthorizeHandler(WebSocketProperties webSocketProperties, AuthorizationListener authorization) {
-        this.webSocketProperties = webSocketProperties;
-        this.authorization = authorization;
-    }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -74,17 +74,25 @@ public class AuthorizeHandler extends ChannelInboundHandlerAdapter {
                 sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), FORBIDDEN, ctx.alloc().buffer(0)));
                 return;
             }
-            Channel channel = ctx.channel();
             // 鉴权操作
             QueryStringDecoder queryString = new QueryStringDecoder(request.uri());
             Map<String, List<String>> parameters = queryString.parameters();
             HandshakeData handshakeData = new HandshakeData(parameters, request.uri());
             logger.info("AuthorizeHandler#channelRead: FullHttpRequest");
-            boolean authorize = authorization.authorize(handshakeData);
-            if (!queryString.uri().startsWith(webSocketProperties.getWebsocketPath()) || !parameters.containsKey(channelIdFiled) || !authorize) {
-                // 鉴权失败
-                sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), UNAUTHORIZED, ctx.alloc().buffer(0)));
-                return;
+            AuthorizationListener.AuthorizationResult authorize = authorization.authorize(handshakeData);
+            if (!queryString.uri().startsWith(webSocketProperties.getWebsocketPath()) || !authorize.isSuccess()) {
+                AuthorizationListener.ErrorType errorType = authorize.getErrorType();
+                switch (errorType) {
+                    case TOKEN_INVALID:
+                        sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), UNAUTHORIZED, ctx.alloc().buffer(0)));
+                        return;
+                    case TOKEN_EXPIRES:
+                        sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), FORBIDDEN, ctx.alloc().buffer(0)));
+                        return;
+                    case ROOM_THROTTLING:
+                        sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), TOO_MANY_REQUESTS, ctx.alloc().buffer(0)));
+                        return;
+                }
             }
         }
         ctx.fireChannelRead(msg);

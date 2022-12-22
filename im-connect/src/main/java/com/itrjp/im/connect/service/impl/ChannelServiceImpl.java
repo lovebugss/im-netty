@@ -53,7 +53,6 @@ public class ChannelServiceImpl implements ChannelService {
                 .setNodeId(consulDiscoveryProperties.getInstanceId())
                 .build();
         DispatchRpcService.DispatchResponse online = dispatchStub.online(request);
-        System.out.println(online);
         // 通知消息服务
         MessageRpcService.OnNoticeResponse noticeResponse = messageBlockingStub.onNotice(MessageRpcService.EventRequest.newBuilder()
                 .setChannelId(channelId)

@@ -21,4 +21,6 @@ public interface TokenService {
      * @return
      */
     String create(String channelId, long currentTime, String uid);
+
+    boolean checkTime(long time);
 }

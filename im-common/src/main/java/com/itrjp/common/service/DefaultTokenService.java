@@ -25,7 +25,8 @@ public class DefaultTokenService implements TokenService {
         return token.equals(create(channelId, time, uid)) && checkTime(time);
     }
 
-    private boolean checkTime(long time) {
+    @Override
+    public boolean checkTime(long time) {
         long currentTime = System.currentTimeMillis() / 1000;
         return currentTime < time + expire && currentTime > time - 60;
     }

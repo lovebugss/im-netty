@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com.itrjp.im.proto.service;
+option java_outer_classname = "ChannelStateRpcService";
+
+service ChannelState{
+  // 获取频道连接数
+  rpc getChannelConnectCount (ChannelRequest) returns (ChannelStateResponse) {}
+
+  // 获取频道用户数
+  rpc getChannelUserCount (ChannelRequest) returns (ChannelStateResponse) {}
+}
+
+message ChannelRequest{
+  string channelId = 1;
+}
+
+message ChannelStateResponse{
+  int32 code = 1;
+  string message = 2;
+  int32 count = 3;
+}
