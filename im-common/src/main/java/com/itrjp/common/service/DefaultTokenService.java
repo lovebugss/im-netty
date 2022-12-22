@@ -34,6 +34,6 @@ public class DefaultTokenService implements TokenService {
     public String create(String channelId, long currentTime, String uid) {
         // token 格式:
         // channelId:
-        return Md5Utils.create(channelId + uid + channelId + sign);
+        return Md5Utils.create(channelId + uid + channelId + currentTime + sign);
     }
 }
