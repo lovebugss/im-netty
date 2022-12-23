@@ -17,6 +17,7 @@ im
 |- im-message //消息模块
 |- im-stat //统计模块
 |- im-storage //存储模块
+|- im-api // 对外提供API
 ```
 
 # 服务列表

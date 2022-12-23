@@ -4,6 +4,9 @@ import com.itrjp.im.stat.service.NodeStatService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import static com.itrjp.common.consts.CacheKeyConstant.CONNECT_NODE;
+import static com.itrjp.common.consts.CacheKeyConstant.CONNECT_NODE_LOAD;
+
 /**
  * TODO
  *
@@ -20,22 +23,27 @@ public class NodeStatServiceImpl implements NodeStatService {
 
     @Override
     public void connected(String nodeName, String sessionId) {
-        redisTemplate.opsForValue().increment("im:stat:node:" + nodeName);
+        redisTemplate.opsForValue().increment(CONNECT_NODE + nodeName);
+        redisTemplate.opsForZSet().incrementScore(CONNECT_NODE_LOAD, nodeName, 1);
     }
 
     @Override
     public void disConnected(String nodeName, String sessionId) {
-        redisTemplate.opsForValue().decrement("im:stat:node:" + nodeName);
+        redisTemplate.opsForValue().decrement(CONNECT_NODE + nodeName);
+        redisTemplate.opsForZSet().incrementScore(CONNECT_NODE_LOAD, nodeName, -1);
+
     }
 
     @Override
     public void start(String nodeName) {
         // 重置
-        redisTemplate.delete("im:stat:node:" + nodeName);
+        redisTemplate.opsForValue().set(CONNECT_NODE + nodeName, "0");
+        redisTemplate.opsForZSet().add(CONNECT_NODE_LOAD, nodeName, 0);
     }
 
     @Override
     public void stop(String nodeName) {
-
+        redisTemplate.delete(CONNECT_NODE + nodeName);
+        redisTemplate.opsForZSet().remove(CONNECT_NODE_LOAD, nodeName);
     }
 }
