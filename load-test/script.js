@@ -1,22 +1,43 @@
 import ws from 'k6/ws';
-import {check, crpyto} from 'k6';
+import http from 'k6/http';
+import { check, crpyto } from 'k6';
 import proto from "./message_pb.js"
 
 export const options = {
     stages: [
-//    {duration: '30s', target: 100},
-//    {duration: '60s', target: 1000},
-//    {duration: '60s', target: 10},
+        //    {duration: '30s', target: 100},
+        //    {duration: '60s', target: 1000},
+        //    {duration: '60s', target: 10},
     ],
     thresholds: {},
-    vus: 20,
-    duration: '300s'
+    vus: 1,
+    duration: '30s'
 
 }
+const channelId = "ch_0000001";
+const userId = "user_123";
 
-export default () => {
-    const url = 'ws://127.0.0.1:18080/ws?cid=ch_0000001&uid=111111&t=95446525d50adfa4dfb9fc8eb65ad739&tm=1671668373';
+export function setup() {
+    const payload = JSON.stringify({
+        "userId": userId,
+        "channelId": channelId
+    });
 
+    const params = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+    const res = http.post('http://localhost:8580/api/chat/init', payload, params);
+    return res.json();
+}
+
+export default (data) => {
+    let token = data.data.token;
+    let time = data.data.time;
+    let nodeInfo = data.data.nodeInfo[0];
+    const url = `${nodeInfo.protocol}://${nodeInfo.address}:${nodeInfo.port}/ws?cid=${channelId}&uid=${userId}&t=${token}&tm=${time}`;
+    console.log("url", url)
     const response = ws.connect(url, {}, function (socket) {
         socket.on('open', function open() {
             console.log('connected');
@@ -40,8 +61,8 @@ export default () => {
             console.log(`Received message: ${message}`);
         });
         socket.on('binaryMessage', function (message) {
-               console.log(`Received binaryMessage: ${proto.Packet.deserializeBinary(message)}`);
-            });
+            console.log(`Received binaryMessage: ${proto.Packet.deserializeBinary(message)}`);
+        });
         socket.on('close', () => console.log('disconnected'));
 
         socket.on('error', (e) => {
@@ -52,5 +73,5 @@ export default () => {
 
     });
 
-    check(response, {'status is 101': (r) => r && r.status === 101});
+    check(response, { 'status is 101': (r) => r && r.status === 101 });
 }
