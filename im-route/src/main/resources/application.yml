@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: im-route
+    instance_id: 3b8323048f9840c294e0cc70cf0ae941
+  cloud:
+    consul:
+      host: 127.0.0.1
+      port: 8500
+      discovery:
+        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+      config:
+        enabled: false
+server:
+  port: 8680
+grpc:
+  server:
+    port: 28680
+  client:
+    GLOBAL:
+      negotiationType: plaintext

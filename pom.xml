@@ -12,6 +12,7 @@
         <module>im-storage</module>
         <module>im-uid</module>
         <module>im-api</module>
+        <module>im-route</module>
 
     </modules>
     <packaging>pom</packaging>
