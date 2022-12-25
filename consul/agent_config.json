@@ -6,7 +6,7 @@
       "passingonly": true,
       "handler_type": "http",
       "http_handler_config": {
-        "path": "http://192.168.0.108:8180/consul/watch/service",
+        "path": "http://192.168.0.105:8180/consul/watch/service",
         "method": "POST",
         "header": {
           "x-foo": [

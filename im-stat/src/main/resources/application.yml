@@ -7,7 +7,7 @@ spring:
       host: 127.0.0.1
       port: 8500
       discovery:
-        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+        instanceId: ${spring.application.instance_id:${random.value}}
       config:
         enabled: false
   redis:

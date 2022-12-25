@@ -6,6 +6,8 @@ spring:
       host: im.itrjp.domain
       port: 8500
       discovery:
-        instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+        instanceId: ${spring.application.instance_id:${random.value}}
+      config:
+        enabled: false
   profiles:
     active: dev
