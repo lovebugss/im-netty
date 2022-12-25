@@ -11,6 +11,7 @@ import java.util.List;
 public class ConnectNodeServiceImpl implements ConnectNodeService {
     @Override
     public List<ChannelNodeInfo> getBestNode(String channelId) {
+
         ChannelNodeInfo nodeInfo = new ChannelNodeInfo();
         nodeInfo.setAddress("localhost");
         nodeInfo.setPort(18080);

@@ -4,7 +4,7 @@
       "type": "checks",
       "handler_type": "http",
       "http_handler_config": {
-        "path": "http://172.16.26.81:8180/watch",
+        "path": "http://127.0.0.1:8580/consul/watch",
         "method": "POST",
         "header": { "x-foo": ["bar", "baz"] },
         "timeout": "10s",
