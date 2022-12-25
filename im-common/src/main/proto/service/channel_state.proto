@@ -3,6 +3,9 @@ syntax = "proto3";
 package com.itrjp.im.proto.service;
 option java_outer_classname = "ChannelStateRpcService";
 
+/**
+频道统计
+ */
 service ChannelState{
   // 获取频道连接数
   rpc getChannelConnectCount (ChannelRequest) returns (ChannelStateResponse) {}

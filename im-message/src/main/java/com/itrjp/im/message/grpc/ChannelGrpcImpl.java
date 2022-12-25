@@ -1,9 +1,8 @@
 package com.itrjp.im.message.grpc;
 
-import com.itrjp.im.message.entity.Channels;
 import com.itrjp.im.message.service.impl.ChannelsServiceImpl;
-import com.itrjp.im.proto.service.ChannelGrpc;
-import com.itrjp.im.proto.service.ChannelRpcService;
+import com.itrjp.im.proto.ChannelGrpc;
+import com.itrjp.im.proto.ChannelProto;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,22 +21,18 @@ public class ChannelGrpcImpl extends ChannelGrpc.ChannelImplBase {
     private final ChannelsServiceImpl channelService;
 
     @Override
-    public void get(ChannelRpcService.GetRequest request, StreamObserver<ChannelRpcService.Response> responseObserver) {
-        Channels channels = channelService.getByChannelId(request.getChannelId());
-        if (channels == null) {
-            responseObserver.onNext(ChannelRpcService.Response.newBuilder()
-                    .setCode(404)
-                    .setMessage("频道未找到")
-                    .build());
-        } else {
-            responseObserver.onNext(ChannelRpcService.Response.newBuilder()
-                    .setCode(200)
-                    .setChannelId(channels.getChannelId())
-                    .setFilterType(channels.getFilterType().getValue())
-                    .setLimit(channels.getChannelLimit())
-                    .build());
+    public void getChannelInfo(ChannelProto.GetRequest request, StreamObserver<ChannelProto.GetResponse> responseObserver) {
+        channelService.getByChannelId(request.getChannelId())
+                .ifPresentOrElse(
+                        (channelInfo) -> responseObserver.onNext(ChannelProto.GetResponse.newBuilder()
+                                .setCode(200)
+                                .setChannelInfo(channelInfo)
+                                .build()),
+                        () -> responseObserver.onNext(ChannelProto.GetResponse.newBuilder()
+                                .setCode(404)
+                                .setMessage("频道未找到")
+                                .build()));
 
-        }
         responseObserver.onCompleted();
     }
 }

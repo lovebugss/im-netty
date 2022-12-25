@@ -19,7 +19,6 @@ import java.io.Serializable;
  * @author renjp
  * @since 2022-12-21
  */
-@Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("IM_CHANNELS")
@@ -39,5 +38,35 @@ public class Channels implements Serializable {
     @TableField("CHANNEL_LIMIT")
     private Integer channelLimit;
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
+    }
+
+    public MessageFilterType getFilterType() {
+        return filterType;
+    }
+
+    public void setFilterType(MessageFilterType filterType) {
+        this.filterType = filterType;
+    }
+
+    public Integer getChannelLimit() {
+        return channelLimit;
+    }
+
+    public void setChannelLimit(Integer channelLimit) {
+        this.channelLimit = channelLimit;
+    }
 }

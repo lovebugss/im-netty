@@ -2,6 +2,9 @@ package com.itrjp.im.api.service;
 
 import com.itrjp.common.exception.ChannelNotFoundException;
 import com.itrjp.im.api.entity.Channel;
+import com.itrjp.im.proto.ChannelProto;
+
+import java.util.Optional;
 
 public interface ChannelService {
     /**
@@ -12,5 +15,5 @@ public interface ChannelService {
      */
     void checkChannelId(String channelId);
 
-    Channel getChannel(String channelId);
+    Optional<ChannelProto.ChannelInfo> getChannel(String channelId);
 }

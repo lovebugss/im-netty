@@ -6,10 +6,10 @@ option java_outer_classname = "MessageProto";
 
 // 数据包
 message Packet{
-  repeated DataType dataType = 1; // 数据类型
-  repeated int64  timestamp = 2;// 时间戳
-  optional Message message = 3; // 消息体
-  optional Event event = 4; // 事件通知
+   DataType dataType = 1; // 数据类型
+   int64  timestamp = 2;// 时间戳
+   Message message = 3; // 消息体
+   Event event = 4; // 事件通知
 }
 enum DataType{
   // 普通消息

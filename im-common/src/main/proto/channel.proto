@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package com.itrjp.im.proto;
+option java_outer_classname = "ChannelProto";
+
+service Channel{
+  // 获取频道信息
+  rpc getChannelInfo (GetRequest) returns (GetResponse) {}
+}
+message ChannelInfo {
+  int64 id = 1;
+  string channelId = 2;
+  int32 limit = 3;
+  string filterType = 4;
+}
+
+message ChannelStateInfo{
+  int64 id = 1;
+  string channelId = 2;
+  int32 pv = 3;
+  int32 uv = 4;
+  int32 maxPv = 5;
+  int32 maxUv = 6;
+}
+message GetRequest{
+  string channelId = 1;
+}
+
+message GetResponse{
+  int32 code = 1;
+  string message = 2;
+  ChannelInfo channelInfo = 3;
+}

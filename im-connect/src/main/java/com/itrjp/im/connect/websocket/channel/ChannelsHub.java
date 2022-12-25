@@ -17,6 +17,9 @@ public class ChannelsHub {
      * 所有频道
      */
     private final Map<String, WebsocketChannel> channels = new ConcurrentHashMap<>();
+    /**
+     * session和channel映射
+     */
     private final Map<String, String> channelMap = new ConcurrentHashMap<>();
 
     public WebsocketChannel create(String channelId, String sessionId) {

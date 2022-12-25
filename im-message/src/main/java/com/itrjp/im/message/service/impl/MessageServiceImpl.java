@@ -7,9 +7,10 @@ import com.itrjp.im.message.service.MessageHistoryService;
 import com.itrjp.im.message.service.MessageService;
 import com.itrjp.im.message.service.MessageStorageService;
 import com.itrjp.im.message.service.filter.MessageFilter;
+import com.itrjp.im.proto.ChannelProto;
 import com.itrjp.im.proto.dto.MessageProto;
 import com.itrjp.im.proto.service.UidGrpc;
-import com.itrjp.im.proto.service.UidRpcService;
+import com.itrjp.im.proto.service.UidProto;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.itrjp.common.consts.KafkaConstant.CONNECT_MESSAGE_TOPIC;
 import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
@@ -47,9 +49,9 @@ public class MessageServiceImpl implements MessageService {
         logger.info("handler message, channelId: {}, userId:{}, message: {}", channelId, userId, message);
         String messageId = createMessageId();
 
-        Channels channelConfig = channelService.getByChannelId(channelId);
+        ChannelProto.ChannelInfo channelInfo = channelService.getByChannelId(channelId).orElseThrow();
         // 消息过滤
-        boolean filter = filter(message, channelConfig.getFilterType());
+        boolean filter = filter(message, MessageFilterType.valueOf(channelInfo.getFilterType()));
         if (!filter) {
             // 存储不合法的消息
             messageStorageService.saveInvalidMessage(channelId, userId, message);
@@ -71,7 +73,7 @@ public class MessageServiceImpl implements MessageService {
 
     private String createMessageId() {
         // 生成全局唯一ID
-        UidRpcService.UidResponse response = uidBlockingStub.genUid(UidRpcService.UidRequest.newBuilder().build());
+        UidProto.UidResponse response = uidBlockingStub.genUid(UidProto.UidRequest.newBuilder().build());
         // TODO 当生成id 失败时, 如何处理
         if (response.getCode() != 200) {
             return String.valueOf(System.currentTimeMillis());
