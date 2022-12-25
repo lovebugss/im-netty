@@ -1,4 +1,4 @@
-package com.itrjp.im.dispatcher.service;
+package com.itrjp.im.api.service;
 
 import java.util.List;
 import java.util.Map;

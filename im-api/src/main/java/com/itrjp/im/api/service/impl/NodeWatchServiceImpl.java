@@ -1,6 +1,6 @@
-package com.itrjp.im.dispatcher.service.impl;
+package com.itrjp.im.api.service.impl;
 
-import com.itrjp.im.dispatcher.service.NodeWatchService;
+import com.itrjp.im.api.service.NodeWatchService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
