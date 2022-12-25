@@ -31,3 +31,6 @@ server:
 grpc:
   server:
     port: 28180
+  client:
+    GLOBAL:
+      negotiationType: plaintext

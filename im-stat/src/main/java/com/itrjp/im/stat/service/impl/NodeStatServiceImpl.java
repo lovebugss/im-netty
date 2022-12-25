@@ -35,15 +35,15 @@ public class NodeStatServiceImpl implements NodeStatService {
     }
 
     @Override
-    public void start(String nodeName) {
+    public void start(String id) {
         // 重置
-        redisTemplate.opsForValue().set(CONNECT_NODE + nodeName, "0");
-        redisTemplate.opsForZSet().add(CONNECT_NODE_LOAD, nodeName, 0);
+        redisTemplate.opsForValue().set(CONNECT_NODE + id, "0");
+        redisTemplate.opsForZSet().add(CONNECT_NODE_LOAD, id, 0);
     }
 
     @Override
-    public void stop(String nodeName) {
-        redisTemplate.delete(CONNECT_NODE + nodeName);
-        redisTemplate.opsForZSet().remove(CONNECT_NODE_LOAD, nodeName);
+    public void stop(String id) {
+        redisTemplate.delete(CONNECT_NODE + id);
+        redisTemplate.opsForZSet().remove(CONNECT_NODE_LOAD, id);
     }
 }

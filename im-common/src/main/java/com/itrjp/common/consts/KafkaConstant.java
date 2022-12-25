@@ -11,7 +11,7 @@ public final class KafkaConstant {
     /**
      * 聊天消息topic, 用于消息广播
      */
-    public static final String CONNECT_MESSAGE_TOPIC = "connect-message-topic";
+    public static final String MESSAGE_TOPIC = "message-topic";
     /**
      * 上下线消息 topic, 允许丢失!!!
      */

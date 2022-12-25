@@ -1,4 +1,6 @@
-package com.itrjp.im.api.service;
+package com.itrjp.im.dispatcher.service;
+
+import com.itrjp.im.dispatcher.pojo.ConsulWatchServiceEntity;
 
 import java.util.List;
 import java.util.Map;
@@ -11,4 +13,6 @@ import java.util.Map;
  */
 public interface NodeWatchService {
     void watch(List<Map<String, Object>> param);
+
+    void handlerServiceNotify(List<ConsulWatchServiceEntity> param);
 }

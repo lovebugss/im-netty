@@ -12,7 +12,17 @@ public final class CacheKeyConstant {
      * <p>
      * 使用zset
      */
-    public static final String CONNECT_NODE_LOAD = "im:stat:node:load";
-    public static final String CONNECT_NODE = "im:stat:node:";
+    public static final String CONNECT_NODE_LOAD = "im:stat:connect-node:load";
+    /**
+     * connect 服务 节点负载.
+     */
+    public static final String CONNECT_NODE = "im:stat:connect-node:load:";
+
+    /**
+     * 所有connect 节点信息
+     * <p>
+     * 使用hash
+     */
+    public static final String CONNECT_NODE_INFO = "im:stat:connect-node:info";
 
 }

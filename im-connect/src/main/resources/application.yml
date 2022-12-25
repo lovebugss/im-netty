@@ -31,6 +31,9 @@ server:
   port: 8080
 websocket:
   port: 18080
+im:
+  connect-topic: connect-topic-${spring.application.instance_id}
+  connect-notify-topic: connect-notify-topic-${spring.application.instance_id}
 grpc:
   server:
     port: 28080

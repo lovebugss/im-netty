@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.itrjp.common.consts.KafkaConstant.CONNECT_MESSAGE_TOPIC;
 import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
+import static com.itrjp.common.consts.KafkaConstant.MESSAGE_TOPIC;
 
 /**
  * 消息 service
@@ -54,7 +54,7 @@ public class MessageServiceImpl implements MessageService {
         }
         // 消息投递给connect 进行广播
         // connect
-        kafkaTemplate.send(CONNECT_MESSAGE_TOPIC, channelId, Data.newBuilder()
+        kafkaTemplate.send(MESSAGE_TOPIC, channelId, Data.newBuilder()
                 .setChannelId(channelId)
                 .setContent(message)
                 .setMessageId(messageId)

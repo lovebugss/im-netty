@@ -275,7 +275,9 @@ services:
       - 8300:8300
       - 8500:8500
       - 8600:8600
-    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO
+    command: consul agent -dev -ui -client 0.0.0.0 -log-level=INFO --config-file=/consul/config/agent_config.json
+    volumes:
+      - /Users/renjp/Documents/workspace/open-source/im/consul/:/consul/config/
     networks:
       - im-network
 networks:

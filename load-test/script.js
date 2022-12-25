@@ -10,7 +10,7 @@ export const options = {
         //    {duration: '60s', target: 10},
     ],
     thresholds: {},
-    vus: 1,
+    vus: 10,
     duration: '30s'
 
 }

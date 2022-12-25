@@ -22,11 +22,11 @@ public interface NodeStatService {
     /**
      * 服务启动
      */
-    void start(String nodeName);
+    void start(String id);
 
     /**
      * 服务停止
      */
-    void stop(String nodeName);
+    void stop(String id);
 
 }

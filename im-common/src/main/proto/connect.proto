@@ -8,6 +8,21 @@ service ConnectService{
   rpc push (PushRequest) returns (PushResponse) {}
 }
 
+service ConnectNodeService{
+  // 服务上线
+  rpc startUp(ConnectNodeRequest) returns (ConnectNodeResponse) {}
+
+  rpc stop(ConnectNodeRequest) returns (ConnectNodeResponse) {}
+}
+
+message ConnectNodeRequest{
+  string id = 1;
+}
+message ConnectNodeResponse{
+  int32 code = 1;
+  string message = 2;
+}
+
 message PushRequest{
   string channelId = 1;
   string content = 2;
