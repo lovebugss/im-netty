@@ -1,14 +1,15 @@
 package com.itrjp.im.connect.listener;
 
 import com.itrjp.im.connect.service.impl.MessageServiceImpl;
-import com.itrjp.im.proto.dto.MessageProto;
+import com.itrjp.im.proto.Data;
+import com.itrjp.im.proto.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
 import static com.itrjp.common.consts.KafkaConstant.CONNECT_MESSAGE_TOPIC;
+import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
 
 /**
  * Kafka 监听器
@@ -34,7 +35,7 @@ public class KafkaMessageListener {
     @KafkaListener(topics = {CONNECT_MESSAGE_TOPIC})
     public void onMessage(byte[] data) {
         try {
-            MessageProto.Message d = MessageProto.Message.parseFrom(data);
+            Data d = Data.parseFrom(data);
             logger.info("接受Kafka消息: {}", d);
             messageService.broadcastMessage(d.getChannelId(), d);
         } catch (Exception e) {
@@ -50,7 +51,7 @@ public class KafkaMessageListener {
     @KafkaListener(topics = {MESSAGE_JOIN_LEAVE_TOPIC})
     public void onJoinLeave(byte[] data) {
         try {
-            MessageProto.Event event = MessageProto.Event.parseFrom(data);
+            Event event = Event.parseFrom(data);
             logger.info("接受Kafka上下线消息: {}, type: {}", event, event.getType());
             messageService.broadcastEvent(event.getChannelId(), event);
         } catch (Exception e) {

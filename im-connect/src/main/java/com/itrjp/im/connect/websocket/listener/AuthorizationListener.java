@@ -1,7 +1,6 @@
 package com.itrjp.im.connect.websocket.listener;
 
 
-import com.itrjp.common.result.ErrorCode;
 import com.itrjp.im.connect.websocket.HandshakeData;
 import lombok.AllArgsConstructor;
 import lombok.Data;

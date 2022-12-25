@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package com.itrjp.im.proto.service;
-option java_outer_classname = "ConnectRpcService";
+package com.itrjp.im.proto;
+option java_multiple_files = true;
 
-service Connect{
+service ConnectService{
   // 推送消息
   rpc push (PushRequest) returns (PushResponse) {}
 }

@@ -1,9 +1,6 @@
 package com.itrjp.im.connect.websocket.handler;
 
 
-import com.itrjp.common.cache.ChannelCache;
-import com.itrjp.common.entity.Channel;
-import com.itrjp.common.result.ErrorCode;
 import com.itrjp.im.connect.websocket.HandshakeData;
 import com.itrjp.im.connect.websocket.WebSocketProperties;
 import com.itrjp.im.connect.websocket.listener.AuthorizationListener;
@@ -11,7 +8,6 @@ import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

@@ -3,11 +3,7 @@ package com.itrjp.im.connect.service.impl;
 import com.itrjp.im.connect.service.ChannelService;
 import com.itrjp.im.connect.websocket.WebSocketClient;
 import com.itrjp.im.connect.websocket.channel.ChannelsHub;
-import com.itrjp.im.proto.dto.MessageProto;
-import com.itrjp.im.proto.service.DispatchGrpc;
-import com.itrjp.im.proto.service.DispatchRpcService;
-import com.itrjp.im.proto.service.MessageGrpc;
-import com.itrjp.im.proto.service.MessageRpcService;
+import com.itrjp.im.proto.*;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.stereotype.Service;
@@ -28,9 +24,9 @@ public class ChannelServiceImpl implements ChannelService {
 
 
     @GrpcClient("im-stat")
-    private DispatchGrpc.DispatchBlockingStub dispatchStub;
+    private DispatchServiceGrpc.DispatchServiceBlockingStub dispatchStub;
     @GrpcClient("im-message")
-    private MessageGrpc.MessageBlockingStub messageBlockingStub;
+    private MessageServiceGrpc.MessageServiceBlockingStub messageBlockingStub;
 
 
     public ChannelServiceImpl(ConsulDiscoveryProperties consulDiscoveryProperties, ChannelsHub channelsHub, Executor executor) {
@@ -46,18 +42,18 @@ public class ChannelServiceImpl implements ChannelService {
         Map<String, List<String>> parameters = client.getParameters();
         String uid = parameters.get("uid").get(0);
         // 通知状态服务
-        DispatchRpcService.OnlineRequest request = DispatchRpcService.OnlineRequest.newBuilder()
+        OnlineRequest request = OnlineRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
                 .setSessionId(client.getSession())
                 .setNodeId(consulDiscoveryProperties.getInstanceId())
                 .build();
-        DispatchRpcService.DispatchResponse online = dispatchStub.online(request);
+        DispatchResponse online = dispatchStub.online(request);
         // 通知消息服务
-        MessageRpcService.OnNoticeResponse noticeResponse = messageBlockingStub.onNotice(MessageRpcService.EventRequest.newBuilder()
+        EventResponse eventResponse = messageBlockingStub.onEvent(EventRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
-                .setType(MessageProto.EventType.join)
+                .setType(EventType.join)
                 .build());
     }
 
@@ -71,19 +67,19 @@ public class ChannelServiceImpl implements ChannelService {
         Map<String, List<String>> parameters = client.getParameters();
         String uid = parameters.get("uid").get(0);
         // 通知状态服务
-        DispatchRpcService.OfflineRequest request = DispatchRpcService.OfflineRequest.newBuilder()
+        OfflineRequest request = OfflineRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
                 .setSessionId(client.getSession())
                 .setNodeId(consulDiscoveryProperties.getInstanceId())
                 .build();
-        DispatchRpcService.DispatchResponse offline = dispatchStub.offline(request);
+        DispatchResponse offline = dispatchStub.offline(request);
 
         // 通知消息服务
-        MessageRpcService.OnNoticeResponse noticeResponse = messageBlockingStub.onNotice(MessageRpcService.EventRequest.newBuilder()
+        EventResponse eventResponse = messageBlockingStub.onEvent(EventRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
-                .setType(MessageProto.EventType.leave)
+                .setType(EventType.leave)
                 .build());
     }
 }

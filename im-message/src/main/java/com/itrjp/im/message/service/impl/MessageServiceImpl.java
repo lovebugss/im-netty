@@ -1,16 +1,12 @@
 package com.itrjp.im.message.service.impl;
 
 import com.itrjp.common.enums.MessageFilterType;
-import com.itrjp.im.message.entity.Channels;
 import com.itrjp.im.message.service.IChannelsService;
 import com.itrjp.im.message.service.MessageHistoryService;
 import com.itrjp.im.message.service.MessageService;
 import com.itrjp.im.message.service.MessageStorageService;
 import com.itrjp.im.message.service.filter.MessageFilter;
-import com.itrjp.im.proto.ChannelProto;
-import com.itrjp.im.proto.dto.MessageProto;
-import com.itrjp.im.proto.service.UidGrpc;
-import com.itrjp.im.proto.service.UidProto;
+import com.itrjp.im.proto.*;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.slf4j.Logger;
@@ -19,7 +15,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.itrjp.common.consts.KafkaConstant.CONNECT_MESSAGE_TOPIC;
 import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
@@ -36,7 +31,7 @@ public class MessageServiceImpl implements MessageService {
     private final Logger logger = LoggerFactory.getLogger(MessageServiceImpl.class);
     private final List<MessageFilter> messageFilterList;
     @GrpcClient("im-uid")
-    private UidGrpc.UidBlockingStub uidBlockingStub;
+    private UidServiceGrpc.UidServiceBlockingStub uidBlockingStub;
     private final KafkaTemplate<String, byte[]> kafkaTemplate;
     private final MessageStorageService messageStorageService;
     private final MessageHistoryService messageHistoryService;
@@ -49,7 +44,7 @@ public class MessageServiceImpl implements MessageService {
         logger.info("handler message, channelId: {}, userId:{}, message: {}", channelId, userId, message);
         String messageId = createMessageId();
 
-        ChannelProto.ChannelInfo channelInfo = channelService.getByChannelId(channelId).orElseThrow();
+        ChannelInfo channelInfo = channelService.getByChannelId(channelId).orElseThrow();
         // 消息过滤
         boolean filter = filter(message, MessageFilterType.valueOf(channelInfo.getFilterType()));
         if (!filter) {
@@ -59,7 +54,7 @@ public class MessageServiceImpl implements MessageService {
         }
         // 消息投递给connect 进行广播
         // connect
-        kafkaTemplate.send(CONNECT_MESSAGE_TOPIC, channelId, MessageProto.Message.newBuilder()
+        kafkaTemplate.send(CONNECT_MESSAGE_TOPIC, channelId, Data.newBuilder()
                 .setChannelId(channelId)
                 .setContent(message)
                 .setMessageId(messageId)
@@ -73,7 +68,7 @@ public class MessageServiceImpl implements MessageService {
 
     private String createMessageId() {
         // 生成全局唯一ID
-        UidProto.UidResponse response = uidBlockingStub.genUid(UidProto.UidRequest.newBuilder().build());
+        UidResponse response = uidBlockingStub.genUid(UidRequest.newBuilder().build());
         // TODO 当生成id 失败时, 如何处理
         if (response.getCode() != 200) {
             return String.valueOf(System.currentTimeMillis());
@@ -82,11 +77,11 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void handlerJoinLeave(String channelId, String userId, MessageProto.EventType type) {
+    public void handlerJoinLeave(String channelId, String userId, EventType type) {
 
         // TODO 上下线限流
         //消息投递
-        kafkaTemplate.send(MESSAGE_JOIN_LEAVE_TOPIC, channelId, MessageProto.Event.newBuilder()
+        kafkaTemplate.send(MESSAGE_JOIN_LEAVE_TOPIC, channelId, Event.newBuilder()
                 .setType(type)
                 .setUserId(userId)
                 .setChannelId(channelId).build().toByteArray());

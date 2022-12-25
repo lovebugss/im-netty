@@ -1,7 +1,7 @@
 package com.itrjp.im.connect.websocket.listener;
 
 import com.itrjp.im.connect.websocket.WebSocketClient;
-import com.itrjp.im.proto.dto.MessageProto;
+import com.itrjp.im.proto.Packet;
 
 /**
  * TODO
@@ -11,5 +11,5 @@ import com.itrjp.im.proto.dto.MessageProto;
  */
 public interface MessageListener {
 
-    void onMessage(WebSocketClient client, MessageProto.Packet data);
+    void onMessage(WebSocketClient client, Packet data);
 }

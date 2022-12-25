@@ -1,8 +1,9 @@
 package com.itrjp.im.message.grpc;
 
 import com.itrjp.im.message.service.impl.ChannelsServiceImpl;
-import com.itrjp.im.proto.ChannelGrpc;
-import com.itrjp.im.proto.ChannelProto;
+import com.itrjp.im.proto.ChannelServiceGrpc;
+import com.itrjp.im.proto.GetRequest;
+import com.itrjp.im.proto.GetResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,18 +18,18 @@ import org.springframework.stereotype.Service;
 @GrpcService
 @Slf4j
 @RequiredArgsConstructor
-public class ChannelGrpcImpl extends ChannelGrpc.ChannelImplBase {
+public class ChannelGrpcImpl extends ChannelServiceGrpc.ChannelServiceImplBase {
     private final ChannelsServiceImpl channelService;
 
     @Override
-    public void getChannelInfo(ChannelProto.GetRequest request, StreamObserver<ChannelProto.GetResponse> responseObserver) {
+    public void getChannelInfo(GetRequest request, StreamObserver<GetResponse> responseObserver) {
         channelService.getByChannelId(request.getChannelId())
                 .ifPresentOrElse(
-                        (channelInfo) -> responseObserver.onNext(ChannelProto.GetResponse.newBuilder()
+                        (channelInfo) -> responseObserver.onNext(GetResponse.newBuilder()
                                 .setCode(200)
                                 .setChannelInfo(channelInfo)
                                 .build()),
-                        () -> responseObserver.onNext(ChannelProto.GetResponse.newBuilder()
+                        () -> responseObserver.onNext(GetResponse.newBuilder()
                                 .setCode(404)
                                 .setMessage("频道未找到")
                                 .build()));

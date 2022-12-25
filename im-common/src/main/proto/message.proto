@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package com.itrjp.im.proto;
+option java_multiple_files = true;
+
+service MessageService{
+  // onMessage
+  rpc onMessage(MessageRequest) returns (MessageResponse){}
+
+  // 上下线
+  rpc onEvent(EventRequest) returns (EventResponse){}
+
+
+}
+
+message MessageResponse{
+  int32 code = 1;
+  string message = 2;
+  string messageId = 3;
+}
+
+message EventResponse{
+  int32 code = 1;
+  string message = 2;
+}
+
+message EventRequest{
+  string channelId = 1; // 频道id
+  string userId = 2; // 用户id
+  EventType type = 3; // 操作类型
+
+}
+
+message MessageRequest{
+  string channelId = 1; // 频道ID
+  string userId = 2; // 用户ID
+  string content = 3; // 消息体
+  string from = 4;
+  string to = 5;
+  int64 msgId = 6;
+  int64 timestamp = 7; // 消息时间戳(服务端接收到消息的时间戳)
+}
+
+// 数据包
+message Packet{
+  DataType dataType = 1; // 数据类型
+  int64  timestamp = 2;// 时间戳
+  Data data = 3; // 消息体
+  Event event = 4; // 事件通知
+}
+enum DataType{
+  // 普通消息
+  msg = 0;
+  // 通知消息(上下线)
+  notion = 1;
+}
+message Data{
+  string channelId = 1;
+  string content = 2;
+  string messageId = 3;
+  int64  timestamp = 4;// 时间戳
+
+}
+
+// 通知事件类型
+enum EventType{
+  online = 0;
+  offline = 1;
+  join = 2;
+  leave = 3;
+}
+
+// 时间通知
+message Event{
+  string channelId = 1;
+  string userId = 2;
+  EventType type = 3; // 时间类型
+  int64  timestamp = 4;// 时间戳
+}
+

@@ -10,7 +10,7 @@ import com.itrjp.im.connect.websocket.listener.ExceptionListener;
 import com.itrjp.im.connect.websocket.listener.OpenListener;
 import com.itrjp.im.connect.websocket.listener.PingListener;
 import com.itrjp.im.connect.websocket.listener.PongListener;
-import com.itrjp.im.proto.dto.MessageProto;
+import com.itrjp.im.proto.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -158,14 +158,14 @@ public class WebsocketHandler extends SimpleChannelInboundHandler<Object> {
             }
         });
 
-        pipeline.addLast(new ProtobufDecoder(MessageProto.Packet.getDefaultInstance()));
+        pipeline.addLast(new ProtobufDecoder(Packet.getDefaultInstance()));
         //自定义入站处理
         pipeline.addLast(messageHandler);
         //出站处理 将protoBuf实例转为WebSocketFrame
         pipeline.addLast(new ProtobufEncoder() {
             @Override
             protected void encode(ChannelHandlerContext ctx, MessageLiteOrBuilder msg, List<Object> out) throws Exception {
-                MessageProto.Packet mpMsg = (MessageProto.Packet) msg;
+                Packet mpMsg = (Packet) msg;
                 WebSocketFrame frame = new BinaryWebSocketFrame(Unpooled.wrappedBuffer(mpMsg.toByteArray()));
                 out.add(frame);
             }

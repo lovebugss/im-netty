@@ -1,8 +1,7 @@
 package com.itrjp.im.stat.grpc;
 
 
-import com.itrjp.im.proto.service.DispatchGrpc;
-import com.itrjp.im.proto.service.DispatchRpcService;
+import com.itrjp.im.proto.*;
 import com.itrjp.im.stat.service.ChannelStatService;
 import com.itrjp.im.stat.service.NodeStatService;
 import io.grpc.stub.StreamObserver;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @GrpcService
-public class DispatcherImpl extends DispatchGrpc.DispatchImplBase {
+public class DispatcherImpl extends DispatchServiceGrpc.DispatchServiceImplBase {
     private final Logger logger = LoggerFactory.getLogger(DispatcherImpl.class);
     private final ChannelStatService channelStatService;
     private final NodeStatService nodeStatService;
@@ -30,13 +29,13 @@ public class DispatcherImpl extends DispatchGrpc.DispatchImplBase {
     }
 
     @Override
-    public void online(DispatchRpcService.OnlineRequest request, StreamObserver<DispatchRpcService.DispatchResponse> responseObserver) {
+    public void online(OnlineRequest request, StreamObserver<DispatchResponse> responseObserver) {
         String channelId = request.getChannelId();
         String userId = request.getUserId();
         logger.info("用户上线, 当前频道: {}, 用户id: {}", channelId, userId);
         channelStatService.online(channelId, userId, request.getSessionId());
         nodeStatService.connected(request.getNodeId(), request.getSessionId());
-        responseObserver.onNext(DispatchRpcService.DispatchResponse.newBuilder()
+        responseObserver.onNext(DispatchResponse.newBuilder()
                 .setCode(200)
                 .setMessage("success")
                 .build());
@@ -44,13 +43,13 @@ public class DispatcherImpl extends DispatchGrpc.DispatchImplBase {
     }
 
     @Override
-    public void offline(DispatchRpcService.OfflineRequest request, StreamObserver<DispatchRpcService.DispatchResponse> responseObserver) {
+    public void offline(OfflineRequest request, StreamObserver<DispatchResponse> responseObserver) {
         String channelId = request.getChannelId();
         String userId = request.getUserId();
         logger.info("用户下线, 当前频道: {}, 用户id: {}", channelId, userId);
         channelStatService.offline(channelId, userId, request.getSessionId());
         nodeStatService.disConnected(request.getNodeId(), request.getSessionId());
-        responseObserver.onNext(DispatchRpcService.DispatchResponse.newBuilder()
+        responseObserver.onNext(DispatchResponse.newBuilder()
                 .setCode(200)
                 .setMessage("success")
                 .build());
@@ -58,7 +57,7 @@ public class DispatcherImpl extends DispatchGrpc.DispatchImplBase {
     }
 
     @Override
-    public void getConnectInfo(DispatchRpcService.GetConnectInfoRequest request, StreamObserver<DispatchRpcService.GetConnectInfoResponse> responseObserver) {
+    public void getConnectInfo(GetConnectInfoRequest request, StreamObserver<GetConnectInfoResponse> responseObserver) {
         super.getConnectInfo(request, responseObserver);
     }
 }

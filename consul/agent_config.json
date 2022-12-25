@@ -6,7 +6,12 @@
       "http_handler_config": {
         "path": "http://127.0.0.1:8580/consul/watch",
         "method": "POST",
-        "header": { "x-foo": ["bar", "baz"] },
+        "header": {
+          "x-foo": [
+            "bar",
+            "baz"
+          ]
+        },
         "timeout": "10s",
         "tls_skip_verify": false
       }

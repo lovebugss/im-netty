@@ -17,14 +17,14 @@ package com.itrjp.im.uid.worker;
 
 /**
  * Represents a worker id assigner for {@link com.itrjp.im.uid.impl.DefaultUidGenerator}
- * 
+ *
  * @author yutianbao
  */
 public interface WorkerIdAssigner {
 
     /**
      * Assign worker id for {@link com.itrjp.im.uid.impl.DefaultUidGenerator}
-     * 
+     *
      * @return assigned worker id
      */
     long assignWorkerId();

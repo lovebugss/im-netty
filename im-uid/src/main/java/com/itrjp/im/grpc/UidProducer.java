@@ -1,7 +1,8 @@
 package com.itrjp.im.grpc;
 
-import com.itrjp.im.proto.service.UidGrpc;
-import com.itrjp.im.proto.service.UidProto;
+import com.itrjp.im.proto.UidRequest;
+import com.itrjp.im.proto.UidResponse;
+import com.itrjp.im.proto.UidServiceGrpc;
 import com.itrjp.im.uid.UidGenerator;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @GrpcService
-public class UidProducer extends UidGrpc.UidImplBase {
+public class UidProducer extends UidServiceGrpc.UidServiceImplBase {
 
     private final UidGenerator uidGenerator;
 
@@ -22,9 +23,9 @@ public class UidProducer extends UidGrpc.UidImplBase {
     }
 
     @Override
-    public void genUid(UidProto.UidRequest request, StreamObserver<UidProto.UidResponse> responseObserver) {
+    public void genUid(UidRequest request, StreamObserver<UidResponse> responseObserver) {
         long uid = uidGenerator.getUID();
-        responseObserver.onNext(UidProto.UidResponse.newBuilder()
+        responseObserver.onNext(UidResponse.newBuilder()
                 .setCode(200)
                 .setMessage("success")
                 .setUid(uid + "")

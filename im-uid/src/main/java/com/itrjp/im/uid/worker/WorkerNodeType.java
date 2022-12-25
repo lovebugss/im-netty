@@ -21,7 +21,7 @@ import com.itrjp.im.uid.utils.ValuedEnum;
  * WorkerNodeType
  * <li>CONTAINER: Such as Docker
  * <li>ACTUAL: Actual machine
- * 
+ *
  * @author yutianbao
  */
 public enum WorkerNodeType implements ValuedEnum<Integer> {

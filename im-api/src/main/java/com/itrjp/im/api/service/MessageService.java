@@ -1,8 +1,9 @@
 package com.itrjp.im.api.service;
 
 import com.itrjp.im.api.entity.MessageParam;
-import com.itrjp.im.proto.service.MessageGrpc;
-import com.itrjp.im.proto.service.MessageRpcService;
+import com.itrjp.im.proto.MessageRequest;
+import com.itrjp.im.proto.MessageResponse;
+import com.itrjp.im.proto.MessageServiceGrpc;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageService {
     @GrpcClient("im-message")
-    private MessageGrpc.MessageBlockingStub messageBlockingStub;
+    private MessageServiceGrpc.MessageServiceBlockingStub messageBlockingStub;
 
     public String sendMessage(MessageParam param) {
-        MessageRpcService.MessageRequest messageRequest = MessageRpcService.MessageRequest.newBuilder()
+        MessageRequest messageRequest = MessageRequest.newBuilder()
                 .setChannelId(param.getTo())
                 .setContent(param.getMessage().getContent())
                 .setTimestamp(System.currentTimeMillis())
@@ -27,7 +28,7 @@ public class MessageService {
                 .setUserId(param.getFrom())
                 .build();
         // todo 消息投递失败
-        MessageRpcService.OnMessageResponse response = messageBlockingStub.onMessage(messageRequest);
+        MessageResponse response = messageBlockingStub.onMessage(messageRequest);
         return response.getMessageId();
     }
 }

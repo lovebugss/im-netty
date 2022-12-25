@@ -1,7 +1,6 @@
 package com.itrjp.im.connect.websocket.listener;
 
 import com.itrjp.im.connect.websocket.WebSocketClient;
-import io.netty.channel.Channel;
 
 /**
  * TODO

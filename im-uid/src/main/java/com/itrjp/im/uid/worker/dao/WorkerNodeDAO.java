@@ -29,7 +29,7 @@ public interface WorkerNodeDAO {
 
     /**
      * Get {@link WorkerNodeEntity} by node host
-     * 
+     *
      * @param host
      * @param port
      * @return
@@ -38,7 +38,7 @@ public interface WorkerNodeDAO {
 
     /**
      * Add {@link WorkerNodeEntity}
-     * 
+     *
      * @param workerNodeEntity
      */
     void addWorkerNode(WorkerNodeEntity workerNodeEntity);

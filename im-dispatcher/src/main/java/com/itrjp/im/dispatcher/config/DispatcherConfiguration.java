@@ -1,7 +1,5 @@
 package com.itrjp.im.dispatcher.config;
 
-import io.grpc.InternalChannelz;
-import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**

@@ -4,9 +4,7 @@ import com.itrjp.im.connect.service.MessageService;
 import com.itrjp.im.connect.websocket.WebSocketClient;
 import com.itrjp.im.connect.websocket.channel.ChannelsHub;
 import com.itrjp.im.connect.websocket.channel.WebsocketChannel;
-import com.itrjp.im.proto.dto.MessageProto;
-import com.itrjp.im.proto.service.MessageGrpc;
-import com.itrjp.im.proto.service.MessageRpcService;
+import com.itrjp.im.proto.*;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,7 @@ public class MessageServiceImpl implements MessageService {
     private final ChannelsHub channelsHub;
 
     @GrpcClient("im-message")
-    private MessageGrpc.MessageBlockingStub messageBlockingStub;
+    private MessageServiceGrpc.MessageServiceBlockingStub messageBlockingStub;
 
 
     public MessageServiceImpl(ChannelsHub channelsHub) {
@@ -33,34 +31,35 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void onMessage(WebSocketClient channel, MessageProto.Packet data) {
-        MessageProto.Message message = data.getMessage();
+    public void onMessage(WebSocketClient channel, Packet packet) {
+        Data data = packet.getData();
         // 直接交给im-message 服务进行处理
         Map<String, List<String>> parameters = channel.getParameters();
 
-        MessageRpcService.MessageRequest messageRequest = MessageRpcService.MessageRequest.newBuilder()
+        MessageRequest messageRequest = MessageRequest.newBuilder()
                 .setChannelId(channel.getChannelId())
                 .setUserId(parameters.get("uid").get(0))
-                .setContent(message.getContent())
+                .setContent(data.getContent())
                 .setFrom(parameters.get("uid").get(0))
                 .setTo(channel.getChannelId())
                 .setTimestamp(System.currentTimeMillis())
                 .build();
         // 消息投递给im-message服务
-        messageBlockingStub.onMessage(messageRequest);
+        MessageResponse response = messageBlockingStub.onMessage(messageRequest);
+        // TODO 失败后处理
     }
 
     @Override
-    public void broadcastMessage(String channelId, MessageProto.Message message) {
-        MessageProto.Packet packet = MessageProto.Packet.newBuilder()
-                .setDataType(MessageProto.DataType.msg)
-                .setMessage(message)
+    public void broadcastMessage(String channelId, Data data) {
+        Packet packet = Packet.newBuilder()
+                .setDataType(DataType.msg)
+                .setData(data)
                 .setTimestamp(System.currentTimeMillis())
                 .build();
         broadcast(channelId, packet);
     }
 
-    private void broadcast(String channelId, MessageProto.Packet packet) {
+    private void broadcast(String channelId, Packet packet) {
         WebsocketChannel websocketChannel = channelsHub.get(channelId);
         if (websocketChannel == null) {
             return;
@@ -73,10 +72,10 @@ public class MessageServiceImpl implements MessageService {
 
 
     @Override
-    public void broadcastEvent(String channelId, MessageProto.Event event) {
+    public void broadcastEvent(String channelId, Event event) {
 
-        MessageProto.Packet build = MessageProto.Packet.newBuilder()
-                .setDataType(MessageProto.DataType.notion)
+        Packet build = Packet.newBuilder()
+                .setDataType(DataType.notion)
                 .setEvent(event)
                 .setTimestamp(event.getTimestamp())
                 .build();

@@ -1,9 +1,9 @@
 syntax = "proto3";
 
 package com.itrjp.im.proto;
-option java_outer_classname = "ChannelProto";
+option java_multiple_files = true;
 
-service Channel{
+service ChannelService{
   // 获取频道信息
   rpc getChannelInfo (GetRequest) returns (GetResponse) {}
 }

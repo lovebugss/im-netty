@@ -16,6 +16,7 @@ public final class HandshakeData {
     private final String uri;
 
     /**
+     *
      */
     public HandshakeData(Map<String, List<String>> parameters, String uri) {
         this.parameters = parameters;

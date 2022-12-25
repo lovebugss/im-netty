@@ -3,7 +3,6 @@ package com.itrjp.im.stat.service;
 import com.itrjp.im.stat.pojo.ChannelInfo;
 
 import java.util.Optional;
-import java.util.OptionalInt;
 
 /**
  * 频道统计

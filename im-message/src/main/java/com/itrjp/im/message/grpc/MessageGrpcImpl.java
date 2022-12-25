@@ -1,8 +1,7 @@
 package com.itrjp.im.message.grpc;
 
 import com.itrjp.im.message.service.MessageService;
-import com.itrjp.im.proto.service.MessageGrpc;
-import com.itrjp.im.proto.service.MessageRpcService;
+import com.itrjp.im.proto.*;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
 @GrpcService
 @Service
 @Slf4j
-public class MessageGrpcImpl extends MessageGrpc.MessageImplBase {
+public class MessageGrpcImpl extends MessageServiceGrpc.MessageServiceImplBase {
 
     private final MessageService messageService;
 
@@ -26,11 +25,11 @@ public class MessageGrpcImpl extends MessageGrpc.MessageImplBase {
     }
 
     @Override
-    public void onMessage(MessageRpcService.MessageRequest request, StreamObserver<MessageRpcService.OnMessageResponse> responseObserver) {
+    public void onMessage(MessageRequest request, StreamObserver<MessageResponse> responseObserver) {
         try {
             // TODO 使用实体
             String messageId = messageService.handlerMessage(request.getChannelId(), request.getUserId(), request.getContent());
-            responseObserver.onNext(MessageRpcService.OnMessageResponse.newBuilder()
+            responseObserver.onNext(MessageResponse.newBuilder()
                     .setMessage("success")
                     .setCode(200)
                     .setMessageId(messageId)
@@ -43,10 +42,10 @@ public class MessageGrpcImpl extends MessageGrpc.MessageImplBase {
     }
 
     @Override
-    public void onNotice(MessageRpcService.EventRequest request, StreamObserver<MessageRpcService.OnNoticeResponse> responseObserver) {
+    public void onEvent(EventRequest request, StreamObserver<EventResponse> responseObserver) {
         try {
             messageService.handlerJoinLeave(request.getChannelId(), request.getUserId(), request.getType());
-            responseObserver.onNext(MessageRpcService.OnNoticeResponse.newBuilder()
+            responseObserver.onNext(EventResponse.newBuilder()
                     .setMessage("success")
                     .setCode(200)
                     .build());

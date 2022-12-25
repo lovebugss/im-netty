@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package com.itrjp.im.proto.service;
-option java_outer_classname = "DispatchRpcService";
+package com.itrjp.im.proto;
+option java_multiple_files = true;
 
-service Dispatch{
+service DispatchService{
   // 上线
   rpc online(OnlineRequest) returns (DispatchResponse) {}
   // 下线

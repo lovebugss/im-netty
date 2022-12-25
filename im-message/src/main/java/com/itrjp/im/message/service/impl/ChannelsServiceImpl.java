@@ -6,7 +6,7 @@ import com.itrjp.im.message.convert.ChannelConvert;
 import com.itrjp.im.message.entity.Channels;
 import com.itrjp.im.message.mapper.ChannelsMapper;
 import com.itrjp.im.message.service.IChannelsService;
-import com.itrjp.im.proto.ChannelProto;
+import com.itrjp.im.proto.ChannelInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -23,7 +23,7 @@ import java.util.Optional;
 public class ChannelsServiceImpl extends ServiceImpl<ChannelsMapper, Channels> implements IChannelsService {
 
     @Override
-    public Optional<ChannelProto.ChannelInfo> getByChannelId(String channelId) {
+    public Optional<ChannelInfo> getByChannelId(String channelId) {
         Channels channels = this.baseMapper.selectOne(new LambdaQueryWrapper<Channels>()
                 .eq(Channels::getChannelId, channelId));
         return Optional.ofNullable(ChannelConvert.INST.toChannelInfo(channels));

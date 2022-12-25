@@ -1,7 +1,8 @@
 package com.itrjp.im.stat.grpc;
 
-import com.itrjp.im.proto.service.ChannelStateGrpc;
-import com.itrjp.im.proto.service.ChannelStateRpcService;
+import com.itrjp.im.proto.ChannelRequest;
+import com.itrjp.im.proto.ChannelStateResponse;
+import com.itrjp.im.proto.ChannelStateServiceGrpc;
 import com.itrjp.im.stat.service.ChannelStatService;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -11,13 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 @GrpcService
 @RequiredArgsConstructor
-public class ChannelStateImpl extends ChannelStateGrpc.ChannelStateImplBase {
+public class ChannelStateImpl extends ChannelStateServiceGrpc.ChannelStateServiceImplBase {
     private final ChannelStatService channelStatService;
 
     @Override
-    public void getChannelConnectCount(ChannelStateRpcService.ChannelRequest request, StreamObserver<ChannelStateRpcService.ChannelStateResponse> responseObserver) {
+    public void getChannelConnectCount(ChannelRequest request, StreamObserver<ChannelStateResponse> responseObserver) {
         Integer count = channelStatService.getChannelConnectCount(request.getChannelId()).orElse(0);
-        responseObserver.onNext(ChannelStateRpcService.ChannelStateResponse.newBuilder()
+        responseObserver.onNext(ChannelStateResponse.newBuilder()
                 .setCode(200)
                 .setCount(count)
                 .build());
@@ -25,9 +26,9 @@ public class ChannelStateImpl extends ChannelStateGrpc.ChannelStateImplBase {
     }
 
     @Override
-    public void getChannelUserCount(ChannelStateRpcService.ChannelRequest request, StreamObserver<ChannelStateRpcService.ChannelStateResponse> responseObserver) {
+    public void getChannelUserCount(ChannelRequest request, StreamObserver<ChannelStateResponse> responseObserver) {
         Integer count = channelStatService.getChannelUserCount(request.getChannelId()).orElse(0);
-        responseObserver.onNext(ChannelStateRpcService.ChannelStateResponse.newBuilder()
+        responseObserver.onNext(ChannelStateResponse.newBuilder()
                 .setCode(200)
                 .setCount(count)
                 .build());

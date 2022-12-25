@@ -5,7 +5,7 @@ import com.itrjp.im.connect.websocket.channel.ChannelsHub;
 import com.itrjp.im.connect.websocket.listener.CloseListener;
 import com.itrjp.im.connect.websocket.listener.ExceptionListener;
 import com.itrjp.im.connect.websocket.listener.MessageListener;
-import com.itrjp.im.proto.dto.MessageProto;
+import com.itrjp.im.proto.Packet;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ChannelHandler.Sharable
-public class MessageHandler extends SimpleChannelInboundHandler<MessageProto.Packet> {
+public class MessageHandler extends SimpleChannelInboundHandler<Packet> {
     private final Logger logger = LoggerFactory.getLogger(MessageHandler.class);
     private final MessageListener messageListener;
     private final ExceptionListener exceptionListener;
@@ -39,7 +39,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<MessageProto.Pac
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, MessageProto.Packet msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, Packet msg) throws Exception {
         logger.info("MessageHandler#channelRead0 message: {}, channel: [{}]", msg, ctx.channel().id());
         Channel channel = ctx.channel();
         messageListener.onMessage(channelsHub.getWebSocketClient(ctx.channel().id().asLongText()), msg);

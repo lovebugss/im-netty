@@ -25,6 +25,7 @@ public class Result<T> {
     public static Result<Void> error(ErrorCode errorCode) {
         return new Result<>(errorCode.getCode(), errorCode.getMessage(), null);
     }
+
     public static Result<Void> error(int code, String message) {
         return new Result<>(code, message, null);
     }
