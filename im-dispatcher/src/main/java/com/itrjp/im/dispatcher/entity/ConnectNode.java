@@ -17,5 +17,5 @@ public class ConnectNode {
     private String id;
     private String address;
     private int port;
-    private int gRPCPort;
+    private int wsPort;
 }

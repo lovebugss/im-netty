@@ -10,7 +10,6 @@ service MessageService{
   // 上下线
   rpc onEvent(EventRequest) returns (EventResponse){}
 
-
 }
 
 message MessageResponse{
@@ -64,17 +63,20 @@ message Data{
 
 // 通知事件类型
 enum EventType{
-  online = 0;
-  offline = 1;
-  join = 2;
-  leave = 3;
+  ONLINE = 0;
+  OFFLINE = 1;
+  JOIN = 2;
+  LEAVE = 3;
+  MUTE = 4;
+  UN_MUTE = 5;
+  KICK = 6;
 }
 
 // 时间通知
 message Event{
   string channelId = 1;
   string userId = 2;
-  EventType type = 3; // 时间类型
+  EventType type = 3; // 事件类型
   int64  timestamp = 4;// 时间戳
 }
 

@@ -1,6 +1,6 @@
 package com.itrjp.im.api.service;
 
-import com.itrjp.im.api.entity.ChannelNodeInfo;
+import com.itrjp.im.proto.ChannelNodeInfo;
 
 import java.util.List;
 

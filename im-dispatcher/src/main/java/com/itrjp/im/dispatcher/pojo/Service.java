@@ -25,7 +25,7 @@ public class Service {
     @JsonProperty("Tags")
     private List<String> tags;
     @JsonProperty("Meta")
-    private Meta meta;
+    private Map<String, Object> meta;
     @JsonProperty("Port")
     private int port;
     @JsonProperty("Address")

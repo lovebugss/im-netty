@@ -1,7 +1,7 @@
 package com.itrjp.im.message.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.itrjp.im.message.entity.Channels;
+import com.itrjp.im.message.entity.ImChannels;
 import com.itrjp.im.proto.ChannelInfo;
 
 import java.util.Optional;
@@ -12,9 +12,8 @@ import java.util.Optional;
  * </p>
  *
  * @author renjp
- * @since 2022-12-21
+ * @since 2022-12-27
  */
-public interface IChannelsService extends IService<Channels> {
-
+public interface IImChannelsService extends IService<ImChannels> {
     Optional<ChannelInfo> getByChannelId(String channelId);
 }

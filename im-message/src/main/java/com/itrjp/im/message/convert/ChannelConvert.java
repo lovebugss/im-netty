@@ -1,6 +1,6 @@
 package com.itrjp.im.message.convert;
 
-import com.itrjp.im.message.entity.Channels;
+import com.itrjp.im.message.entity.ImChannels;
 import com.itrjp.im.proto.ChannelInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,6 +12,6 @@ public interface ChannelConvert {
 
     @Mapping(target = "limit", source = "channelLimit", defaultValue = "-1")
     @Mapping(target = "channelId", source = "channelId")
-    ChannelInfo toChannelInfo(Channels channels);
+    ChannelInfo toChannelInfo(ImChannels channels);
 
 }

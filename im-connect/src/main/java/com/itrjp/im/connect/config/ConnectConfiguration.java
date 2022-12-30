@@ -1,5 +1,7 @@
 package com.itrjp.im.connect.config;
 
+import com.itrjp.im.connect.service.DropEventFactory;
+import com.itrjp.im.connect.service.DropEventStrategy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;

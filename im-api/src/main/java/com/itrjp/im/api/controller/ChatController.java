@@ -3,10 +3,10 @@ package com.itrjp.im.api.controller;
 import com.itrjp.common.result.Result;
 import com.itrjp.common.service.TokenService;
 import com.itrjp.im.api.entity.ChannelConnectInfo;
-import com.itrjp.im.api.entity.ChannelNodeInfo;
 import com.itrjp.im.api.entity.InitParam;
 import com.itrjp.im.api.service.ChannelService;
 import com.itrjp.im.api.service.ConnectNodeService;
+import com.itrjp.im.proto.ChannelNodeInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/chat")
+@RequestMapping("chat")
 @RequiredArgsConstructor
 public class ChatController {
 

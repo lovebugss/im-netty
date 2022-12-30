@@ -24,12 +24,11 @@
     <properties>
         <java.version>17</java.version>
         <netty.version>4.1.79.Final</netty.version>
-        <spring-boot.version>2.7.1</spring-boot.version>
+        <spring-boot.version>2.7.7</spring-boot.version>
+        <spring-cloud.version>2021.0.5</spring-cloud.version>
         <protobuf.version>3.18.2</protobuf.version>
         <grpc.version>1.42.2</grpc.version>
-        <spring-cloud.version>2021.0.3</spring-cloud.version>
         <grpc-spring-boot.version>2.13.1.RELEASE</grpc-spring-boot.version>
-        <spring-kafka.version>2.8.8</spring-kafka.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -96,20 +95,6 @@
                 <groupId>net.devh</groupId>
                 <artifactId>grpc-server-spring-boot-starter</artifactId>
                 <version>${grpc-spring-boot.version}</version>
-            </dependency>
-
-            <!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
-            <dependency>
-                <groupId>org.springframework.kafka</groupId>
-                <artifactId>spring-kafka</artifactId>
-                <version>${spring-kafka.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.kafka</groupId>
-                <artifactId>spring-kafka-test</artifactId>
-                <scope>test</scope>
-                <version>${spring-kafka.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

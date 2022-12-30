@@ -1,12 +1,18 @@
 package com.itrjp.im.message.service.impl;
 
 import com.itrjp.common.enums.MessageFilterType;
-import com.itrjp.im.message.service.IChannelsService;
+import com.itrjp.im.message.service.IImChannelsService;
 import com.itrjp.im.message.service.MessageHistoryService;
 import com.itrjp.im.message.service.MessageService;
 import com.itrjp.im.message.service.MessageStorageService;
 import com.itrjp.im.message.service.filter.MessageFilter;
-import com.itrjp.im.proto.*;
+import com.itrjp.im.proto.ChannelInfo;
+import com.itrjp.im.proto.Data;
+import com.itrjp.im.proto.Event;
+import com.itrjp.im.proto.EventType;
+import com.itrjp.im.uid.UidRequest;
+import com.itrjp.im.uid.UidResponse;
+import com.itrjp.im.uid.UidServiceGrpc;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.slf4j.Logger;
@@ -36,17 +42,17 @@ public class MessageServiceImpl implements MessageService {
     private final MessageStorageService messageStorageService;
     private final MessageHistoryService messageHistoryService;
 
-    private final IChannelsService channelService;
+    private final IImChannelsService channelService;
 
 
     @Override
     public String handlerMessage(String channelId, String userId, String message) {
         logger.info("handler message, channelId: {}, userId:{}, message: {}", channelId, userId, message);
-        String messageId = createMessageId();
+        String messageId = createMessageId(channelId);
 
         ChannelInfo channelInfo = channelService.getByChannelId(channelId).orElseThrow();
         // 消息过滤
-        boolean filter = filter(message, MessageFilterType.valueOf(channelInfo.getFilterType()));
+        boolean filter = filter(message, MessageFilterType.valueOfCode(Integer.valueOf(channelInfo.getFilterType())));
         if (!filter) {
             // 存储不合法的消息
             messageStorageService.saveInvalidMessage(channelId, userId, message);
@@ -66,9 +72,9 @@ public class MessageServiceImpl implements MessageService {
         return messageId + "";
     }
 
-    private String createMessageId() {
+    private String createMessageId(String channelId) {
         // 生成全局唯一ID
-        UidResponse response = uidBlockingStub.genUid(UidRequest.newBuilder().build());
+        UidResponse response = uidBlockingStub.genUid(UidRequest.newBuilder().setChannelId(channelId).build());
         // TODO 当生成id 失败时, 如何处理
         if (response.getCode() != 200) {
             return String.valueOf(System.currentTimeMillis());

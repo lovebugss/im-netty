@@ -10,11 +10,11 @@ export const options = {
         //    {duration: '60s', target: 10},
     ],
     thresholds: {},
-    vus: 10,
+    vus: 2,
     duration: '30s'
 
 }
-const channelId = "ch_0000001";
+const channelId = "ch_00000001";
 const userId = "user_123";
 
 export function setup() {

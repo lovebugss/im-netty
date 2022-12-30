@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package com.itrjp.im.proto;
+option java_multiple_files = true;
+
+service ChannelNodeService{
+
+  // 获取最佳节点
+  rpc getBestChannelNode(ChannelNodeRequest) returns (ChannelNodeResponse) {}
+}
+
+message StartRequest {
+  string userId = 1;
+}
+
+message StartResponse {
+  string userId = 1;
+}
+message ChannelNodeRequest{
+  string channelId = 1;
+}
+
+message ChannelNodeInfo{
+  string address = 1;
+  int32 port = 2;
+  string protocol = 3;
+}
+
+
+message ChannelNodeResponse{
+  int32 code = 1;
+  string message = 2;
+  repeated ChannelNodeInfo channelNode = 3;
+}

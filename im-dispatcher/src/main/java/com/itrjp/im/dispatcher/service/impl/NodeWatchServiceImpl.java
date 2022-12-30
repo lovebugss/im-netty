@@ -94,10 +94,10 @@ public class NodeWatchServiceImpl implements NodeWatchService {
                 .map(entity -> {
                     com.itrjp.im.dispatcher.pojo.Service service = entity.getService();
                     String address = service.getAddress();
-                    String gRpcPort = service.getMeta().getGRpcPort();
+                    String wsPort = service.getMeta().get("wsPort").toString();
                     int port = service.getPort();
                     String id = service.getId();
-                    return new ConnectNode(id, address, port, Integer.parseInt(gRpcPort));
+                    return new ConnectNode(id, address, port, Integer.parseInt(wsPort));
                 }).toList();
     }
 }

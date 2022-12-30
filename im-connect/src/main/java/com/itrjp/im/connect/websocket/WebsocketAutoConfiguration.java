@@ -1,5 +1,7 @@
 package com.itrjp.im.connect.websocket;
 
+import com.itrjp.im.connect.websocket.cache.CacheFactory;
+import com.itrjp.im.connect.websocket.cache.MemoryCacheFactory;
 import com.itrjp.im.connect.websocket.listener.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,12 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(value = {WebSocketProperties.class})
 public class WebsocketAutoConfiguration {
     private final Logger logger = LoggerFactory.getLogger(WebsocketAutoConfiguration.class);
+
+    @Bean
+    @ConditionalOnMissingBean
+    CacheFactory cacheFactory() {
+        return new MemoryCacheFactory();
+    }
 
     @Bean
     @ConditionalOnMissingBean

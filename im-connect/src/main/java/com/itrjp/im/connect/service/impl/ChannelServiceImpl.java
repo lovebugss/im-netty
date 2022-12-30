@@ -2,15 +2,14 @@ package com.itrjp.im.connect.service.impl;
 
 import com.itrjp.im.connect.service.ChannelService;
 import com.itrjp.im.connect.websocket.WebSocketClient;
-import com.itrjp.im.connect.websocket.channel.ChannelsHub;
 import com.itrjp.im.proto.*;
+import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 /**
  * TODO
@@ -19,6 +18,7 @@ import java.util.concurrent.Executor;
  * @date 2022/7/24 21:30
  */
 @Service
+@RequiredArgsConstructor
 public class ChannelServiceImpl implements ChannelService {
     private final ConsulDiscoveryProperties consulDiscoveryProperties;
 
@@ -28,10 +28,6 @@ public class ChannelServiceImpl implements ChannelService {
     @GrpcClient("im-message")
     private MessageServiceGrpc.MessageServiceBlockingStub messageBlockingStub;
 
-
-    public ChannelServiceImpl(ConsulDiscoveryProperties consulDiscoveryProperties, ChannelsHub channelsHub, Executor executor) {
-        this.consulDiscoveryProperties = consulDiscoveryProperties;
-    }
 
     @Override
     public void onOpen(WebSocketClient client) {
@@ -53,7 +49,7 @@ public class ChannelServiceImpl implements ChannelService {
         EventResponse eventResponse = messageBlockingStub.onEvent(EventRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
-                .setType(EventType.join)
+                .setType(EventType.JOIN)
                 .build());
     }
 
@@ -79,7 +75,7 @@ public class ChannelServiceImpl implements ChannelService {
         EventResponse eventResponse = messageBlockingStub.onEvent(EventRequest.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
-                .setType(EventType.leave)
+                .setType(EventType.LEAVE)
                 .build());
     }
 }

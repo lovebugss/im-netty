@@ -1,6 +1,6 @@
 package com.itrjp.im.message.grpc;
 
-import com.itrjp.im.message.service.impl.ChannelsServiceImpl;
+import com.itrjp.im.message.service.IImChannelsService;
 import com.itrjp.im.proto.ChannelServiceGrpc;
 import com.itrjp.im.proto.GetRequest;
 import com.itrjp.im.proto.GetResponse;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class ChannelGrpcImpl extends ChannelServiceGrpc.ChannelServiceImplBase {
-    private final ChannelsServiceImpl channelService;
+    private final IImChannelsService channelService;
 
     @Override
     public void getChannelInfo(GetRequest request, StreamObserver<GetResponse> responseObserver) {

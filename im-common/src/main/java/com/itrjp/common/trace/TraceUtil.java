@@ -19,15 +19,19 @@ public class TraceUtil {
         MDC.put(TRACE_ID, traceId);
     }
 
-    private static String createTraceId() {
+    public static String createTraceId() {
         return null;
     }
 
-    private static String getTraceId() {
+    public static String getTraceId() {
         return MDC.get(TRACE_ID);
     }
 
     public static void clear() {
         MDC.remove(TRACE_ID);
+    }
+
+    public static void setTraceId(String traceId) {
+        MDC.put(TRACE_ID, traceId);
     }
 }
