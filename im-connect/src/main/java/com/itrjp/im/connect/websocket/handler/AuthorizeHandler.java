@@ -70,13 +70,19 @@ public class AuthorizeHandler extends ChannelInboundHandlerAdapter {
                 sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), FORBIDDEN, ctx.alloc().buffer(0)));
                 return;
             }
+
             // 鉴权操作
             QueryStringDecoder queryString = new QueryStringDecoder(request.uri());
+            if (!queryString.uri().startsWith(webSocketProperties.getWebsocketPath())) {
+                // http 请求
+                sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), FORBIDDEN, ctx.alloc().buffer(0)));
+                return;
+            }
             Map<String, List<String>> parameters = queryString.parameters();
             HandshakeData handshakeData = new HandshakeData(parameters, request.uri());
             logger.info("AuthorizeHandler#channelRead: FullHttpRequest");
             AuthorizationListener.AuthorizationResult authorize = authorization.authorize(handshakeData);
-            if (!queryString.uri().startsWith(webSocketProperties.getWebsocketPath()) || !authorize.isSuccess()) {
+            if (!authorize.isSuccess()) {
                 AuthorizationListener.ErrorType errorType = authorize.getErrorType();
                 switch (errorType) {
                     case TOKEN_INVALID:

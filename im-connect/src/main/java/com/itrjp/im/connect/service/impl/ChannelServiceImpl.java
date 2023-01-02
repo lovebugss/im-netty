@@ -1,5 +1,6 @@
 package com.itrjp.im.connect.service.impl;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.itrjp.im.connect.service.ChannelService;
 import com.itrjp.im.connect.websocket.WebSocketClient;
 import com.itrjp.im.proto.*;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  * TODO
@@ -24,9 +26,9 @@ public class ChannelServiceImpl implements ChannelService {
 
 
     @GrpcClient("im-stat")
-    private DispatchServiceGrpc.DispatchServiceBlockingStub dispatchStub;
+    private DispatchServiceGrpc.DispatchServiceFutureStub dispatchStub;
     @GrpcClient("im-message")
-    private MessageServiceGrpc.MessageServiceBlockingStub messageBlockingStub;
+    private MessageServiceGrpc.MessageServiceFutureStub messageBlockingStub;
 
 
     @Override
@@ -44,9 +46,19 @@ public class ChannelServiceImpl implements ChannelService {
                 .setSessionId(client.getSession())
                 .setNodeId(consulDiscoveryProperties.getInstanceId())
                 .build();
-        DispatchResponse online = dispatchStub.online(request);
+        ListenableFuture<DispatchResponse> online = dispatchStub.online(request);
+        online.addListener(() -> {
+            try {
+                DispatchResponse response = online.get();
+
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        }, Runnable::run);
         // 通知消息服务
-        EventResponse eventResponse = messageBlockingStub.onEvent(EventRequest.newBuilder()
+        ListenableFuture<EventResponse> onEvent = messageBlockingStub.onEvent(Event.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
                 .setType(EventType.JOIN)
@@ -69,10 +81,10 @@ public class ChannelServiceImpl implements ChannelService {
                 .setSessionId(client.getSession())
                 .setNodeId(consulDiscoveryProperties.getInstanceId())
                 .build();
-        DispatchResponse offline = dispatchStub.offline(request);
+        ListenableFuture<DispatchResponse> offline = dispatchStub.offline(request);
 
         // 通知消息服务
-        EventResponse eventResponse = messageBlockingStub.onEvent(EventRequest.newBuilder()
+        ListenableFuture<EventResponse> onEvent = messageBlockingStub.onEvent(Event.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(uid)
                 .setType(EventType.LEAVE)

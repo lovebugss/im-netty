@@ -27,9 +27,9 @@ spring:
       buffer-memory: 33554432 #Producer 用来缓冲等待被发送到服务器的记录的总字节数，33554432是缺省配置
       key-serializer: org.apache.kafka.common.serialization.StringSerializer #关键字的序列化类
       value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer #值的序列化类
-      properties:
-        interceptor:
-          classes: com.itrjp.common.trace.KafkaTraceProducerInterceptor #拦截器
+#      properties:
+#        interceptor:
+#          classes: com.itrjp.common.trace.KafkaTraceProducerInterceptor #拦截器
   datasource:
     url: jdbc:mysql://localhost:3306/im?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=true
     username: root

@@ -10,14 +10,37 @@ service ConnectService{
 
 service ConnectNodeService{
   // 服务上线
-  rpc startUp(ConnectNodeRequest) returns (ConnectNodeResponse) {}
+  rpc startUp(ChannelNodeInfo) returns (ConnectNodeResponse) {}
 
-  rpc stop(ConnectNodeRequest) returns (ConnectNodeResponse) {}
+  // 服务下线
+  rpc stop(ChannelNodeInfo) returns (ConnectNodeResponse) {}
+
+  // 服务状态
+  rpc getBestChannelNode(ChannelNodeRequest) returns (ChannelNodeResponse) {}
+
+  // 服务列表
+  rpc getAvailableList(ChannelNodeRequest) returns (ChannelNodeResponse) {}
+
+  rpc getConnectNode(ChannelNodeRequest) returns (ChannelNodeResponse) {}
+}
+message ChannelNodeRequest{
+  string channelId = 1;
 }
 
-message ConnectNodeRequest{
-  string id = 1;
+message ChannelNodeInfo{
+  string nodeId = 1;
+  string address = 2;
+  int32 port = 3;
+  string protocol = 4;
 }
+
+
+message ChannelNodeResponse{
+  int32 code = 1;
+  string message = 2;
+  repeated ChannelNodeInfo channelNode = 3;
+}
+
 message ConnectNodeResponse{
   int32 code = 1;
   string message = 2;

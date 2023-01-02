@@ -57,6 +57,6 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         int count = channelStateService.getChannelConnectCount(channelId);
         // 获取频道的限流数
         Channel channel = channelCache.get(channelId);
-        return count > (channel == null ? 1000 : channel.getLimit());
+        return count >= (channel == null ? 1000 : channel.getLimit());
     }
 }

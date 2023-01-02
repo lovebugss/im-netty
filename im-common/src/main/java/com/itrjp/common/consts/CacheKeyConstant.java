@@ -15,30 +15,23 @@ public final class CacheKeyConstant {
      * 使用zset
      */
     public static final String CONNECT_NODE_LOAD = "im:connect-node:load";
-    public static final String IM_STAT_CHANNEL_PV = "im:stat:channel:pv:";
+    public static final String CONNECT_NODE_LIST = "im:connect-node:list";
+    public static final String IM_STAT_CHANNEL_PV = "im:channel:stat:pv:";
+    public static final String IM_STAT_CHANNEL_UV = "im:channel:stat:uv:";
 
     /**
      * connect 服务 节点负载.
      */
-    public static final String CONNECT_NODE = "im:connect-node:load:";
+    public static final String IM_CONNECT_NODE_LOAD = "im:connect-node:load:";
+
 
     /**
-     * 所有connect 节点信息
-     * <p>
-     * 使用hash
+     * 频道分布在的connect节点
      */
-    public static final String CONNECT_NODE_INFO = "im:connect-node:info";
+    public static final String IM_CHANNEL_CONNECT_NODE_MAPPING = "im:channel:connect-node:mapping:";
 
-    /**
-     * <pre>
-     * connect 节点与频道映射关系(hash)
-     * key: connectNodeId
-     * value: channelId
-     * </pre>
-     */
-    public static final String CONNECT_NODE_CHANNEL_MAPPING = "im:connect-node:channel:mapping";
     /**
      * 频道用户列表
      */
-    public static final String CHANNEL_USER = "im:channel:";
+    public static final String IM_CHANNEL_ONLINE_USER = "im:channel:online:user:";
 }

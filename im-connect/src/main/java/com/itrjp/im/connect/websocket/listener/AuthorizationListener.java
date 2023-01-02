@@ -27,7 +27,7 @@ public interface AuthorizationListener {
         }
 
         public static AuthorizationResult fail(ErrorType errorType) {
-            return new AuthorizationResult(false, null);
+            return new AuthorizationResult(false, errorType);
         }
     }
 

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package com.itrjp.im.proto;
+option java_multiple_files = true;
+import "message.proto";
+
+message KafkaMessage {
+  DataType dataType = 1;
+  bytes data = 2;
+  string  from = 3;
+  string  to = 4;
+  int64 timestamp = 5;
+  string nodeId = 6;
+}

@@ -34,7 +34,7 @@ public class DispatcherImpl extends DispatchServiceGrpc.DispatchServiceImplBase 
         String userId = request.getUserId();
         logger.info("用户上线, 当前频道: {}, 用户id: {}", channelId, userId);
         channelStatService.online(channelId, userId, request.getSessionId());
-        nodeStatService.connected(request.getNodeId(), request.getSessionId());
+        nodeStatService.connected(request.getNodeId(), channelId, userId, request.getSessionId());
         responseObserver.onNext(DispatchResponse.newBuilder()
                 .setCode(200)
                 .setMessage("success")
@@ -48,7 +48,7 @@ public class DispatcherImpl extends DispatchServiceGrpc.DispatchServiceImplBase 
         String userId = request.getUserId();
         logger.info("用户下线, 当前频道: {}, 用户id: {}", channelId, userId);
         channelStatService.offline(channelId, userId, request.getSessionId());
-        nodeStatService.disConnected(request.getNodeId(), request.getSessionId());
+        nodeStatService.disConnected(request.getNodeId(), channelId, userId, request.getSessionId());
         responseObserver.onNext(DispatchResponse.newBuilder()
                 .setCode(200)
                 .setMessage("success")

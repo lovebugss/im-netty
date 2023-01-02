@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.itrjp.common.consts.CacheKeyConstant.IM_CHANNEL_ONLINE_USER;
 import static com.itrjp.common.consts.CacheKeyConstant.IM_STAT_CHANNEL_PV;
 
 /**
@@ -22,14 +23,19 @@ public class ChannelStatServiceImpl implements ChannelStatService {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public void online(String channelId, String sessionId, String userName) {
-
+    public void online(String channelId, String userName, String sessionId) {
+        // 统计pv
         redisTemplate.opsForValue().increment(IM_STAT_CHANNEL_PV + channelId);
+        redisTemplate.opsForSet().add(IM_CHANNEL_ONLINE_USER + channelId, userName);
     }
 
     @Override
-    public void offline(String channelId, String sessionId, String userName) {
-        redisTemplate.opsForValue().decrement(IM_STAT_CHANNEL_PV + channelId);
+    public void offline(String channelId, String userName, String sessionId) {
+        Long decrement = redisTemplate.opsForValue().decrement(IM_STAT_CHANNEL_PV + channelId);
+        if (decrement == null || decrement <= 0) {
+            redisTemplate.delete(IM_STAT_CHANNEL_PV + channelId);
+        }
+        redisTemplate.opsForSet().remove(IM_CHANNEL_ONLINE_USER + channelId, userName);
     }
 
 

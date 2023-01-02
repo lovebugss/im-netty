@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2022/12/28 21:34
  */
 @RestController
-@RequestMapping("api/history/message")
+@RequestMapping("message/history")
 public class HistoryMessageController {
 }

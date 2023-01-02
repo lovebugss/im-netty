@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2022/12/19 21:19
  */
 @RestController
-@RequestMapping("api/message")
+@RequestMapping("message")
 @RequiredArgsConstructor
 public class MessageController {
 

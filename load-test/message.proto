@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+// 数据包
+message Packet{
+  DataType dataType = 1; // 数据类型
+  int64  timestamp = 2;// 时间戳
+  bytes data = 3; // 消息体
+}
+enum DataType{
+  // 普通消息
+  MSG = 0;
+  // 通知消息(上下线)
+  EVENT = 1;
+  ACK = 2;
+}
+message Message{
+  string channelId = 1;
+  string userId = 2;
+  string content = 3;
+  string messageId = 4;
+  int64  timestamp = 5;// 时间戳
+  MessageType type = 6;
+
+}
+enum MessageType{
+  TEXT = 0;
+  IMAGE = 1;
+  VOICE = 2;
+  VIDEO = 3;
+  FILE = 4;
+  LOCATION = 5;
+  SYSTEM = 6;
+}
+
+// 通知事件类型
+enum EventType{
+  ONLINE = 0;
+  OFFLINE = 1;
+  JOIN = 2;
+  LEAVE = 3;
+  MUTE = 4;
+  UN_MUTE = 5;
+  KICK = 6;
+}
+
+// 时间通知
+message Event{
+  string channelId = 1;
+  string userId = 2;
+  EventType type = 3; // 事件类型
+  int64  timestamp = 4;// 时间戳
+}
+

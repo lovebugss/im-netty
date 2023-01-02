@@ -9,6 +9,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import static com.itrjp.im.connect.service.DropEventStrategy.DropType.DEFAULT;
+
 /**
  * TODO
  *
@@ -17,6 +19,11 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @Configuration
 public class ConnectConfiguration {
+
+    @Bean
+    DropEventStrategy dropEventStrategy() {
+        return DropEventFactory.createDropEventStrategy(DEFAULT);
+    }
 
 
     @Bean

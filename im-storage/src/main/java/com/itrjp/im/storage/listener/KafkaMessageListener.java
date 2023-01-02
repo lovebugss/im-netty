@@ -1,7 +1,7 @@
 package com.itrjp.im.storage.listener;
 
-import com.itrjp.im.proto.Data;
 import com.itrjp.im.proto.Event;
+import com.itrjp.im.proto.Message;
 import com.itrjp.im.storage.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,7 @@ public class KafkaMessageListener {
     @KafkaListener(topics = {STORAGE_TOPIC})
     public void onMessage(byte[] data) {
         try {
-            Data d = Data.parseFrom(data);
+            Message d = Message.parseFrom(data);
             logger.info("接受Kafka消息: {}", d);
             messageService.handlerMessage(d.getChannelId(), d.getContent());
         } catch (Exception e) {

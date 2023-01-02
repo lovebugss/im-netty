@@ -1,6 +1,5 @@
 package com.itrjp.im.api.entity;
 
-import com.itrjp.im.proto.ChannelNodeInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

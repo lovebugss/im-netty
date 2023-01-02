@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * TODO
- *
  * @author <a href="mailto:r979668507@gmail.com">renjp</a>
  * @date 2022/7/21 19:05
  */
@@ -31,17 +29,15 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void onMessage(WebSocketClient channel, Packet packet) {
-        Data data = packet.getData();
+    public void onMessage(WebSocketClient channel, Message message) {
+
         // 直接交给im-message 服务进行处理
         Map<String, List<String>> parameters = channel.getParameters();
 
-        MessageRequest messageRequest = MessageRequest.newBuilder()
+        Message messageRequest = Message.newBuilder()
                 .setChannelId(channel.getChannelId())
                 .setUserId(parameters.get("uid").get(0))
-                .setContent(data.getContent())
-                .setFrom(parameters.get("uid").get(0))
-                .setTo(channel.getChannelId())
+                .setContent(message.getContent())
                 .setTimestamp(System.currentTimeMillis())
                 .build();
         // 消息投递给im-message服务
@@ -50,10 +46,10 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void broadcastMessage(String channelId, Data data) {
+    public void broadcastMessage(String channelId, Message data) {
         Packet packet = Packet.newBuilder()
-                .setDataType(DataType.msg)
-                .setData(data)
+                .setDataType(DataType.MSG)
+                .setData(data.toByteString())
                 .setTimestamp(System.currentTimeMillis())
                 .build();
         broadcast(channelId, packet);
@@ -75,8 +71,8 @@ public class MessageServiceImpl implements MessageService {
     public void broadcastEvent(String channelId, Event event) {
 
         Packet build = Packet.newBuilder()
-                .setDataType(DataType.notion)
-                .setEvent(event)
+                .setDataType(DataType.EVENT)
+                .setData(event.toByteString())
                 .setTimestamp(event.getTimestamp())
                 .build();
         broadcast(channelId, build);

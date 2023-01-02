@@ -25,10 +25,10 @@ public class MessageGrpcImpl extends MessageServiceGrpc.MessageServiceImplBase {
     }
 
     @Override
-    public void onMessage(MessageRequest request, StreamObserver<MessageResponse> responseObserver) {
+    public void onMessage(Message message, StreamObserver<MessageResponse> responseObserver) {
         try {
             // TODO 使用实体
-            String messageId = messageService.handlerMessage(request.getChannelId(), request.getUserId(), request.getContent());
+            String messageId = messageService.handlerMessage(message.getChannelId(), message.getUserId(), message.getContent());
             responseObserver.onNext(MessageResponse.newBuilder()
                     .setMessage("success")
                     .setCode(200)
@@ -42,9 +42,9 @@ public class MessageGrpcImpl extends MessageServiceGrpc.MessageServiceImplBase {
     }
 
     @Override
-    public void onEvent(EventRequest request, StreamObserver<EventResponse> responseObserver) {
+    public void onEvent(Event event, StreamObserver<EventResponse> responseObserver) {
         try {
-            messageService.handlerJoinLeave(request.getChannelId(), request.getUserId(), request.getType());
+            messageService.handlerJoinLeave(event.getChannelId(), event.getUserId(), event.getType());
             responseObserver.onNext(EventResponse.newBuilder()
                     .setMessage("success")
                     .setCode(200)

@@ -6,13 +6,11 @@
     <modules>
         <module>im-connect</module>
         <module>im-message</module>
-        <module>im-dispatcher</module>
         <module>im-common</module>
         <module>im-stat</module>
         <module>im-storage</module>
         <module>im-uid</module>
         <module>im-api</module>
-        <module>im-route</module>
 
     </modules>
     <packaging>pom</packaging>
@@ -59,6 +57,11 @@
             <dependency>
                 <groupId>com.google.protobuf</groupId>
                 <artifactId>protobuf-java</artifactId>
+                <version>${protobuf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java-util</artifactId>
                 <version>${protobuf.version}</version>
             </dependency>
             <dependency>

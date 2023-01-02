@@ -15,7 +15,7 @@ public interface MessageService {
      *
      * @param channelId 频道
      * @param userId    用户id
-     * @param message   消息体
+     * @param message   消息体 todo 消息体无法扩展
      */
     String handlerMessage(String channelId, String userId, String message);
 

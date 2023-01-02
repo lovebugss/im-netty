@@ -1,7 +1,7 @@
 package com.itrjp.im.api.service;
 
 import com.itrjp.im.api.entity.MessageParam;
-import com.itrjp.im.proto.MessageRequest;
+import com.itrjp.im.proto.Message;
 import com.itrjp.im.proto.MessageResponse;
 import com.itrjp.im.proto.MessageServiceGrpc;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -19,12 +19,10 @@ public class MessageService {
     private MessageServiceGrpc.MessageServiceBlockingStub messageBlockingStub;
 
     public String sendMessage(MessageParam param) {
-        MessageRequest messageRequest = MessageRequest.newBuilder()
+        Message messageRequest = Message.newBuilder()
                 .setChannelId(param.getTo())
                 .setContent(param.getMessage().getContent())
                 .setTimestamp(System.currentTimeMillis())
-                .setTo(param.getTo())
-                .setFrom(param.getFrom())
                 .setUserId(param.getFrom())
                 .build();
         // todo 消息投递失败

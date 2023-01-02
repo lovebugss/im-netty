@@ -5,10 +5,10 @@ option java_multiple_files = true;
 
 service MessageService{
   // onMessage
-  rpc onMessage(MessageRequest) returns (MessageResponse){}
+  rpc onMessage(Message) returns (MessageResponse){}
 
-  // 上下线
-  rpc onEvent(EventRequest) returns (EventResponse){}
+  // onEvent
+  rpc onEvent(Event) returns (EventResponse){}
 
 }
 
@@ -23,42 +23,36 @@ message EventResponse{
   string message = 2;
 }
 
-message EventRequest{
-  string channelId = 1; // 频道id
-  string userId = 2; // 用户id
-  EventType type = 3; // 操作类型
-
-}
-
-message MessageRequest{
-  string channelId = 1; // 频道ID
-  string userId = 2; // 用户ID
-  string content = 3; // 消息体
-  string from = 4;
-  string to = 5;
-  int64 msgId = 6;
-  int64 timestamp = 7; // 消息时间戳(服务端接收到消息的时间戳)
-}
-
 // 数据包
 message Packet{
   DataType dataType = 1; // 数据类型
   int64  timestamp = 2;// 时间戳
-  Data data = 3; // 消息体
-  Event event = 4; // 事件通知
+  bytes data = 3; // 消息体
 }
 enum DataType{
   // 普通消息
-  msg = 0;
+  MSG = 0;
   // 通知消息(上下线)
-  notion = 1;
+  EVENT = 1;
+  ACK = 2;
 }
-message Data{
+message Message{
   string channelId = 1;
-  string content = 2;
-  string messageId = 3;
-  int64  timestamp = 4;// 时间戳
+  string userId = 2;
+  string content = 3;
+  string messageId = 4;
+  int64  timestamp = 5;// 时间戳
+  MessageType type = 6;
 
+}
+enum MessageType{
+  TEXT = 0;
+  IMAGE = 1;
+  VOICE = 2;
+  VIDEO = 3;
+  FILE = 4;
+  LOCATION = 5;
+  SYSTEM = 6;
 }
 
 // 通知事件类型

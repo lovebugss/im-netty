@@ -37,7 +37,7 @@ server:
 websocket:
   port: 18080
 im:
-  connect-topic: connect-topic-${spring.application.instance_id}
+  connect-topic: connect-topic-${spring.application.name}-${spring.application.instance_id}
   connect-notify-topic: connect-notify-topic-${spring.application.instance_id}
 grpc:
   server:

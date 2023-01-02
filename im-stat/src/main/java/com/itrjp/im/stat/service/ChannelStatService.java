@@ -14,7 +14,7 @@ public interface ChannelStatService {
     /**
      * 上线
      */
-    void online(String channelId, String sessionId, String userName);
+    void online(String channelId, String userName, String sessionId);
 
     /**
      * 下线
@@ -22,7 +22,7 @@ public interface ChannelStatService {
      * @param channelId
      * @param sessionId
      */
-    void offline(String channelId, String sessionId, String userName);
+    void offline(String channelId, String userName, String sessionId);
 
     /**
      * 获取当前频道信息
