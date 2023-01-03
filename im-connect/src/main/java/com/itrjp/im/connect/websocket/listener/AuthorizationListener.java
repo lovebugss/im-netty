@@ -32,7 +32,7 @@ public interface AuthorizationListener {
     }
 
     enum ErrorType {
-        TOKEN_INVALID, TOKEN_EXPIRES, ROOM_THROTTLING;
+        TOKEN_INVALID, TOKEN_EXPIRES, ROOM_THROTTLING, IN_BLACK_LIST;
 
     }
 }

@@ -85,15 +85,18 @@ public class AuthorizeHandler extends ChannelInboundHandlerAdapter {
             if (!authorize.isSuccess()) {
                 AuthorizationListener.ErrorType errorType = authorize.getErrorType();
                 switch (errorType) {
-                    case TOKEN_INVALID:
+                    case TOKEN_INVALID -> {
                         sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), UNAUTHORIZED, ctx.alloc().buffer(0)));
                         return;
-                    case TOKEN_EXPIRES:
+                    }
+                    case TOKEN_EXPIRES, IN_BLACK_LIST -> {
                         sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), FORBIDDEN, ctx.alloc().buffer(0)));
                         return;
-                    case ROOM_THROTTLING:
+                    }
+                    case ROOM_THROTTLING -> {
                         sendHttpResponse(ctx, request, new DefaultFullHttpResponse(request.protocolVersion(), TOO_MANY_REQUESTS, ctx.alloc().buffer(0)));
                         return;
+                    }
                 }
             }
         }

@@ -14,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ProtobufUtils {
+    private ProtobufUtils() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static String toJson(MessageOrBuilder messageOrBuilder) {
         try {

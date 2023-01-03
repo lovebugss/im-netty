@@ -3,6 +3,7 @@ package com.itrjp.im.connect.service.impl;
 import com.itrjp.common.cache.ChannelCache;
 import com.itrjp.common.entity.Channel;
 import com.itrjp.common.service.TokenService;
+import com.itrjp.im.connect.cache.ChannelBlackList;
 import com.itrjp.im.connect.service.AuthorizationService;
 import com.itrjp.im.connect.service.ChannelStateService;
 import com.itrjp.im.connect.websocket.HandshakeData;
@@ -20,8 +21,8 @@ import java.util.Map;
 public class AuthorizationServiceImpl implements AuthorizationService {
     private final TokenService tokenService;
     private final ChannelCache channelCache;
-
     private final ChannelStateService channelStateService;
+    private final ChannelBlackList channelBlackList;
 
     @Override
     public AuthorizationResult authorize(HandshakeData data) {
@@ -44,6 +45,10 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         if (!tokenService.checkTime(Long.parseLong(time.get(0)))) {
             return AuthorizationResult.fail(ErrorType.TOKEN_EXPIRES);
         }
+        if (channelBlackList.contains(channelId.get(0), uid.get(0))) {
+            return AuthorizationResult.fail(ErrorType.IN_BLACK_LIST);
+        }
+
         // 检查频道是否被限流
         if (checkChannelThrottling(channelId.get(0))) {
             return AuthorizationResult.fail(ErrorType.ROOM_THROTTLING);
