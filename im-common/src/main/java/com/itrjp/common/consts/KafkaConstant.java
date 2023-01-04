@@ -21,6 +21,7 @@ public final class KafkaConstant {
      * 通知消息
      */
     public static final String NOTICE_TOPIC = "notice-topic";
+    public static final String CONNECT_COMMAND_TOPIC = "connect-command-topic";
 
     /**
      * 存储

@@ -4,6 +4,7 @@ import com.itrjp.common.cache.ChannelCache;
 import com.itrjp.common.entity.Channel;
 import com.itrjp.common.service.TokenService;
 import com.itrjp.im.connect.cache.ChannelBlackList;
+import com.itrjp.im.connect.properties.ConnectProperties;
 import com.itrjp.im.connect.service.AuthorizationService;
 import com.itrjp.im.connect.service.ChannelStateService;
 import com.itrjp.im.connect.websocket.HandshakeData;
@@ -23,6 +24,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
     private final ChannelCache channelCache;
     private final ChannelStateService channelStateService;
     private final ChannelBlackList channelBlackList;
+    private final ConnectProperties connectProperties;
 
     @Override
     public AuthorizationResult authorize(HandshakeData data) {
@@ -62,6 +64,6 @@ public class AuthorizationServiceImpl implements AuthorizationService {
         int count = channelStateService.getChannelConnectCount(channelId);
         // 获取频道的限流数
         Channel channel = channelCache.get(channelId);
-        return count >= (channel == null ? 1000 : channel.getLimit());
+        return count >= (channel == null ? connectProperties.getChannelLimit() : channel.getLimit());
     }
 }

@@ -11,6 +11,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("connect")
 public class ConnectProperties {
 
+    private int channelLimit = 100000;
+
     private Global global = new Global();
 
     @Data

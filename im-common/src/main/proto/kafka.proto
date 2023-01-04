@@ -12,3 +12,18 @@ message KafkaMessage {
   int64 timestamp = 5;
   string nodeId = 6;
 }
+
+message Command{
+  CommandType commandType = 1;
+  bytes data = 2;
+}
+enum CommandType{
+  SYNC = 0;
+  DEL = 1;
+}
+
+message SyncCommand{
+  string channelId = 1;
+  string deviceId = 2;
+  string messageId = 3;
+}

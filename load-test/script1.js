@@ -52,8 +52,16 @@ export default (data) => {
         socket.on('message', function (message) {
             console.log(`Received message: ${message}`);
         });
-        socket.on('binaryMessage', function (message) {
-            console.log(`Received binaryMessage: ${proto.Packet.deserializeBinary(message)}`);
+        socket.on('binaryMessage', function (data) {
+            let packet = proto.Packet.deserializeBinary(data).toObject();
+            let type = packet.datatype;
+            if(type == 0){
+                let message = proto.Message.deserializeBinary(packet.data).toObject();
+                console.log(`Received message: timestamp: ${packet.timestamp}, message: ${JSON.stringify(message)}`);
+            }else if(type == 1){
+                let event = proto.Event.deserializeBinary(packet.data).toObject();
+                console.log(`Received event: timestamp: ${packet.timestamp}, message: ${JSON.stringify(event)}`);
+            }
         });
         socket.on('close', () => console.log('disconnected'));
 

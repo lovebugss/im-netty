@@ -61,6 +61,7 @@ public class MessageServiceImpl implements MessageService {
                 .setData(data.toByteString())
                 .setTimestamp(System.currentTimeMillis())
                 .build();
+        log.info("广播消息: channelId: {}, data: {}, message: {}", channelId, packet, data);
         broadcast(channelId, packet);
     }
 

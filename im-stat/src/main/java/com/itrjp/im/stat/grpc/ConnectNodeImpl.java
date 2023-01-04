@@ -72,7 +72,8 @@ public class ConnectNodeImpl extends ConnectNodeServiceGrpc.ConnectNodeServiceIm
 
     @Override
     public void getConnectNode(ChannelNodeRequest request, StreamObserver<ChannelNodeResponse> responseObserver) {
-        connectNodeService.getConnectNodeByChannelId(request.getChannelId()).ifPresentOrElse(
+        connectNodeService.getConnectNodeByChannelId(request.getChannelId())
+                .ifPresentOrElse(
                 channelNodeInfos -> responseObserver.onNext(ChannelNodeResponse.newBuilder()
                         .setCode(200)
                         .addAllChannelNode(channelNodeInfos)

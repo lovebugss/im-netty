@@ -2,6 +2,7 @@ package com.itrjp.im.connect.websocket;
 
 import com.itrjp.im.connect.websocket.handler.AuthorizeHandler;
 import com.itrjp.im.connect.websocket.handler.MessageHandler;
+import com.itrjp.im.connect.websocket.handler.TraceHandler;
 import com.itrjp.im.connect.websocket.handler.WebsocketHandler;
 import com.itrjp.im.connect.websocket.listener.AuthorizationListener;
 import io.netty.channel.Channel;
@@ -59,6 +60,7 @@ public class WebSocketServerInitializer extends ChannelInitializer<Channel> {
 
         // 鉴权
         pipeline.addLast(AUTHORIZE_HANDLER, authorizeHandler);
+        pipeline.addLast("traceHandler", new TraceHandler());
         // websocket
         pipeline.addLast(WEBSOCKET_HANDLER, websocketHandler);
     }

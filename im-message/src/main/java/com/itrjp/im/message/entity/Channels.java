@@ -24,11 +24,6 @@ public class Channels implements Serializable {
     @TableId(value = "ID", type = IdType.AUTO)
     private Long id;
 
-    /**
-     * 应用ID
-     */
-    @TableField("APP_ID")
-    private String appId;
 
     /**
      * 频道ID
@@ -66,14 +61,6 @@ public class Channels implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
     }
 
     public String getChannelId() {
@@ -136,7 +123,6 @@ public class Channels implements Serializable {
     public String toString() {
         return "Channels{" +
                 "id=" + id +
-                ", appId=" + appId +
                 ", channelId=" + channelId +
                 ", filterType=" + filterType +
                 ", channelLimit=" + channelLimit +

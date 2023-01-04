@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.itrjp.common.consts.KafkaConstant.CONNECT_TOPIC_PREFIX;
-import static com.itrjp.common.consts.KafkaConstant.MESSAGE_JOIN_LEAVE_TOPIC;
 
 /**
  * 消息 service
@@ -60,8 +59,15 @@ public class MessageServiceImpl implements MessageService {
             messageStorageService.saveInvalidMessage(channelId, userId, message);
             return messageId + "";
         }
+        ByteString messageByteStr = Message.newBuilder()
+                .setChannelId(channelId)
+                .setUserId(userId)
+                .setContent(message)
+                .setMessageId(messageId)
+                .setTimestamp(System.currentTimeMillis())
+                .build().toByteString();
         // 消息投递给connect 进行广播
-        sendMessageToConnect(channelId, userId, message, messageId);
+        sendMessageToConnect(channelId, userId, messageByteStr, DataType.MSG);
         // storage
         messageStorageService.saveMessage(channelId, userId, message, messageId);
         messageHistoryService.add(channelId, userId, message, messageId);
@@ -74,10 +80,10 @@ public class MessageServiceImpl implements MessageService {
      * @param channelId channel id
      * @param userId    user id
      * @param message   message
-     * @param messageId message id
+     * @param type      type
      */
-    private void sendMessageToConnect(String channelId, String userId, String message, String messageId) {
-        ChannelNodeResponse channelNode = connectNodeServiceBlockingStub.getBestChannelNode(ChannelNodeRequest.newBuilder()
+    private void sendMessageToConnect(String channelId, String userId, ByteString message, DataType type) {
+        ChannelNodeResponse channelNode = connectNodeServiceBlockingStub.getConnectNode(ChannelNodeRequest.newBuilder()
                 .setChannelId(channelId).build());
         if (channelNode == null) {
             logger.error("消息投递失败, connect节点为空, channelId: {}", channelId);
@@ -86,19 +92,13 @@ public class MessageServiceImpl implements MessageService {
         List<ChannelNodeInfo> channelNodeList = channelNode.getChannelNodeList();
         for (ChannelNodeInfo channelNodeInfo : channelNodeList) {
             // connect
-            ByteString messageByteStr = Message.newBuilder()
-                    .setChannelId(channelId)
-                    .setContent(message)
-                    .setMessageId(messageId)
-                    .setTimestamp(System.currentTimeMillis())
-                    .build().toByteString();
-            logger.info("发送消息到Kafka, topic: {}, message: {}", CONNECT_TOPIC_PREFIX + channelNodeInfo.getNodeId(), messageByteStr);
+            logger.info("发送消息到Kafka, topic: {}, message: {}", CONNECT_TOPIC_PREFIX + channelNodeInfo.getNodeId(), message);
             kafkaTemplate.send(CONNECT_TOPIC_PREFIX + channelNodeInfo.getNodeId(), channelId, KafkaMessage.newBuilder()
                     .setTimestamp(System.currentTimeMillis())
                     .setFrom(userId)
                     .setTo(channelId)
-                    .setDataType(DataType.MSG)
-                    .setData(messageByteStr)
+                    .setDataType(type)
+                    .setData(message)
                     .setNodeId(channelNodeInfo.getNodeId())
                     .build().toByteArray());
         }
@@ -119,10 +119,10 @@ public class MessageServiceImpl implements MessageService {
 
         // TODO 上下线限流
         //消息投递
-        kafkaTemplate.send(MESSAGE_JOIN_LEAVE_TOPIC, channelId, Event.newBuilder()
+        sendMessageToConnect(channelId, userId, Event.newBuilder()
                 .setType(type)
                 .setUserId(userId)
-                .setChannelId(channelId).build().toByteArray());
+                .setChannelId(channelId).build().toByteString(), DataType.EVENT);
 
     }
 
