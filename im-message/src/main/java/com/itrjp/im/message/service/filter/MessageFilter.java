@@ -11,7 +11,7 @@ import com.itrjp.im.proto.Message;
  */
 public interface MessageFilter {
 
-    boolean match(MessageFilterType type);
+    boolean matchFilterType(MessageFilterType type);
 
     boolean doFilter(Message message);
 }

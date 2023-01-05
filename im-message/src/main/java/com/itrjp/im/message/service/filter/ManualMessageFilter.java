@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class ManualMessageFilter implements MessageFilter {
 
     @Override
-    public boolean match(MessageFilterType type) {
+    public boolean matchFilterType(MessageFilterType type) {
         return MessageFilterType.MANUAL.equals(type);
     }
 

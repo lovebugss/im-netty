@@ -1,19 +1,20 @@
 package com.itrjp.im.message.service.filter;
 
-import com.itrjp.common.enums.MessageFilterType;
 import com.itrjp.im.proto.Message;
+import com.itrjp.im.proto.MessageType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 /**
- * 黑词过滤器
- *
  * @author <a href="mailto:r979668507@gmail.com">renjp</a>
- * @date 2022/7/25 14:03
+ * @date 2023/1/5 18:54
  */
+@Slf4j
 @Service
-public class BlackWordFilter implements MessageFilter {
+public class TextAutoMessageFilter extends AbstractAutoMessageFilter {
 
     private final ACFilter filter = new ACFilter();
 
@@ -27,13 +28,19 @@ public class BlackWordFilter implements MessageFilter {
         filter.build();
     }
 
-    @Override
-    public boolean matchFilterType(MessageFilterType type) {
-        return false;
+
+    protected TextAutoMessageFilter(List<AutoMessageFilter> autoMessageFilters) {
+        super(autoMessageFilters);
     }
 
     @Override
-    public boolean doFilter(Message message) {
+    public boolean matchMessageType(MessageType type) {
+        return MessageType.TEXT.equals(type);
+    }
+
+    @Override
+    public boolean doMessageFilter(Message message) {
         return filter.contains(message.getContent());
     }
+
 }

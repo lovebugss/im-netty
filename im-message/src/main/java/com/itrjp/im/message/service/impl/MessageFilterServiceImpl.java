@@ -23,7 +23,7 @@ public class MessageFilterServiceImpl implements MessageFilterService {
     @Override
     public boolean filter(Message message, MessageFilterType filterType) {
         for (MessageFilter filter : messageFilter) {
-            if (filter.match(filterType)) {
+            if (filter.matchFilterType(filterType)) {
                 return filter.doFilter(message);
             }
         }
