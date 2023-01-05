@@ -9,10 +9,12 @@ import com.itrjp.im.api.entity.InitParam;
 import com.itrjp.im.api.pojo.param.CreateChannelParam;
 import com.itrjp.im.api.service.ChannelService;
 import com.itrjp.im.api.service.ConnectNodeService;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -24,6 +26,8 @@ import java.util.List;
 @RequestMapping("/channel")
 @RestController
 @RequiredArgsConstructor
+@Validated
+@Api(value = "channel", tags = "频道管理")
 public class ChannelController {
     private final ChannelService channelService;
     private final ConnectNodeService connectNodeService;
@@ -49,5 +53,221 @@ public class ChannelController {
         String token = tokenService.create(channelId, currentTime, param.getUserId());
 
         return Result.success(new ChannelConnectInfo(channelId, nodeInfo, token, currentTime));
+    }
+
+    /**
+     * POST /channel/{channelId}/broadcast : 广播消息
+     *
+     * @param channelId (required)
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "广播消息", nickname = "channelChannelIdBroadcastPost", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @PostMapping(value = "/channel/{channelId}/broadcast",
+            produces = {"application/json"})
+    private Result channelChannelIdBroadcastPost(@ApiParam(value = "", required = true) @PathVariable("channelId") String channelId) {
+        return Result.success();
+    }
+
+
+    /**
+     * DELETE /channel/{channelId} : 删除房间
+     *
+     * @param channelId (required)
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "删除房间", nickname = "channelChannelIdDelete", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @DeleteMapping(value = "/channel/{channelId}",
+            produces = {"application/json"})
+    private Result channelChannelIdDelete(@ApiParam(value = "", required = true) @PathVariable("channelId") String channelId) {
+        return Result.success();
+
+    }
+
+
+    /**
+     * PUT /channel/{channelId}/filter/{filter} : 修复频道消息过滤类型
+     *
+     * @param channelId (required)
+     * @param filter    (required)
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "修复频道消息过滤类型", nickname = "channelChannelIdFilterFilterPut", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @PutMapping(value = "/channel/{channelId}/filter/{filter}",
+            produces = {"application/json"})
+    private Result channelChannelIdFilterFilterPut(@ApiParam(value = "", required = true) @PathVariable("channelId") String channelId,
+                                                   @ApiParam(value = "", required = true) @PathVariable("filter") String filter) {
+        return Result.success(null);
+
+    }
+
+
+    /**
+     * GET /channel/{channelId} : 获取房间配置
+     *
+     * @param channelId (required)
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "获取房间配置", nickname = "channelChannelIdGet", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @GetMapping(value = "/channel/{channelId}",
+            produces = {"application/json"})
+    private Result channelChannelIdGet(@ApiParam(value = "", required = true) @PathVariable("channelId") String channelId) {
+
+        return Result.success(null);
+
+    }
+
+
+    /**
+     * GET /channel/{channelId}/init : 初始化连接信息
+     *
+     * @param channelId (required)
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "初始化连接信息", nickname = "channelChannelIdInitGet", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @GetMapping(value = "/channel/{channelId}/init",
+            produces = {"application/json"})
+    private Result channelChannelIdInitGet(@ApiParam(value = "", required = true) @PathVariable("channelId") String channelId) {
+
+        return Result.success(null);
+
+    }
+
+
+    /**
+     * PUT /channel/{channelId}/limit/{limit} : 修改频道最大limit
+     *
+     * @param channelId (required)
+     * @param limit     (required)
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "修改频道最大limit", nickname = "channelChannelIdLimitLimitPut", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @PutMapping(value = "/channel/{channelId}/limit/{limit}",
+            produces = {"application/json"})
+    private Result channelChannelIdLimitLimitPut(@ApiParam(value = "", required = true) @PathVariable("channelId") String channelId,
+                                                 @ApiParam(value = "", required = true) @PathVariable("limit") String limit) {
+
+        return Result.success(null);
+
+    }
+
+
+    /**
+     * POST /channel/{channelId}/mute/{userId} : 频道内禁言某用户
+     *
+     * @param channelId (required)
+     * @param userId    (required)
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "频道内禁言某用户", nickname = "channelChannelIdMuteUserIdPost", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @PostMapping(value = "/channel/{channelId}/mute/{userId}",
+            produces = {"application/json"})
+    private Result channelChannelIdMuteUserIdPost(@ApiParam(value = "", required = true) @PathVariable("channelId") String channelId,
+                                                  @ApiParam(value = "", required = true) @PathVariable("userId") String userId) {
+
+        return Result.success(null);
+
+    }
+
+
+    /**
+     * PUT /channel/{channelId} : 更新房间配置
+     *
+     * @param channelId (required)
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "更新房间配置", nickname = "channelChannelIdPut", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @PutMapping(value = "/channel/{channelId}",
+            produces = {"application/json"})
+    private Result channelChannelIdPut(@ApiParam(value = "", required = true) @PathVariable("channelId") String channelId) {
+        return Result.success(null);
+
+    }
+
+
+    /**
+     * POST /channel/{channelId}/unmute/{userId} : 解除禁言
+     *
+     * @param channelId (required)
+     * @param userId    (required)
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "解除禁言", nickname = "channelChannelIdUnmuteUserIdPost", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @PostMapping(value = "/channel/{channelId}/unmute/{userId}",
+            produces = {"application/json"})
+    private Result channelChannelIdUnmuteUserIdPost(@ApiParam(value = "", required = true) @PathVariable("channelId") String channelId, @ApiParam(value = "", required = true) @PathVariable("userId") String userId) {
+
+        return Result.success(null);
+
+    }
+
+
+    /**
+     * DELETE /channel/{channleId}/dismiss : 解散房间
+     *
+     * @param channleId (required)
+     * @param body      (optional)
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "解散房间", nickname = "channelChannleIdDismissDelete", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @DeleteMapping(value = "/channel/{channleId}/dismiss",
+            produces = {"application/json"},
+            consumes = {"application/json"})
+    private Result channelChannelIdDismissDelete(@ApiParam(value = "", required = true) @PathVariable("channleId") String channleId,
+                                                 @ApiParam(value = "") @Valid @RequestBody(required = false) Object body) {
+
+        return Result.success(null);
+
+    }
+
+
+    /**
+     * GET /channel : 获取房间列表
+     *
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "获取房间列表", nickname = "channelGet", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @GetMapping(value = "/channel",
+            produces = {"application/json"})
+    private Result<Channel> channelGet() {
+
+        return Result.success(null);
+    }
+
+
+    /**
+     * POST /channel : 创建频道
+     *
+     * @return 成功 (status code 200)
+     */
+    @ApiOperation(value = "创建频道", nickname = "channelPost", notes = "", response = Result.class, tags = {"IM/频道管理",})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "成功", response = Result.class)})
+    @PostMapping(value = "/channel",
+            produces = {"application/json"})
+    private Result<Channel> channelPost() {
+        return Result.success(null);
+
     }
 }

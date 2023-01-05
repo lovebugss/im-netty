@@ -1,8 +1,5 @@
 package com.itrjp.im.connect.service;
 
-import com.itrjp.im.connect.service.DropEventStrategy;
-import com.itrjp.im.connect.service.EventHandlerService;
-import com.itrjp.im.connect.service.MessageService;
 import com.itrjp.im.proto.Event;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,12 +12,12 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2022/12/29 22:44
  */
 @Slf4j
-public abstract class NotifyEventHandlerAbstract implements EventHandlerService {
+public abstract class AbstractNotifyEventHandler implements EventHandlerService {
     private final MessageService messageService;
     private final DropEventStrategy dropEventStrategy;
 
 
-    protected NotifyEventHandlerAbstract(MessageService messageService, DropEventStrategy dropEventStrategy) {
+    protected AbstractNotifyEventHandler(MessageService messageService, DropEventStrategy dropEventStrategy) {
         this.messageService = messageService;
         this.dropEventStrategy = dropEventStrategy;
     }

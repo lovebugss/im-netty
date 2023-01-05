@@ -10,14 +10,10 @@ import org.springframework.stereotype.Service;
  * @date 2022/7/25 14:01
  */
 @Service
-public class AutoMessageFilter implements MessageFilter {
+public abstract class AbstractAutoMessageFilter implements MessageFilter {
     @Override
     public boolean match(MessageFilterType type) {
         return MessageFilterType.AUTO.equals(type);
     }
 
-    @Override
-    public boolean doFilter(String message) {
-        return true;
-    }
 }

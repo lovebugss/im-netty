@@ -114,13 +114,14 @@ public class WebsocketHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     private void connectClient(FullHttpRequest request, Channel channel) {
-        // 创建频道
-        // 加入频道
+
         QueryStringDecoder queryString = new QueryStringDecoder(request.uri());
         Map<String, List<String>> parameters = queryString.parameters();
         HandshakeData handshakeData = new HandshakeData(parameters, request.uri());
+        // 创建频道
         WebsocketChannel websocketChannel = channelsHub.create(parameters.get("cid").get(0), channel.id().asLongText());
         ChannelClient channelClient = new ChannelClient(handshakeData, channel, websocketChannel);
+        // 加入频道
         channelClient.join();
         // 调用状态服务
 

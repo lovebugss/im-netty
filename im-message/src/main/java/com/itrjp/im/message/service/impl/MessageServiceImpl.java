@@ -2,10 +2,7 @@ package com.itrjp.im.message.service.impl;
 
 import com.google.protobuf.ByteString;
 import com.itrjp.common.enums.MessageFilterType;
-import com.itrjp.im.message.service.IChannelsService;
-import com.itrjp.im.message.service.MessageHistoryService;
-import com.itrjp.im.message.service.MessageService;
-import com.itrjp.im.message.service.MessageStorageService;
+import com.itrjp.im.message.service.*;
 import com.itrjp.im.message.service.filter.MessageFilter;
 import com.itrjp.im.proto.*;
 import com.itrjp.im.uid.UidRequest;
@@ -45,32 +42,36 @@ public class MessageServiceImpl implements MessageService {
 
     private final IChannelsService channelService;
 
+    private final MessageFilterService messageFilterService;
+
 
     @Override
-    public String handlerMessage(String channelId, String userId, String message) {
-        logger.info("handler message, channelId: {}, userId:{}, message: {}", channelId, userId, message);
+    public String handlerMessage(Message message) {
+        String channelId = message.getChannelId();
+        String userId = message.getUserId();
+        logger.info("handler message, channelId: {}, userId:{}, message: {}", channelId, userId, message.getContent());
         String messageId = createMessageId(channelId);
 
         ChannelInfo channelInfo = channelService.getByChannelId(channelId).orElseThrow();
         // 消息过滤
-        boolean filter = filter(message, MessageFilterType.valueOfCode(Integer.valueOf(channelInfo.getFilterType())));
+        boolean filter = messageFilterService.filter(message, MessageFilterType.valueOfCode(Integer.valueOf(channelInfo.getFilterType())));
         if (!filter) {
             // 存储不合法的消息
-            messageStorageService.saveInvalidMessage(channelId, userId, message);
+            messageStorageService.saveInvalidMessage(channelId, userId, message.getContent());
             return messageId + "";
         }
         ByteString messageByteStr = Message.newBuilder()
                 .setChannelId(channelId)
                 .setUserId(userId)
-                .setContent(message)
+                .setContent(message.getContent())
                 .setMessageId(messageId)
                 .setTimestamp(System.currentTimeMillis())
                 .build().toByteString();
         // 消息投递给connect 进行广播
         sendMessageToConnect(channelId, userId, messageByteStr, DataType.MSG);
         // storage
-        messageStorageService.saveMessage(channelId, userId, message, messageId);
-        messageHistoryService.add(channelId, userId, message, messageId);
+        messageStorageService.saveMessage(channelId, userId, message.getContent(), messageId);
+        messageHistoryService.add(channelId, userId, message.getContent(), messageId);
         return messageId + "";
     }
 
@@ -124,15 +125,5 @@ public class MessageServiceImpl implements MessageService {
                 .setUserId(userId)
                 .setChannelId(channelId).build().toByteString(), DataType.EVENT);
 
-    }
-
-    private boolean filter(String message, MessageFilterType filterType) {
-        // 查询当前房间配置的过滤器
-        for (MessageFilter filter : messageFilterList) {
-            if (filter.match(filterType)) {
-                return filter.doFilter(message);
-            }
-        }
-        return false;
     }
 }

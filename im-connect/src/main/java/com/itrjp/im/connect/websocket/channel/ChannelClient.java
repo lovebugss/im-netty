@@ -5,6 +5,7 @@ import com.itrjp.im.connect.websocket.WebSocketClient;
 import com.itrjp.im.proto.Packet;
 import io.netty.channel.Channel;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -37,8 +38,8 @@ public class ChannelClient implements WebSocketClient {
     }
 
     @Override
-    public List<WebSocketClient> getAllClient(WebsocketChannel websocketChannel) {
-        return null;
+    public Collection<WebSocketClient> getAllClient(WebsocketChannel websocketChannel) {
+        return websocketChannel.getAllClient();
     }
 
     @Override
@@ -71,4 +72,13 @@ public class ChannelClient implements WebSocketClient {
         channel.writeAndFlush(data);
     }
 
+    @Override
+    public void close() {
+        channel.close();
+    }
+
+    @Override
+    public String getUid() {
+        return handshakeData.parameters().get("uid").get(0);
+    }
 }

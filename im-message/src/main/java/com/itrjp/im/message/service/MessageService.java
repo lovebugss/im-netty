@@ -2,6 +2,7 @@ package com.itrjp.im.message.service;
 
 
 import com.itrjp.im.proto.EventType;
+import com.itrjp.im.proto.Message;
 
 /**
  * MessageService
@@ -12,12 +13,10 @@ import com.itrjp.im.proto.EventType;
 public interface MessageService {
     /**
      * 处理消息
-     *
-     * @param channelId 频道
-     * @param userId    用户id
-     * @param message   消息体 todo 消息体无法扩展
+     * @param message
+     * @return
      */
-    String handlerMessage(String channelId, String userId, String message);
+    String handlerMessage(Message message);
 
     /**
      * 处理上下线

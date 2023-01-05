@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.IEnum;
 import java.util.Objects;
 
 public enum MessageFilterType implements IEnum<Integer> {
-    AUTO(0), BLACK(1);
+    AUTO(0), MANUAL(1);
     private final int code;
 
     MessageFilterType(int code) {

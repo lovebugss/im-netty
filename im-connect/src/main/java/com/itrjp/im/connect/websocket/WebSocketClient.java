@@ -3,6 +3,7 @@ package com.itrjp.im.connect.websocket;
 import com.itrjp.im.connect.websocket.channel.WebsocketChannel;
 import com.itrjp.im.proto.Packet;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public interface WebSocketClient {
 
     WebsocketChannel getChannel();
 
-    List<WebSocketClient> getAllClient(WebsocketChannel websocketChannel);
+    Collection<WebSocketClient> getAllClient(WebsocketChannel websocketChannel);
 
     String getSession();
 
@@ -30,4 +31,8 @@ public interface WebSocketClient {
     Map<String, List<String>> getParameters();
 
     void sendMessage(Packet data);
+
+    void close();
+
+    String getUid();
 }

@@ -1,6 +1,7 @@
 package com.itrjp.im.message.service.filter;
 
 import com.itrjp.common.enums.MessageFilterType;
+import com.itrjp.im.proto.Message;
 
 /**
  * 消息过滤
@@ -12,5 +13,5 @@ public interface MessageFilter {
 
     boolean match(MessageFilterType type);
 
-    boolean doFilter(String message);
+    boolean doFilter(Message message);
 }

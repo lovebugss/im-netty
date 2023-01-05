@@ -1,7 +1,10 @@
 package com.itrjp.im.message.service.filter;
 
 import com.itrjp.common.enums.MessageFilterType;
+import com.itrjp.im.proto.Message;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
 
 /**
  * 黑词过滤器
@@ -11,14 +14,26 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class BlackWordFilter implements MessageFilter {
-    @Override
-    public boolean match(MessageFilterType type) {
-        return MessageFilterType.BLACK.equals(type);
+
+    private final ACFilter filter = new ACFilter();
+
+    /**
+     * TODO 从数据库加载黑词库
+     */
+    @PostConstruct
+    public void init() {
+        filter.addWord("你妈的");
+        filter.addWord("傻逼");
+        filter.build();
     }
 
     @Override
-    public boolean doFilter(String message) {
+    public boolean match(MessageFilterType type) {
+        return false;
+    }
 
-        return true;
+    @Override
+    public boolean doFilter(Message message) {
+        return filter.contains(message.getContent());
     }
 }

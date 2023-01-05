@@ -1,5 +1,6 @@
 package com.itrjp.common.filter;
 
+import com.itrjp.common.trace.TraceUtil;
 import com.itrjp.common.util.RequestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -33,7 +34,7 @@ public class RequestLogFilter extends OncePerRequestFilter {
         String method = request.getMethod();
 
         filterChain.doFilter(request, cachingResponseWrapper);
-        cachingResponseWrapper.setHeader("x-request-id", MDC.get("traceId"));
+        cachingResponseWrapper.setHeader(TraceUtil.HEADER_TRACE_ID, MDC.get("traceId"));
 
         int status = cachingResponseWrapper.getStatus();
 

@@ -62,4 +62,10 @@ public class ChannelsHub {
         return websocketChannel.getClient(sessionId);
 
     }
+
+    public Collection<WebSocketClient> getUserClient(String channelId, String userId) {
+        WebsocketChannel websocketChannel = channels.get(channelId);
+        Collection<String> userSession = websocketChannel.getUserSession(userId);
+        return userSession.stream().map(websocketChannel::getClient).toList();
+    }
 }

@@ -28,7 +28,7 @@ public class MessageGrpcImpl extends MessageServiceGrpc.MessageServiceImplBase {
     public void onMessage(Message message, StreamObserver<MessageResponse> responseObserver) {
         try {
             // TODO 使用实体
-            String messageId = messageService.handlerMessage(message.getChannelId(), message.getUserId(), message.getContent());
+            String messageId = messageService.handlerMessage(message);
             responseObserver.onNext(MessageResponse.newBuilder()
                     .setMessage("success")
                     .setCode(200)
