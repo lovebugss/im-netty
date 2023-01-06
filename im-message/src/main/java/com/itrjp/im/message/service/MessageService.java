@@ -1,8 +1,8 @@
 package com.itrjp.im.message.service;
 
 
-import com.itrjp.im.proto.EventType;
-import com.itrjp.im.proto.Message;
+import com.itrjp.im.proto.message.EventType;
+import com.itrjp.im.proto.message.Message;
 
 /**
  * MessageService
@@ -13,6 +13,7 @@ import com.itrjp.im.proto.Message;
 public interface MessageService {
     /**
      * 处理消息
+     *
      * @param message
      * @return
      */

@@ -1,6 +1,6 @@
 package com.itrjp.im.storage.service.impl;
 
-import com.itrjp.im.proto.EventType;
+import com.itrjp.im.proto.message.EventType;
 import com.itrjp.im.storage.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

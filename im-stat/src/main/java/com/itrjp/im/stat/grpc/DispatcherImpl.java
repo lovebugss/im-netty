@@ -1,7 +1,7 @@
 package com.itrjp.im.stat.grpc;
 
 
-import com.itrjp.im.proto.*;
+import com.itrjp.im.proto.stat.*;
 import com.itrjp.im.stat.service.ChannelStatService;
 import com.itrjp.im.stat.service.NodeStatService;
 import io.grpc.stub.StreamObserver;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @GrpcService
-public class DispatcherImpl extends DispatchServiceGrpc.DispatchServiceImplBase {
+public class DispatcherImpl extends StatServiceGrpc.StatServiceImplBase {
     private final Logger logger = LoggerFactory.getLogger(DispatcherImpl.class);
     private final ChannelStatService channelStatService;
     private final NodeStatService nodeStatService;

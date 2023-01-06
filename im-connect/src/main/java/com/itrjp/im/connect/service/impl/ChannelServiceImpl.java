@@ -3,7 +3,14 @@ package com.itrjp.im.connect.service.impl;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.itrjp.im.connect.service.ChannelService;
 import com.itrjp.im.connect.websocket.WebSocketClient;
-import com.itrjp.im.proto.*;
+import com.itrjp.im.proto.message.Event;
+import com.itrjp.im.proto.message.EventResponse;
+import com.itrjp.im.proto.message.EventType;
+import com.itrjp.im.proto.message.MessageServiceGrpc;
+import com.itrjp.im.proto.stat.DispatchResponse;
+import com.itrjp.im.proto.stat.OfflineRequest;
+import com.itrjp.im.proto.stat.OnlineRequest;
+import com.itrjp.im.proto.stat.StatServiceGrpc;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
@@ -26,7 +33,7 @@ public class ChannelServiceImpl implements ChannelService {
 
 
     @GrpcClient("im-stat")
-    private DispatchServiceGrpc.DispatchServiceFutureStub dispatchStub;
+    private StatServiceGrpc.StatServiceFutureStub dispatchStub;
     @GrpcClient("im-message")
     private MessageServiceGrpc.MessageServiceFutureStub messageBlockingStub;
 

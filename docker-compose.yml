@@ -36,34 +36,34 @@ services:
   #      - im-consul
   #      - im-redis
   # id服务
-#  im-uid:
-#    container_name: im-uid
-#    build:
-#      context: im-uid
-#      dockerfile: Dockerfile
-#    image: im-uid:latest
-#    ulimits:
-#      core: -1
-#      nproc: 65535
-#      nofile:
-#        soft: 20000
-#        hard: 40000
-#    environment:
-#      - JAVA_OPTIONS=-Xmx512m -Xms256m
-#    #        - SPRING_PROFILES_ACTIVE=prod
-#    #        - SPRING_CLOUD_CONSUL_HOST=consul
-#    #        - SPRING_CLOUD_CONSUL_PORT=8500
-#    #        - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
-#    ports:
-#      - 8880:8880
-#      - 28880:28880
-#    networks:
-#      - im-network
-#    depends_on:
-#      - im-kafka1
-#      - im-kafka2
-#      - im-kafka3
-#      - im-consul
+  #  im-uid:
+  #    container_name: im-uid
+  #    build:
+  #      context: im-uid
+  #      dockerfile: Dockerfile
+  #    image: im-uid:latest
+  #    ulimits:
+  #      core: -1
+  #      nproc: 65535
+  #      nofile:
+  #        soft: 20000
+  #        hard: 40000
+  #    environment:
+  #      - JAVA_OPTIONS=-Xmx512m -Xms256m
+  #    #        - SPRING_PROFILES_ACTIVE=prod
+  #    #        - SPRING_CLOUD_CONSUL_HOST=consul
+  #    #        - SPRING_CLOUD_CONSUL_PORT=8500
+  #    #        - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka1:9092,kafka2:9093:kafka3:9094
+  #    ports:
+  #      - 8880:8880
+  #      - 28880:28880
+  #    networks:
+  #      - im-network
+  #    depends_on:
+  #      - im-kafka1
+  #      - im-kafka2
+  #      - im-kafka3
+  #      - im-consul
   #  # 统计服务
   #  im-stat:
   #    container_name: im-stat
@@ -167,39 +167,39 @@ services:
     #      - 3888:3888
     environment:
       ZOO_MY_ID: 1
-#      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+      #      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
       ZOO_SERVERS: server.1=zoo1:2888:3888
     networks:
       - im-network
-#  im-zoo2:
-#    image: zookeeper:3.4
-#    restart: always
-#    hostname: zoo2
-#    container_name: zoo2
-#    ports:
-#      - 2182:2182
-#    #      - 3888:3888
-#    environment:
-#      ZOO_MY_ID: 2
-#      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
-#    #    links:
-#    #      - zoo3
-#    #      - zoo1
-#    networks:
-#      - im-network
-#  im-zoo3:
-#    image: zookeeper:3.4
-#    restart: always
-#    hostname: zoo3
-#    container_name: zoo3
-#    ports:
-#      - 2183:2183
-#    #      - 3888:3888
-#    environment:
-#      ZOO_MY_ID: 3
-#      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
-#    networks:
-#      - im-network
+  #  im-zoo2:
+  #    image: zookeeper:3.4
+  #    restart: always
+  #    hostname: zoo2
+  #    container_name: zoo2
+  #    ports:
+  #      - 2182:2182
+  #    #      - 3888:3888
+  #    environment:
+  #      ZOO_MY_ID: 2
+  #      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+  #    #    links:
+  #    #      - zoo3
+  #    #      - zoo1
+  #    networks:
+  #      - im-network
+  #  im-zoo3:
+  #    image: zookeeper:3.4
+  #    restart: always
+  #    hostname: zoo3
+  #    container_name: zoo3
+  #    ports:
+  #      - 2183:2183
+  #    #      - 3888:3888
+  #    environment:
+  #      ZOO_MY_ID: 3
+  #      ZOO_SERVERS: server.1=zoo1:2888:3888 server.2=zoo2:2888:3888 server.3=zoo3:2888:3888
+  #    networks:
+  #      - im-network
   im-kafka1:
     image: wurstmeister/kafka:2.12-2.4.1
     restart: always
@@ -213,12 +213,12 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://kafka1:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
       KAFKA_ADVERTISED_PORT: 9092
-#      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
+      #      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181
     depends_on:
       - im-zoo1
-#      - im-zoo2
-#      - im-zoo3
+    #      - im-zoo2
+    #      - im-zoo3
     networks:
       - im-network
   im-kafka2:
@@ -234,12 +234,12 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://kafka2:9093
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093
       KAFKA_ADVERTISED_PORT: 9093
-#      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
+      #      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181
     depends_on:
       - im-zoo1
-#      - im-zoo2
-#      - im-zoo3
+    #      - im-zoo2
+    #      - im-zoo3
     networks:
       - im-network
   im-kafka3:
@@ -255,12 +255,12 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://kafka3:9094
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9094
       KAFKA_ADVERTISED_PORT: 9094
-#      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
+      #      KAFKA_ZOOKEEPER_CONNECT: zoo1:2181,zoo2:2182,zoo3:2183
       KAFKA_ZOOKEEPER_CONNECT: zoo1:2181
     depends_on:
       - im-zoo1
-#      - im-zoo2
-#      - im-zoo3
+    #      - im-zoo2
+    #      - im-zoo3
     networks:
       - im-network
   im-redis:

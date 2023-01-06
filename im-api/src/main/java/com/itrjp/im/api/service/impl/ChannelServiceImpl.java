@@ -3,10 +3,10 @@ package com.itrjp.im.api.service.impl;
 import com.itrjp.common.exception.ChannelNotFoundException;
 import com.itrjp.im.api.pojo.param.CreateChannelParam;
 import com.itrjp.im.api.service.ChannelService;
-import com.itrjp.im.proto.ChannelInfo;
-import com.itrjp.im.proto.ChannelServiceGrpc;
-import com.itrjp.im.proto.GetRequest;
-import com.itrjp.im.proto.GetResponse;
+import com.itrjp.im.proto.message.ChannelInfo;
+import com.itrjp.im.proto.message.ChannelServiceGrpc;
+import com.itrjp.im.proto.message.GetRequest;
+import com.itrjp.im.proto.message.GetResponse;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +38,22 @@ public class ChannelServiceImpl implements ChannelService {
 
     @Override
     public com.itrjp.im.api.entity.Channel createChannel(CreateChannelParam param) {
+
         return null;
+    }
+
+    @Override
+    public void checkUserInChannel(String channelId, String userId) {
+
+    }
+
+    @Override
+    public void muteUser(String channelId, String userId) {
+
+    }
+
+    @Override
+    public void unMuteUser(String channelId, String userId) {
+
     }
 }

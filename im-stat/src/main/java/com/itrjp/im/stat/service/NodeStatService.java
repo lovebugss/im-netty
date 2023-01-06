@@ -1,6 +1,6 @@
 package com.itrjp.im.stat.service;
 
-import com.itrjp.im.proto.ChannelNodeInfo;
+import com.itrjp.im.proto.connect.ChannelNodeInfo;
 
 import java.util.List;
 import java.util.Optional;

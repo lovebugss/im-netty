@@ -1,9 +1,9 @@
 package com.itrjp.im.grpc;
 
+import com.itrjp.im.proto.uid.UidRequest;
+import com.itrjp.im.proto.uid.UidResponse;
+import com.itrjp.im.proto.uid.UidServiceGrpc;
 import com.itrjp.im.uid.UidGenerator;
-import com.itrjp.im.uid.UidRequest;
-import com.itrjp.im.uid.UidResponse;
-import com.itrjp.im.uid.UidServiceGrpc;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.stereotype.Service;

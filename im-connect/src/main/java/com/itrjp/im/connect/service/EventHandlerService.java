@@ -1,7 +1,7 @@
 package com.itrjp.im.connect.service;
 
-import com.itrjp.im.proto.Event;
-import com.itrjp.im.proto.EventType;
+import com.itrjp.im.proto.message.Event;
+import com.itrjp.im.proto.message.EventType;
 
 /**
  * TODO

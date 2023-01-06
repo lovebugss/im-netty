@@ -1,8 +1,8 @@
 package com.itrjp.im.stat.grpc;
 
-import com.itrjp.im.proto.ChannelRequest;
-import com.itrjp.im.proto.ChannelStateResponse;
-import com.itrjp.im.proto.ChannelStateServiceGrpc;
+import com.itrjp.im.proto.stat.ChannelRequest;
+import com.itrjp.im.proto.stat.ChannelStateResponse;
+import com.itrjp.im.proto.stat.ChannelStateServiceGrpc;
 import com.itrjp.im.stat.service.ChannelStatService;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;

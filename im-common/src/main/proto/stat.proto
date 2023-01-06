@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package com.itrjp.im.proto;
+package com.itrjp.im.proto.stat;
 option java_multiple_files = true;
 
-service DispatchService{
+service StatService{
   // 上线
   rpc online(OnlineRequest) returns (DispatchResponse) {}
   // 下线
@@ -12,6 +12,26 @@ service DispatchService{
   rpc getConnectInfo(GetConnectInfoRequest) returns (GetConnectInfoResponse) {}
 }
 
+/**
+频道统计
+ */
+service ChannelStateService{
+  // 获取频道连接数
+  rpc getChannelConnectCount (ChannelRequest) returns (ChannelStateResponse) {}
+
+  // 获取频道用户数
+  rpc getChannelUserCount (ChannelRequest) returns (ChannelStateResponse) {}
+}
+
+message ChannelRequest{
+  string channelId = 1;
+}
+
+message ChannelStateResponse{
+  int32 code = 1;
+  string message = 2;
+  int32 count = 3;
+}
 message OnlineRequest{
   string channelId = 1; // 频道ID
   string userId = 2; // 用户ID

@@ -2,7 +2,7 @@ package com.itrjp.im.connect.websocket.channel;
 
 import com.itrjp.im.connect.websocket.HandshakeData;
 import com.itrjp.im.connect.websocket.WebSocketClient;
-import com.itrjp.im.proto.Packet;
+import com.itrjp.im.proto.message.Packet;
 import io.netty.channel.Channel;
 
 import java.util.Collection;

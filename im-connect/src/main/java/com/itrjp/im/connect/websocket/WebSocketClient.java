@@ -1,7 +1,7 @@
 package com.itrjp.im.connect.websocket;
 
 import com.itrjp.im.connect.websocket.channel.WebsocketChannel;
-import com.itrjp.im.proto.Packet;
+import com.itrjp.im.proto.message.Packet;
 
 import java.util.Collection;
 import java.util.List;

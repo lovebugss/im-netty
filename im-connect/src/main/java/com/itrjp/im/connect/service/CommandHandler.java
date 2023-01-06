@@ -1,7 +1,7 @@
 package com.itrjp.im.connect.service;
 
 import com.google.protobuf.ByteString;
-import com.itrjp.im.proto.CommandType;
+import com.itrjp.im.proto.message.CommandType;
 
 /**
  * 系统命令处理器

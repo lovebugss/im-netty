@@ -6,7 +6,7 @@ import com.itrjp.im.message.convert.ChannelConvert;
 import com.itrjp.im.message.entity.Channels;
 import com.itrjp.im.message.mapper.ChannelsMapper;
 import com.itrjp.im.message.service.IChannelsService;
-import com.itrjp.im.proto.ChannelInfo;
+import com.itrjp.im.proto.message.ChannelInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

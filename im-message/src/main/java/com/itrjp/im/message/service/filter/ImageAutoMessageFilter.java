@@ -1,7 +1,7 @@
 package com.itrjp.im.message.service.filter;
 
-import com.itrjp.im.proto.Message;
-import com.itrjp.im.proto.MessageType;
+import com.itrjp.im.proto.message.Message;
+import com.itrjp.im.proto.message.MessageType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

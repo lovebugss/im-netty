@@ -1,8 +1,8 @@
 package com.itrjp.im.message.service.filter;
 
 import com.itrjp.common.enums.MessageFilterType;
-import com.itrjp.im.proto.Message;
-import com.itrjp.im.proto.MessageType;
+import com.itrjp.im.proto.message.Message;
+import com.itrjp.im.proto.message.MessageType;
 
 /**
  * TODO

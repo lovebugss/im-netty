@@ -5,7 +5,7 @@ import com.itrjp.im.connect.service.MessageService;
 import com.itrjp.im.connect.websocket.WebSocketClient;
 import com.itrjp.im.connect.websocket.channel.ChannelsHub;
 import com.itrjp.im.connect.websocket.channel.WebsocketChannel;
-import com.itrjp.im.proto.*;
+import com.itrjp.im.proto.message.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;

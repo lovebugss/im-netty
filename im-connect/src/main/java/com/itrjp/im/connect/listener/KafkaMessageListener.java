@@ -2,9 +2,9 @@ package com.itrjp.im.connect.listener;
 
 import com.itrjp.im.connect.service.CommandHandler;
 import com.itrjp.im.connect.service.MessageHandler;
-import com.itrjp.im.proto.Command;
-import com.itrjp.im.proto.DataType;
-import com.itrjp.im.proto.KafkaMessage;
+import com.itrjp.im.proto.message.Command;
+import com.itrjp.im.proto.message.DataType;
+import com.itrjp.im.proto.message.KafkaMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

@@ -1,6 +1,6 @@
 package com.itrjp.im.connect.service;
 
-import com.itrjp.im.proto.Event;
+import com.itrjp.im.proto.message.Event;
 
 /**
  * 默认丢弃事件策略 延迟超过1秒, 自动丢弃, 不进行事件投递

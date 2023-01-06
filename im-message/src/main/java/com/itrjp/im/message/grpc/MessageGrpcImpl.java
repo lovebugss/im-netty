@@ -1,7 +1,7 @@
 package com.itrjp.im.message.grpc;
 
 import com.itrjp.im.message.service.MessageService;
-import com.itrjp.im.proto.*;
+import com.itrjp.im.proto.message.*;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;

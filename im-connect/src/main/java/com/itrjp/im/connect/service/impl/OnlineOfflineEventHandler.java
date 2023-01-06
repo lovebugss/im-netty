@@ -3,7 +3,7 @@ package com.itrjp.im.connect.service.impl;
 import com.itrjp.im.connect.service.AbstractNotifyEventHandler;
 import com.itrjp.im.connect.service.DropEventStrategy;
 import com.itrjp.im.connect.service.MessageService;
-import com.itrjp.im.proto.EventType;
+import com.itrjp.im.proto.message.EventType;
 import org.springframework.stereotype.Service;
 
 /**

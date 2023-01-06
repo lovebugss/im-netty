@@ -1,7 +1,7 @@
 package com.itrjp.im.storage.listener;
 
-import com.itrjp.im.proto.Event;
-import com.itrjp.im.proto.Message;
+import com.itrjp.im.proto.message.Event;
+import com.itrjp.im.proto.message.Message;
 import com.itrjp.im.storage.service.MessageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +29,9 @@ public class KafkaMessageListener {
     @KafkaListener(topics = {STORAGE_TOPIC})
     public void onMessage(byte[] data) {
         try {
-            Message d = Message.parseFrom(data);
-            logger.info("接受Kafka消息: {}", d);
-            messageService.handlerMessage(d.getChannelId(), d.getContent());
+            Message message = Message.parseFrom(data);
+            logger.info("接受Kafka消息: {}", message);
+            messageService.handlerMessage(message.getChannelId(), message.getContent());
         } catch (Exception e) {
             logger.error("消息处理失败", e);
         }
@@ -45,9 +45,9 @@ public class KafkaMessageListener {
     @KafkaListener(topics = {MESSAGE_JOIN_LEAVE_TOPIC})
     public void onJoinLeave(byte[] data) {
         try {
-            Event d = Event.parseFrom(data);
-            logger.info("接受Kafka上下线消息: {}", d);
-            messageService.handlerJoinLeaveMessage(d.getChannelId(), d.getUserId(), d.getType());
+            Event event = Event.parseFrom(data);
+            logger.info("接受Kafka上下线消息: {}", event);
+            messageService.handlerJoinLeaveMessage(event.getChannelId(), event.getUserId(), event.getType());
         } catch (Exception e) {
             logger.error("上下线消息处理失败", e);
         }

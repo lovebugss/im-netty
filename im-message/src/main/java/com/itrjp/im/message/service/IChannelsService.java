@@ -2,7 +2,7 @@ package com.itrjp.im.message.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.itrjp.im.message.entity.Channels;
-import com.itrjp.im.proto.ChannelInfo;
+import com.itrjp.im.proto.message.ChannelInfo;
 
 import java.util.Optional;
 

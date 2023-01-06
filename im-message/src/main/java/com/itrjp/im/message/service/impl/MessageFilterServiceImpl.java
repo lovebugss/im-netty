@@ -3,7 +3,7 @@ package com.itrjp.im.message.service.impl;
 import com.itrjp.common.enums.MessageFilterType;
 import com.itrjp.im.message.service.MessageFilterService;
 import com.itrjp.im.message.service.filter.MessageFilter;
-import com.itrjp.im.proto.Message;
+import com.itrjp.im.proto.message.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

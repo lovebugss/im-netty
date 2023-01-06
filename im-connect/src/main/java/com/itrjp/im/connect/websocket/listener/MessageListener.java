@@ -1,8 +1,7 @@
 package com.itrjp.im.connect.websocket.listener;
 
 import com.itrjp.im.connect.websocket.WebSocketClient;
-import com.itrjp.im.proto.Message;
-import com.itrjp.im.proto.Packet;
+import com.itrjp.im.proto.message.Message;
 
 /**
  * TODO

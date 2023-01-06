@@ -5,7 +5,7 @@ import com.itrjp.im.message.entity.Channels;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author renjp

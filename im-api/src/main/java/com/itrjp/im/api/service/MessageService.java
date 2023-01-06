@@ -1,9 +1,9 @@
 package com.itrjp.im.api.service;
 
 import com.itrjp.im.api.entity.MessageParam;
-import com.itrjp.im.proto.Message;
-import com.itrjp.im.proto.MessageResponse;
-import com.itrjp.im.proto.MessageServiceGrpc;
+import com.itrjp.im.proto.message.Message;
+import com.itrjp.im.proto.message.MessageResponse;
+import com.itrjp.im.proto.message.MessageServiceGrpc;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 

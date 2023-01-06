@@ -2,7 +2,7 @@ package com.itrjp.im.connect.service.impl;
 
 import com.google.protobuf.ByteString;
 import com.itrjp.im.connect.service.CommandHandler;
-import com.itrjp.im.proto.CommandType;
+import com.itrjp.im.proto.message.CommandType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

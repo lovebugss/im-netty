@@ -3,8 +3,8 @@ package com.itrjp.im.connect.service.impl;
 import com.itrjp.im.connect.cache.MuteList;
 import com.itrjp.im.connect.service.EventHandlerService;
 import com.itrjp.im.connect.service.MessageService;
-import com.itrjp.im.proto.Event;
-import com.itrjp.im.proto.EventType;
+import com.itrjp.im.proto.message.Event;
+import com.itrjp.im.proto.message.EventType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

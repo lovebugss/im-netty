@@ -1,6 +1,6 @@
 package com.itrjp.im.stat.grpc;
 
-import com.itrjp.im.proto.*;
+import com.itrjp.im.proto.connect.*;
 import com.itrjp.im.stat.service.NodeStatService;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -74,15 +74,15 @@ public class ConnectNodeImpl extends ConnectNodeServiceGrpc.ConnectNodeServiceIm
     public void getConnectNode(ChannelNodeRequest request, StreamObserver<ChannelNodeResponse> responseObserver) {
         connectNodeService.getConnectNodeByChannelId(request.getChannelId())
                 .ifPresentOrElse(
-                channelNodeInfos -> responseObserver.onNext(ChannelNodeResponse.newBuilder()
-                        .setCode(200)
-                        .addAllChannelNode(channelNodeInfos)
-                        .build()),
-                () -> responseObserver.onNext(ChannelNodeResponse.newBuilder()
-                        .setCode(400)
-                        .setMessage("没有可用的服务")
-                        .build())
-        );
+                        channelNodeInfos -> responseObserver.onNext(ChannelNodeResponse.newBuilder()
+                                .setCode(200)
+                                .addAllChannelNode(channelNodeInfos)
+                                .build()),
+                        () -> responseObserver.onNext(ChannelNodeResponse.newBuilder()
+                                .setCode(400)
+                                .setMessage("没有可用的服务")
+                                .build())
+                );
         responseObserver.onCompleted();
     }
 }

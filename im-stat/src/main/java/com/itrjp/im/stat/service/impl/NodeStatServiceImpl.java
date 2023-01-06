@@ -1,7 +1,7 @@
 package com.itrjp.im.stat.service.impl;
 
 import com.itrjp.common.util.ProtobufUtils;
-import com.itrjp.im.proto.ChannelNodeInfo;
+import com.itrjp.im.proto.connect.ChannelNodeInfo;
 import com.itrjp.im.stat.service.NodeStatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

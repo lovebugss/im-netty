@@ -1,9 +1,9 @@
 package com.itrjp.im.message.grpc;
 
 import com.itrjp.im.message.service.IChannelsService;
-import com.itrjp.im.proto.ChannelServiceGrpc;
-import com.itrjp.im.proto.GetRequest;
-import com.itrjp.im.proto.GetResponse;
+import com.itrjp.im.proto.message.ChannelServiceGrpc;
+import com.itrjp.im.proto.message.GetRequest;
+import com.itrjp.im.proto.message.GetResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class ChannelGrpcImpl extends ChannelServiceGrpc.ChannelServiceImplBase {
     public void getChannelInfo(GetRequest request, StreamObserver<GetResponse> responseObserver) {
         channelService.getByChannelId(request.getChannelId())
                 .ifPresentOrElse(
-                        (channelInfo) -> responseObserver.onNext(GetResponse.newBuilder()
+                        channelInfo -> responseObserver.onNext(GetResponse.newBuilder()
                                 .setCode(200)
                                 .setChannelInfo(channelInfo)
                                 .build()),

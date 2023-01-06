@@ -1,7 +1,7 @@
 package com.itrjp.im.storage.service;
 
 
-import com.itrjp.im.proto.EventType;
+import com.itrjp.im.proto.message.EventType;
 
 /**
  * TODO

@@ -1,10 +1,9 @@
 package com.itrjp.im.connect.service.impl;
 
 import com.itrjp.im.connect.service.ChannelStateService;
-
-import com.itrjp.im.proto.ChannelRequest;
-import com.itrjp.im.proto.ChannelStateResponse;
-import com.itrjp.im.proto.ChannelStateServiceGrpc;
+import com.itrjp.im.proto.stat.ChannelRequest;
+import com.itrjp.im.proto.stat.ChannelStateResponse;
+import com.itrjp.im.proto.stat.ChannelStateServiceGrpc;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 

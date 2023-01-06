@@ -4,10 +4,10 @@ import com.itrjp.common.exception.BizException;
 import com.itrjp.im.api.entity.ChannelNodeInfo;
 import com.itrjp.im.api.entity.ConnectNode;
 import com.itrjp.im.api.service.ConnectNodeService;
-import com.itrjp.im.proto.ChannelNodeRequest;
-import com.itrjp.im.proto.ChannelNodeResponse;
-import com.itrjp.im.proto.ConnectNodeResponse;
-import com.itrjp.im.proto.ConnectNodeServiceGrpc;
+import com.itrjp.im.proto.connect.ChannelNodeRequest;
+import com.itrjp.im.proto.connect.ChannelNodeResponse;
+import com.itrjp.im.proto.connect.ConnectNodeResponse;
+import com.itrjp.im.proto.connect.ConnectNodeServiceGrpc;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class ConnectNodeServiceImpl implements ConnectNodeService {
 
     @Override
     public void offline(ConnectNode connectNode) {
-        ConnectNodeResponse response = blockingStub.stop(com.itrjp.im.proto.ChannelNodeInfo.newBuilder()
+        ConnectNodeResponse response = blockingStub.stop(com.itrjp.im.proto.connect.ChannelNodeInfo.newBuilder()
                 .setNodeId(connectNode.getId())
                 .setProtocol("ws")
                 .setAddress(connectNode.getAddress())
@@ -49,7 +49,7 @@ public class ConnectNodeServiceImpl implements ConnectNodeService {
 
     @Override
     public void online(ConnectNode connectNode) {
-        ConnectNodeResponse response = blockingStub.startUp(com.itrjp.im.proto.ChannelNodeInfo.newBuilder()
+        ConnectNodeResponse response = blockingStub.startUp(com.itrjp.im.proto.connect.ChannelNodeInfo.newBuilder()
                 .setNodeId(connectNode.getId())
                 .setProtocol("ws")
                 .setAddress(connectNode.getAddress())
@@ -70,7 +70,7 @@ public class ConnectNodeServiceImpl implements ConnectNodeService {
             throw new BizException(4001, "获取最佳节点失败");
         }
         // 获取最佳节点
-        List<com.itrjp.im.proto.ChannelNodeInfo> channelNodeList = bestChannelNode.getChannelNodeList();
+        List<com.itrjp.im.proto.connect.ChannelNodeInfo> channelNodeList = bestChannelNode.getChannelNodeList();
         return channelNodeList.stream().map(i -> {
             ChannelNodeInfo channelNodeInfo = new ChannelNodeInfo();
             channelNodeInfo.setProtocol(i.getProtocol());

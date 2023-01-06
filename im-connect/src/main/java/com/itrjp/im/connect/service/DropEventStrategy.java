@@ -1,6 +1,6 @@
 package com.itrjp.im.connect.service;
 
-import com.itrjp.im.proto.Event;
+import com.itrjp.im.proto.message.Event;
 
 /**
  * 丢弃事件策略

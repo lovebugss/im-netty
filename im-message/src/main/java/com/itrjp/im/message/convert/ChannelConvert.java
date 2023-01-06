@@ -1,7 +1,7 @@
 package com.itrjp.im.message.convert;
 
 import com.itrjp.im.message.entity.Channels;
-import com.itrjp.im.proto.ChannelInfo;
+import com.itrjp.im.proto.message.ChannelInfo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

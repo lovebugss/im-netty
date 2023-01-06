@@ -1,7 +1,7 @@
 package com.itrjp.im.connect.service;
 
 import com.google.protobuf.ByteString;
-import com.itrjp.im.proto.DataType;
+import com.itrjp.im.proto.message.DataType;
 
 /**
  * @author <a href="mailto:r979668507@gmail.com">renjp</a>
