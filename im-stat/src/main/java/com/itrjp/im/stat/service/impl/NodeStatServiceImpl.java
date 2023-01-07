@@ -5,9 +5,11 @@ import com.itrjp.im.proto.connect.ChannelNodeInfo;
 import com.itrjp.im.stat.service.NodeStatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -26,52 +28,62 @@ public class NodeStatServiceImpl implements NodeStatService {
 
     @Override
     public void connected(String nodeId, String channelID, String userId, String sessionId) {
-        redisTemplate.opsForValue().increment(IM_CONNECT_NODE_LOAD + nodeId);
-        redisTemplate.opsForZSet().incrementScore(CONNECT_NODE_LOAD, nodeId, 1);
-        redisTemplate.opsForSet().add(IM_CHANNEL_CONNECT_NODE_MAPPING + channelID, nodeId);
+        redisTemplate.executePipelined((RedisCallback<Void>) connection -> {
+            connection.incrBy((IM_CONNECT_NODE_LOAD + nodeId).getBytes(StandardCharsets.UTF_8), 1);
+            connection.zSetCommands().zIncrBy((CONNECT_NODE_LOAD).getBytes(StandardCharsets.UTF_8), 1, nodeId.getBytes(StandardCharsets.UTF_8));
+            connection.sAdd((IM_CHANNEL_CONNECT_NODE_MAPPING + channelID).getBytes(StandardCharsets.UTF_8), nodeId.getBytes(StandardCharsets.UTF_8));
+            return null;
+        });
     }
 
     @Override
     public void disConnected(String nodeId, String channelId, String userId, String sessionId) {
-        Long decrement = redisTemplate.opsForValue().decrement(IM_CONNECT_NODE_LOAD + nodeId);
-        if (decrement == null || decrement <= 0) {
-            redisTemplate.delete(IM_CONNECT_NODE_LOAD + nodeId);
-        }
-        redisTemplate.opsForZSet().incrementScore(CONNECT_NODE_LOAD, nodeId, -1);
-        redisTemplate.opsForSet().remove(IM_CHANNEL_CONNECT_NODE_MAPPING + channelId, nodeId);
 
+        redisTemplate.executePipelined((RedisCallback<Void>) connection -> {
+            Long decr = connection.decr((IM_CONNECT_NODE_LOAD + nodeId).getBytes(StandardCharsets.UTF_8));
+            if (decr == null || decr <= 0) {
+                connection.del((IM_CONNECT_NODE_LOAD + nodeId).getBytes(StandardCharsets.UTF_8));
+            }
+            connection.zSetCommands().zIncrBy((CONNECT_NODE_LOAD).getBytes(StandardCharsets.UTF_8), -1, nodeId.getBytes(StandardCharsets.UTF_8));
+            connection.sRem((IM_CHANNEL_CONNECT_NODE_MAPPING + channelId).getBytes(StandardCharsets.UTF_8), nodeId.getBytes(StandardCharsets.UTF_8));
+            return null;
+        });
     }
 
     @Override
     public void start(ChannelNodeInfo nodeInfo) {
         // 重置
-        redisTemplate.opsForValue().set(IM_CONNECT_NODE_LOAD + nodeInfo.getNodeId(), "0");
-        redisTemplate.opsForZSet().add(CONNECT_NODE_LOAD, nodeInfo.getNodeId(), 0);
-        String json = ProtobufUtils.toJson(nodeInfo);
-        if (json != null) {
-            redisTemplate.opsForSet().add(CONNECT_NODE_LIST, json);
-        }
+
+        redisTemplate.executePipelined((RedisCallback<Void>) connection -> {
+            connection.del((IM_CONNECT_NODE_LOAD + nodeInfo.getNodeId()).getBytes(StandardCharsets.UTF_8));
+            connection.zSetCommands().zAdd((CONNECT_NODE_LOAD).getBytes(StandardCharsets.UTF_8), 0, nodeInfo.getNodeId().getBytes(StandardCharsets.UTF_8));
+            String json = ProtobufUtils.toJson(nodeInfo);
+            if (json != null) {
+                connection.hSet((CONNECT_NODE_LIST).getBytes(StandardCharsets.UTF_8), nodeInfo.getNodeId().getBytes(StandardCharsets.UTF_8), json.getBytes(StandardCharsets.UTF_8));
+            }
+            return null;
+        });
     }
 
     @Override
     public void stop(ChannelNodeInfo nodeInfo) {
-        redisTemplate.delete(IM_CONNECT_NODE_LOAD + nodeInfo.getNodeId());
-        redisTemplate.opsForZSet().remove(CONNECT_NODE_LOAD, nodeInfo.getNodeId());
-        String json = ProtobufUtils.toJson(nodeInfo);
-        if (json != null) {
-            redisTemplate.opsForSet().remove(CONNECT_NODE_LIST, json);
-        }
+        redisTemplate.executePipelined((RedisCallback<Void>) connection -> {
+            connection.del((IM_CONNECT_NODE_LOAD + nodeInfo.getNodeId()).getBytes(StandardCharsets.UTF_8));
+            connection.zSetCommands().zRem((CONNECT_NODE_LOAD).getBytes(StandardCharsets.UTF_8), nodeInfo.getNodeId().getBytes(StandardCharsets.UTF_8));
+            connection.hDel((CONNECT_NODE_LIST).getBytes(StandardCharsets.UTF_8), nodeInfo.getNodeId().getBytes(StandardCharsets.UTF_8));
+            return null;
+        });
     }
 
     @Override
     public List<ChannelNodeInfo> getAvailableList() {
-        Set<String> range = redisTemplate.opsForSet().members(CONNECT_NODE_LIST);
-        if (range == null) {
+        List<Object> range = redisTemplate.opsForHash().values(CONNECT_NODE_LIST);
+        if (range.isEmpty()) {
             return Collections.emptyList();
         }
         return range
                 .stream()
-                .map(json -> (ChannelNodeInfo) ProtobufUtils.fromJson(json, ChannelNodeInfo.newBuilder()))
+                .map(json -> (ChannelNodeInfo) ProtobufUtils.fromJson(json.toString(), ChannelNodeInfo.newBuilder()))
                 .filter(Objects::nonNull)
                 .toList();
 
