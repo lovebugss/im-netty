@@ -4,20 +4,13 @@ import com.itrjp.im.proto.message.Message;
 import com.itrjp.im.proto.message.MessageType;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
- * TODO
- *
  * @author <a href="mailto:r979668507@gmail.com">renjp</a>
  * @date 2023/1/5 18:58
  */
 @Service
 public class ImageAutoMessageFilter extends AbstractAutoMessageFilter {
 
-    protected ImageAutoMessageFilter(List<AutoMessageFilter> autoMessageFilters) {
-        super(autoMessageFilters);
-    }
 
     @Override
     public boolean matchMessageType(MessageType type) {
@@ -25,7 +18,7 @@ public class ImageAutoMessageFilter extends AbstractAutoMessageFilter {
     }
 
     @Override
-    public boolean doMessageFilter(Message message) {
+    public boolean doFilter(Message message) {
         return false;
     }
 }

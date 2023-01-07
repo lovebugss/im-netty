@@ -3,6 +3,7 @@ package com.itrjp.im.api;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @SpringBootApplication(scanBasePackages = "com.itrjp")
 @EnableAutoConfiguration
 @EnableDiscoveryClient
+@EnableConfigurationProperties
 public class APIApplication {
     public static void main(String[] args) {
         SpringApplication.run(APIApplication.class, args);

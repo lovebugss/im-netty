@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 /**
  * @author <a href="mailto:r979668507@gmail.com">renjp</a>
@@ -28,19 +27,13 @@ public class TextAutoMessageFilter extends AbstractAutoMessageFilter {
         filter.build();
     }
 
-
-    protected TextAutoMessageFilter(List<AutoMessageFilter> autoMessageFilters) {
-        super(autoMessageFilters);
-    }
-
     @Override
     public boolean matchMessageType(MessageType type) {
         return MessageType.TEXT.equals(type);
     }
 
     @Override
-    public boolean doMessageFilter(Message message) {
-        return filter.contains(message.getContent());
+    public boolean doFilter(Message message) {
+        return true;
     }
-
 }

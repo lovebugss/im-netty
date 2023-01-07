@@ -1,5 +1,6 @@
 package com.itrjp.im.connect.service.impl;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.itrjp.im.connect.cache.MuteList;
 import com.itrjp.im.connect.service.MessageService;
 import com.itrjp.im.connect.websocket.WebSocketClient;
@@ -27,7 +28,7 @@ public class MessageServiceImpl implements MessageService {
     private final MuteList muteList;
 
     @GrpcClient("im-message")
-    private MessageServiceGrpc.MessageServiceBlockingStub messageBlockingStub;
+    private MessageServiceGrpc.MessageServiceFutureStub messageBlockingStub;
 
 
     @Override
@@ -50,7 +51,15 @@ public class MessageServiceImpl implements MessageService {
                 .setTimestamp(System.currentTimeMillis())
                 .build();
         // 消息投递给im-message服务
-        MessageResponse response = messageBlockingStub.onMessage(messageRequest);
+        ListenableFuture<MessageResponse> listenableFuture = messageBlockingStub.onMessage(messageRequest);
+        listenableFuture.addListener(() -> {
+            try {
+                MessageResponse messageResponse = listenableFuture.get();
+                log.info("消息投递成功, message: {}", messageResponse);
+            } catch (Exception e) {
+                log.error("消息投递失败, message: {}", messageRequest, e);
+            }
+        }, Runnable::run);
         // TODO 失败后处理
     }
 

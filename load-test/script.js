@@ -5,9 +5,9 @@ import proto from "./message_pb.js"
 
 export const options = {
     stages: [
-            {duration: '50s', target: 1050},
-            {duration: '60s', target: 1000},
-            {duration: '10s', target: 10},
+//            {duration: '50s', target: 1050},
+//            {duration: '60s', target: 1000},
+            {duration: '100s', target: 10},
     ],
     thresholds: {},
 //    vus: 50,

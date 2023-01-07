@@ -27,7 +27,6 @@ import java.util.List;
 @RequestMapping("/channel")
 @RestController
 @RequiredArgsConstructor
-@Validated
 @Api(value = "channel", tags = "频道管理")
 public class ChannelController {
     private final ChannelService channelService;
